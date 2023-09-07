@@ -46,4 +46,6 @@ table {
 }
 `;
 
+
+
 export default GlobalStyle;

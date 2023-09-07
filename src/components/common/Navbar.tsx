@@ -1,14 +1,15 @@
-import React, { Fragment } from 'react';
+import { User } from 'lucide-react';
+import React, { Fragment,useState } from 'react';
 import { styled } from 'styled-components';
 const Background = styled.div`
-  background-color: #ffffff;
-  border: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  box-sizing: border-box;
 `;
 const HeaderWrap = styled.div`
+  width: 51.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 51.25rem;
   height: 100px;
   margin: 0 auto;
 `;
@@ -22,17 +23,30 @@ const NavWrap = styled.ul`
   justify-content: space-between;
 `;
 const Nav = styled.li`
-    margin: 1rem;
+  display: flex;
+  align-items: center;
+  margin-left: 2rem;
 `;
-const Header: React.FC = () => {
+const Header = () => {
+  const [logined,setLogined] = useState<boolean>(false);
   return (
     <Background>
       <HeaderWrap>
         <LogoWrap></LogoWrap>
+        {!logined ? <NavWrap>
+          <Nav>
+            <User />
+            login
+          </Nav>
+          <Nav>join</Nav>
+        </NavWrap>:
         <NavWrap>
-          <Nav>로그인</Nav>
-          <Nav>회원가입</Nav>
-        </NavWrap>
+          <Nav>
+            <User />
+            mypage
+          </Nav>
+          <Nav>logout</Nav>
+        </NavWrap>}
       </HeaderWrap>
     </Background>
   );
