@@ -12,11 +12,8 @@
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "antd": "^5.8.4",
-<<<<<<< HEAD
-    "lucide-react": "^0.274.0",
-=======
     "axios": "^1.5.0",
->>>>>>> 5870bf89cc8ef1d7c4bb73e318f654bf3bffdc00
+    "lucide-react": "^0.274.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-kakao-login": "^2.1.1",
