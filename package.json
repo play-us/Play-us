@@ -12,7 +12,10 @@
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "antd": "^5.8.4",
+<<<<<<< HEAD
     "axios": "^1.5.0",
+=======
+>>>>>>> ca18fb1597934d37cc97b7d1e4ea0c6fdcebcf9f
     "lucide-react": "^0.274.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
