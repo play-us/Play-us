@@ -4,7 +4,7 @@ import Header from './components/common/Navbar';
 import { styled } from 'styled-components';
 import { Route, Routes } from 'react-router-dom';
 import MyPage from './pages/MyPage';
-
+import Community from './pages/Community';
 
 const Wrap = styled.div`
   background-color: #f2f5f7;
@@ -23,12 +23,12 @@ function App() {
       <Wrap>
         <InnerWrap>
           <Routes>
-            <Route path="/" ></Route>
+            <Route path="/"></Route>
             <Route path="/signIn"></Route>
             <Route path="/signUp"></Route>
-            <Route path="/mypage" element = {<MyPage></MyPage>}></Route>
+            <Route path="/mypage" element={<MyPage></MyPage>}></Route>
             <Route path="/fieldList"></Route>
-            <Route path="/community"></Route>
+            <Route path="/community" element={<Community />}></Route>
           </Routes>
         </InnerWrap>
       </Wrap>

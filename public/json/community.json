@@ -1,0 +1,50 @@
+[
+  {
+    "name": "황창민",
+    "p_img": null,
+
+    "commu_title": "개봉동 풋살인원  모집합니다.",
+    "created_date": "2023-08-01 13:42:30",
+    "comment_date": "2023-08-03 13:42:30",
+    "comment_cnt": 1,
+
+    "like_cnt": 1,
+    "views": 1,
+
+    "deadLine": "2023-08-10 13:42:30",
+    "member_count": 5,
+    "stadium": "축구"
+  },
+  {
+    "name": "추성훈 동생",
+    "p_img": null,
+
+    "commu_title": "당산 리액트 배우면서 축구하실뿐!",
+    "created_date": "2023-08-01 13:42:30",
+    "comment_date": "2023-08-07 13:42:30",
+    "comment_cnt": 1,
+
+    "like_cnt": 1,
+    "views": 1,
+
+    "deadLine": "2023-08-30 13:42:30",
+    "member_count": 5,
+    "stadium": "축구"
+  },
+  {
+    "name": "홍범진",
+    "p_img": null,
+
+    "commu_title": "농구하실뿐.",
+    "created_date": "2023-08-01 13:42:30",
+    "comment_date": "2023-08-10 13:42:30",
+    "comment_cnt": 1,
+
+    "like_cnt": 1,
+    "views": 1,
+
+    "deadLine": "2023-08-30 13:42:30",
+    "member_count": 5,
+    "stadium": "농구"
+  }
+]
