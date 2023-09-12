@@ -2,9 +2,11 @@ import React from 'react';
 import './App.css';
 import Header from './components/common/Navbar';
 import { styled } from 'styled-components';
+import { Provider } from 'react-redux';
+import store from './store/Store';
 import { Route, Routes } from 'react-router-dom';
 import MyPage from './pages/MyPage';
-
+import SignIn from './pages/signIn/SignIn';
 
 const Wrap = styled.div`
   background-color: #f2f5f7;
@@ -18,21 +20,21 @@ const InnerWrap = styled.div`
 `;
 function App() {
   return (
-    <div className="App">
+    <Provider store={store}>
       <Header></Header>
       <Wrap>
         <InnerWrap>
           <Routes>
-            <Route path="/" ></Route>
-            <Route path="/signIn"></Route>
+            <Route path="/"></Route>
+            <Route path="/signIn" element={<SignIn />}></Route>
             <Route path="/signUp"></Route>
-            <Route path="/mypage" element = {<MyPage></MyPage>}></Route>
+            <Route path="/mypage" element={<MyPage></MyPage>}></Route>
             <Route path="/fieldList"></Route>
             <Route path="/community"></Route>
           </Routes>
         </InnerWrap>
       </Wrap>
-    </div>
+    </Provider>
   );
 }
 
