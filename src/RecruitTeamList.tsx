@@ -35,10 +35,10 @@ interface CommunityHeaderWrapProps {
   wrapWidth?: string;
 }
 
-interface CommunityProps {
-  wrapWidth?: string;
-  w;
-}
+// interface CommunityProps {
+//   wrapWidth?: string;
+//   w;
+// }
 // 팀원 모집 게시판 컴포넌트
 const RecruitTeamList = () => {
   const { Title } = Typography;
