@@ -1,0 +1,40 @@
+{
+    "reserData":[
+        {
+            "resv_id": 1,
+            "field_id":1,
+            "member_id":1,
+            "resv_date":"2023-09-14",
+            "resv_time":"13:42:30",
+            "resv_state":1,
+            "resv_price":10000
+        },
+        {
+            "resv_id": 2,
+            "field_id":2,
+            "member_id":1,
+            "resv_date":"2023-09-14",
+            "resv_time":"13:42:30",
+            "resv_state":1,
+            "resv_price":12000
+        },
+        {
+            "resv_id": 3,
+            "field_id":3,
+            "member_id":1,
+            "resv_date":"2023-09-14",
+            "resv_time":"13:42:30",
+            "resv_state":1,
+            "resv_price":11000
+        },
+        {
+            "resv_id": 4,
+            "field_id":4,
+            "member_id":1,
+            "resv_date":"2023-09-14",
+            "resv_time":"13:42:30",
+            "resv_state":1,
+            "resv_price":14000
+        },
+    ]
+}
