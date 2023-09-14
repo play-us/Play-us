@@ -1,10 +1,12 @@
 import { Button, Col, Row, Typography } from 'antd';
-import Title from 'antd/es/skeleton/Title';
 import Axios from 'axios';
 import { Eye, Hand, MessageSquare, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
+//url 팀원모집 게시판 리스트
+const urlGetRecruitTeamList = '/json/community.json';
 
 interface ICommunityItem {
   created_date: string;
@@ -31,6 +33,7 @@ interface IRowData {
   memberCount: number;
   stadium: string;
 }
+
 interface CommunityHeaderWrapProps {
   wrapWidth?: string;
 }
@@ -57,7 +60,7 @@ const RecruitTeamList = () => {
     //   console.log(res);
     // });
     // 목데이터 연결
-    Axios.get<ICommunityItem[]>('/json/community.json').then((response) => {
+    Axios.get<ICommunityItem[]>(urlGetRecruitTeamList).then((response) => {
       const data = response.data;
 
       if (data.length > 0) {
@@ -121,6 +124,7 @@ const CommunutyListItem = (props: { itemData: IRowData }) => {
   const likeCnt = itemData.likeCnt;
   const commentCnt = itemData.commentCnt;
   const views = itemData.views;
+
   return (
     <Row style={{ border: '1px solid #000000;' }}>
       {/* 날짜와 구장 정보 */}
