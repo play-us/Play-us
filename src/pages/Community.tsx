@@ -1,4 +1,4 @@
-import RecruitTeamList from '../RecruitTeamList';
+import RecruitTeamList from '../components/recruitTeam/RecruitTeamList';
 
 const Community = () => {
   return (
