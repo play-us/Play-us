@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import { Route, Routes } from 'react-router-dom';
 import MyPage from './pages/MyPage';
 import Community from './pages/Community';
+import RecruitTeamDetail from './RecruitTeamDetail';
 
 const Wrap = styled.div`
   background-color: #f2f5f7;
@@ -29,6 +30,10 @@ function App() {
             <Route path="/mypage" element={<MyPage></MyPage>}></Route>
             <Route path="/fieldList"></Route>
             <Route path="/community" element={<Community />}></Route>
+            <Route
+              path="/recruitTeamDetail"
+              element={<RecruitTeamDetail />}
+            ></Route>
           </Routes>
         </InnerWrap>
       </Wrap>
