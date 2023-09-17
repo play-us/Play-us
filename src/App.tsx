@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import MyPage from './pages/MyPage';
 import Community from './pages/Community';
 import RecruitTeamDetail from './components/recruitTeam/RecruitTeamDetail';
+import Home from './pages/index';
 
 const Wrap = styled.div`
   background-color: #f2f5f7;
@@ -24,7 +25,7 @@ function App() {
       <Wrap>
         <InnerWrap>
           <Routes>
-            <Route path="/"></Route>
+            <Route path="/" element={<Home />}></Route>
             <Route path="/signIn"></Route>
             <Route path="/signUp"></Route>
             <Route path="/mypage" element={<MyPage></MyPage>}></Route>
