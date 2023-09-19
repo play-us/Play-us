@@ -71,11 +71,11 @@ const FieldList = () => {
   }, []);
 
   const settings = {
-    dots: true,
-    infinite: true,
+    dots: false,
+    infinite: false,
     speed: 500,
     slidesToShow: 4,
-    slidesToScroll: 1,
+    slidesToScroll: 2,
   };
 
   return (
@@ -164,20 +164,12 @@ const MoreBtn = styled.button`
 `;
 
 const SliderWrap = styled.div`
-  .slick-prev {
-    left: -57px;
-  }
-
-  .slick-next {
-    right: -37px;
-  }
-
-  .slick-next:before {
-    content: '→';
-  }
+  width: 100%;
 
   .slick-track {
     margin: 0;
+    display: flex;
+    justify-content: start;
     overflow: hidden;
   }
 
@@ -189,6 +181,7 @@ const SliderWrap = styled.div`
   }
 
   .slick-slide {
+    width: calc(25% - 1rem);
     text-align: center;
     margin-right: 1rem;
   }
