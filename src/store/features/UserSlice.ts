@@ -30,8 +30,7 @@ export const UserSlice = createSlice({
         phone: string;
       }>,
     ) => {
-      return [
-        state,
+      state.users = [
         {
           kakaoId: action.payload.kakaoId,
           password: action.payload.password,
