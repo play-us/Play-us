@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch,TypedUseSelectorHook,useSelector } from "react-redux";
 import { MenuSlice } from './features/MypageMenuSlice';
+import { getReserDataSlice } from './features/GetReservationSlice';
 export const store = configureStore(
     {
         reducer:{
-            menu: MenuSlice.reducer
+            menu: MenuSlice.reducer,
+            getReserData: getReserDataSlice.reducer
         }
     }
 )

@@ -150,12 +150,18 @@ export const MyListRight = styled.div`
   border-radius: 10px;
   padding: 30px 40px;
   box-sizing: border-box;
+  overflow: auto;
+  &::-webkit-scrollbar{
+    width: 0px;
+  }
 `;
+
 
 export const ReserConBox = styled.div`
   background-color: #ffffff;
   border-radius: 10px;
   padding: 30px 25px;
+  margin-bottom: 20px;
   box-sizing: border-box;
 `;
 export const ReserTitleBox = styled.div`

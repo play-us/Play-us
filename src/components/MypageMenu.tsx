@@ -1,14 +1,19 @@
 import { useAppDispatch, useAppSelector } from '../stores/Store';
+import { reserFetch } from '../stores/features/GetReservationSlice';
 import { menuChange } from '../stores/features/MypageMenuSlice';
 import * as MypageS from '../styles/Mypage';
+import { useEffect } from 'react';
 const MypageMenu = () => {
   console.log('렌더링');
-  const changeMenuState = useAppDispatch();
+  const changeDispatch = useAppDispatch();
   const getMenuState = useAppSelector((state) => state.menu.MState);
+  const getReserData = useAppSelector((state)=> state.getReserData.reserdata);
   const stateChange = (menuState: string) => {
-    changeMenuState(menuChange({ changeMState: menuState }));
+    changeDispatch(menuChange({ changeMState: menuState }));
   };
-
+  useEffect(()=>{
+    changeDispatch(reserFetch());
+  },[])
   return (
     <MypageS.MyListLeft>
       <MypageS.ListMenu
