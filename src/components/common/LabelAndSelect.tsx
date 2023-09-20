@@ -1,15 +1,13 @@
-import { User } from 'lucide-react';
-import React, { ReactEventHandler, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { css, styled } from 'styled-components';
-
-interface Props {
-  placeholder?: string;
-  options: any;
-  onchange: any;
-}
+import {
+  OpacityPrimaryTextColor,
+  OpacityPrimaryBGColor,
+} from '../../styles/CommonStyle';
 
 const LabelAndSelectBox = (props: {
-  placeholder?: string;
+  required?: boolean;
+  labelName?: string;
   options: any;
   onchange: any;
 }) => {
@@ -43,7 +41,9 @@ const LabelAndSelectBox = (props: {
   return (
     <SelectContainer>
       <LabelWrap>
-        <LabelStyle>{props.placeholder}</LabelStyle>
+        <LabelStyle required={props.required ? true : false}>
+          {props.labelName}
+        </LabelStyle>
       </LabelWrap>
       <SelectBox ref={selectRef}>
         <SelectTriggerBtn onClick={() => handleVisible()} isOpened={isOpened}>
@@ -104,10 +104,7 @@ const SelectContainer = styled.div`
   }
 `;
 
-const LabelWrap = styled.div`
-  padding: 0px 2px;
-  margin-bottom: 4px;
-`;
+const LabelWrap = styled.div``;
 
 const Label = styled.label`
   display: block;
@@ -115,51 +112,61 @@ const Label = styled.label`
   word-break: break-word;
 `;
 
-const LabelStyle = styled(Label)`
-  font-size: 1.3rem;
-  line-height: 1.8rem;
-  margin: 0px;
-  font-style: normal;
-  font-weight: 600;
-  color: rgba(0, 0, 0, 0.85);
-  transition: color 150ms cubic-bezier(0.3, 0, 0, 1) 0ms;
+const LabelStyle = styled(Label)<{ required: boolean }>`
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  height: 32px;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+
+  ${(props: any) =>
+    props.required &&
+    css`
+      &::before {
+        display: inline-block;
+        margin-inline-end: 4px;
+        color: #ff4d4f;
+        font-size: 14px;
+        font-family: SimSun, sans-serif;
+        line-height: 1;
+        content: '*';
+      }
+    `}
 `;
 
 const SelectBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
   position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 32px;
 `;
 
 const SelectTriggerBtn = styled.button<{ isOpened: boolean }>`
-    all: unset;
-    box-sizing: border-box;
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: justify;
-    justify-content: space-between;
-    width: 100%;
-    height: 36px;
-    cursor: pointer;
-    user-select: none;
-    background-color: rgb(252, 252, 252);
-    color: rgba(0, 0, 0, 0.85);
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px,
-      rgba(0, 0, 0, 0.15) 0px 0px 0px 1px inset;
-    transition-delay: 0ms;
-    transition-timing-function: cubic-bezier(0.3, 0, 0, 1);
-    transition-duration: 150ms;
-    transition-property: background-color, box-shadow;
-    padding: 8px 12px;
-    overflow: hidden;
-    border-radius: 8px;
-    margin: 0px;
-    font: inherit;
+position:relative;
+box-sizing: border-box;
+margin-bottom: 24px;
+color: rgba(0, 0, 0, 0.88);
+font-size: 14px;
+line-height: 1.5714285714285714;
+list-style: none;
+font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';
+position: relative;
+display: inline-block;
+width: 100%;
+min-width: 0;
+padding: 0.5rem;
+background-color: #f3f5f7;
+background-image: none;
+border-width: 1px;
+border-style: solid;
+border-color: #d9d9d9;
+border-radius: 6px;
+transition: all 0.2s;
   
     &:not(:disabled):focus {
-      box-shadow: rgb(94 86 240 / 30%) 0px 0px 0px 3px, rgb(94 86 240) 0px 0px 0px 1px inset;
+      box-shadow: ${OpacityPrimaryBGColor} 0px 0px 0px 2px, ${OpacityPrimaryTextColor} 0px 0px 0px 1px inset;
       background-color: rgb(247, 247, 248);
   `;
 
@@ -177,8 +184,6 @@ const OptionSpanWrap = styled.span`
 `;
 
 const SelectOptSpan = styled(OptionSpanWrap)`
-  font-size: 1.4rem;
-  line-height: 1.8rem;
   margin: 0px;
   font-style: normal;
   font-weight: normal;
@@ -187,6 +192,9 @@ const SelectOptSpan = styled(OptionSpanWrap)`
 `;
 
 const SvgArrow = styled.svg<{ isOpened: boolean }>`
+  position: absolute;
+  top: 0.7rem;
+  right: 0.5rem;
   flex: 0 0 auto;
   margin: 0px 0px 0px 6px;
   color: rgba(0, 0, 0, 0.6);
@@ -210,15 +218,13 @@ const SelectWrapper = styled.div`
   transition-timing-function: cubic-bezier(0.3, 0, 0, 1);
   transition-duration: 150ms;
   transition-property: top, opacity;
-  min-width: 200px;
-  min-height: 42px;
-  max-height: 640px;
   overflow: hidden;
   border-radius: 8px;
   background-color: rgb(255, 255, 255);
   box-shadow: rgb(255 255 255 / 12%) 0px 0px 2px 0px inset,
     rgb(0 0 0 / 5%) 0px 0px 2px 1px, rgb(0 0 0 / 15%) 0px 4px 12px;
   width: 100%;
+  box-sizing: border-box;
 `;
 
 const SelectOption = styled.div<{ isActive: string; value: string }>`
@@ -237,8 +243,8 @@ const SelectOption = styled.div<{ isActive: string; value: string }>`
   ${(props: any) =>
     props.isActive === props.value
       ? css`
-          color: rgb(94, 86, 240);
-          background-color: rgba(94, 86, 240, 0.1);
+          color: ${OpacityPrimaryTextColor};
+          background-color: ${OpacityPrimaryBGColor};
         `
       : css`
           color: rgba(0, 0, 0, 0.85);
@@ -269,8 +275,8 @@ const OptionValueContainer = styled.div`
 `;
 
 const OptionValue = styled.span`
-  font-size: 1.4rem;
-  line-height: 1.8rem;
+  font-size: 14px;
+  line-height: 1.5714285714285714;
   margin: 0px;
   font-style: normal;
   font-weight: normal;

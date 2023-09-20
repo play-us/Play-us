@@ -1,4 +1,3 @@
-
 import { createGlobalStyle } from 'styled-components';
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -44,8 +43,15 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+button{
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	border: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
 `;
-
-
 
 export default GlobalStyle;
