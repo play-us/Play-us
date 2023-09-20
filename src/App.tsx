@@ -7,6 +7,7 @@ import store from './store/Store';
 import { Route, Routes } from 'react-router-dom';
 import MyPage from './pages/MyPage';
 import SignIn from './pages/signIn/SignIn';
+import SignUp from './pages/signUp/SignUp';
 
 const Wrap = styled.div`
   background-color: #f2f5f7;
@@ -27,7 +28,7 @@ function App() {
           <Routes>
             <Route path="/"></Route>
             <Route path="/signIn" element={<SignIn />}></Route>
-            <Route path="/signUp"></Route>
+            <Route path="/signUp" element={<SignUp />}></Route>
             <Route path="/mypage" element={<MyPage></MyPage>}></Route>
             <Route path="/fieldList"></Route>
             <Route path="/community"></Route>
