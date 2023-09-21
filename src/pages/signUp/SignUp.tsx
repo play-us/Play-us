@@ -1,31 +1,38 @@
 import React, { useState } from 'react';
+import Axios from 'axios';
 import { styled } from 'styled-components';
-import { Space, Form, Input, Select } from 'antd';
+import { Space, Form, Input, Modal } from 'antd';
 import LabelAndSelect from '../../components/common/LabelAndSelect';
-
-const primaryColor = '#3CE4A8';
+import { primaryColor } from '../../styles/CommonStyle';
+import AxiosMockAdapter from 'axios-mock-adapter';
+import { useNavigate } from 'react-router-dom';
 
 type RequiredMark = boolean | 'optional' | 'customize';
 
-const SignUp: React.FC = () => {
+interface IUserInfo {
+  email: string;
+  password: string;
+  passwordChk: string;
+  name: string;
+  phone: number;
+  area: string;
+}
+
+const SignUp = () => {
   const [form] = Form.useForm();
+  const mock = new AxiosMockAdapter(Axios);
+  const navigate = useNavigate();
+
   const [requiredMark, setRequiredMarkType] =
     useState<RequiredMark>('optional');
-  type Inputs = {
-    email: string;
-    pw: string;
-    pwchk: string;
-    name: string;
-    phone: number;
-    area: string;
-  };
-  const [inputs, setInputs] = useState<Inputs>({
+
+  const [inputs, setInputs] = useState<IUserInfo>({
     email: '',
-    pw: '',
-    pwchk: '',
+    password: '',
+    passwordChk: '',
     name: '',
     phone: 0,
-    area: '',
+    area: '서울시',
   });
 
   const onChangeInput = (event: React.FormEvent<HTMLInputElement>) => {
@@ -51,12 +58,45 @@ const SignUp: React.FC = () => {
     setInputs({ ...inputs, area: value });
   };
 
-  const onSearch = (value: string) => {
-    setInputs({ ...inputs, area: value });
-  };
-
+  /* 회원가입 */
   const addUser = () => {
-    console.log('회원가입', inputs);
+    if (!inputs.email) {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+    if (!inputs.password) {
+      alert('비밀번호를 입력해주세요.');
+      return;
+    }
+    if (!inputs.passwordChk) {
+      alert('비밀번호 확인란을 입력해주세요.');
+      return;
+    }
+    if (inputs.password !== inputs.passwordChk) {
+      alert('비밀번호와 비밀번호 확인란이 일치하지 않습니다.');
+      return;
+    }
+    if (!inputs.name) {
+      alert('이름을 입력해주세요.');
+      return;
+    }
+    if (!inputs.phone) {
+      alert('휴대폰번호를 입력해주세요.');
+      return;
+    }
+    mock.onPost('/json/user.json', inputs).reply(204);
+    Modal.info({
+      title: '회원가입이 완료되었습니다.',
+      content: (
+        <div>
+          <p>Play Us에 가입하신 것을 환영합니다.</p>
+          <p>로그인하여 Plqy Us를 즐겨보세요.</p>
+        </div>
+      ),
+      onOk() {
+        navigate('/signIn');
+      },
+    });
   };
 
   const AreaOptions = [
@@ -80,10 +120,14 @@ const SignUp: React.FC = () => {
         <div>
           <ItemWrap>
             <Form.Item label="비밀번호" required>
-              <Input type="password" name="pw" onChange={onChangeInput} />
+              <Input type="password" name="password" onChange={onChangeInput} />
             </Form.Item>
             <Form.Item label="비밀번호 확인" required>
-              <Input type="password" name="pwchk" onChange={onChangeInput} />
+              <Input
+                type="password"
+                name="passwordChk"
+                onChange={onChangeInput}
+              />
             </Form.Item>
           </ItemWrap>
         </div>
