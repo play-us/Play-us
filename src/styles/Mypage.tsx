@@ -148,14 +148,18 @@ export const MyListRight = styled.div`
   height: 700px;
   background-color: #d9d9d9;
   border-radius: 10px;
-  padding: 30px 40px;
-  box-sizing: border-box;
-  overflow: auto;
+  /* padding: 30px 40px;
+  box-sizing: border-box; */
+  overflow: scroll;
   &::-webkit-scrollbar{
     width: 0px;
   }
+  padding: 30px 40px;
+  box-sizing: border-box;
 `;
 
+export const ReserConWrap = styled.div`
+`
 
 export const ReserConBox = styled.div`
   background-color: #ffffff;

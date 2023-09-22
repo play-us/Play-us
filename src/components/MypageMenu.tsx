@@ -6,11 +6,13 @@ import { useEffect } from 'react';
 const MypageMenu = () => {
   console.log('렌더링');
   const changeDispatch = useAppDispatch();
+  //메뉴 상태 state
   const getMenuState = useAppSelector((state) => state.menu.MState);
-  const getReserData = useAppSelector((state)=> state.getReserData.reserdata);
+  // 메뉴 상태 dispatch 함수
   const stateChange = (menuState: string) => {
     changeDispatch(menuChange({ changeMState: menuState }));
   };
+  // 예약 데이터 dispatch 
   useEffect(()=>{
     changeDispatch(reserFetch());
   },[])
