@@ -22,10 +22,9 @@ const ReservationDetails = () => {
     threshold: 1,
   };
   const callback = (entries: any[], observer: any) => {
-    entries.forEach((entry:any) => {
+    entries.forEach((entry: any) => {
       if (entry.isIntersecting) {
         // 대상 요소가 화면에 나타났을 때 실행할 코드
-        console.log('실행');
         changeDispatch(reserFetch());
       }
     });
@@ -44,7 +43,15 @@ const ReservationDetails = () => {
                 <MypageS.ReserTitle>
                   {reserData.resv_field_name}
                 </MypageS.ReserTitle>
-                <MypageS.ReserCurrent>예약완료</MypageS.ReserCurrent>
+                {reserData.resv_state === 0 && (
+                  <MypageS.ReserCurrent>예약취소</MypageS.ReserCurrent>
+                )}
+                {reserData.resv_state === 1 && (
+                  <MypageS.ReserCurrent>예약완료</MypageS.ReserCurrent>
+                )}
+                {reserData.resv_state === 2 && (
+                  <MypageS.ReserCurrent>사용완료</MypageS.ReserCurrent>
+                )}
               </MypageS.ReserTitleBox>
               <MypageS.ReserStateBox>
                 <MypageS.ReserDetailsWrap>
@@ -68,7 +75,12 @@ const ReservationDetails = () => {
                   </MypageS.ReserListWrap>
                 </MypageS.ReserDetailsWrap>
                 <MypageS.ReserStateWrap>
-                  <MypageS.ReserStateBtn>예약취소</MypageS.ReserStateBtn>
+                  {reserData.resv_state === 1 && (
+                    <MypageS.ReserStateBtn>예약취소</MypageS.ReserStateBtn>
+                  )}
+                  {reserData.resv_state === 2 && (
+                    <MypageS.ReserStateBtn>후기등록</MypageS.ReserStateBtn>
+                  )}
                 </MypageS.ReserStateWrap>
               </MypageS.ReserStateBox>
             </MypageS.ReserConBox>

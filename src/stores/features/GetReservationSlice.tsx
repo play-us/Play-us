@@ -53,8 +53,6 @@ export const getReserDataSlice = createSlice({
         for (let i = stateIndex; i < stateIndex + 3; i++) {
           stateDatas.push(mocDatas[i]);
         }
-        // stateIndex = stateLastIndex; 이렇게 사용하면 stateIndex라는 변수에 담긴  참조주소가 바뀌는 것이므로 상태 업데이트가 감지가 안 되서 이렇게 사용하면 안됨
-      
         // 남은 목데이터가 3개 미만이거나 목데이터가 3개 미만일 때 스테이트에 담아주는 구문 
       } else if ( mocDatasLength - stateDataLength < 3) {
         // 목데이터 배열 길이가 0 보다 크고 목데이터 배열 길이에서 스테이트 배열 길이를 뺀 값이 3보다 작으면
@@ -70,6 +68,7 @@ export const getReserDataSlice = createSlice({
       }
       stateLastIndex = stateDatas.length; // 스테이트 배열의 길이가 그다음 인덱스 번호이기 때문에 
       state.stateIndex = stateLastIndex; // 저장한 마지막 인덱스 번호를 state에 보관
+       // stateIndex = stateLastIndex; 이렇게 사용하면 stateIndex라는 변수에 담긴  참조주소가 바뀌는 것이므로 상태 업데이트가 감지가 안 되서 이렇게 사용하면 안됨
     });
     builder.addCase(reserFetch.rejected, (state, action) => {});
   },

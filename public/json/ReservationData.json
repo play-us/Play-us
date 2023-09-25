@@ -17,7 +17,7 @@
       "member_id": 1,
       "resv_date": "2023-09-14",
       "resv_time": "13:42:30",
-      "resv_state": 1,
+      "resv_state": 2,
       "resv_price": 12000,
       "resv_field_name": "정릉 풋살장",
       "resv_field_loca": "보문역 2번출구 앞"
@@ -25,10 +25,10 @@
     {
       "resv_id": 3,
       "field_id": 3,
-      "member_id": 1,
+      "member_id": 0,
       "resv_date": "2023-09-14",
       "resv_time": "13:42:30",
-      "resv_state": 1,
+      "resv_state": 0,
       "resv_price": 11000,
       "resv_field_name": "종로 풋살장",
       "resv_field_loca": "종로2가역 1번출구 앞"
@@ -39,7 +39,7 @@
       "member_id": 1,
       "resv_date": "2023-09-14",
       "resv_time": "13:42:30",
-      "resv_state": 1,
+      "resv_state": 2,
       "resv_price": 14000,
       "resv_field_name": "성신 풋살장",
       "resv_field_loca": "성신여대역 1번출구 앞"
@@ -50,7 +50,7 @@
       "member_id": 1,
       "resv_date": "2023-09-14",
       "resv_time": "13:42:30",
-      "resv_state": 1,
+      "resv_state": 2,
       "resv_price": 10000,
       "resv_field_name": "김포 풋살장",
       "resv_field_loca": "당산역 1번출구 앞"
@@ -61,7 +61,7 @@
       "member_id": 1,
       "resv_date": "2023-09-14",
       "resv_time": "13:42:30",
-      "resv_state": 1,
+      "resv_state": 2,
       "resv_price": 12000,
       "resv_field_name": "신림 풋살장",
       "resv_field_loca": "보문역 2번출구 앞"
@@ -72,7 +72,7 @@
       "member_id": 1,
       "resv_date": "2023-09-14",
       "resv_time": "13:42:30",
-      "resv_state": 1,
+      "resv_state": 2,
       "resv_price": 14000,
       "resv_field_name": "마포 풋살장",
       "resv_field_loca": "성신여대역 1번출구 앞"
