@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
-import { Col, Row } from 'antd';
+import { Col, Row, Select, Space } from 'antd';
 import FieldListItem from './FieldListItem';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import LabelAndSelectBox from '../common/LabelAndSelectBox';
 
 interface IFieldItem {
   field_id: string;
@@ -36,9 +34,54 @@ interface IRowData {
   img_url: string;
 }
 
+interface IFieldTypeData {
+  value: string;
+  label: string;
+}
+
 const FieldList = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [rowDataList, setRowDataList] = useState<IRowData[]>([]);
+  const [activeTab, setActiveTab] = useState<number>(0);
+  // 검색 영역
+  const [schArea, setSchArea] = useState<IFieldTypeData>({
+    value: '',
+    label: '전체',
+  });
+  const [schFieldType, setSchFieldType] = useState<IFieldTypeData>({
+    value: '',
+    label: '전체',
+  });
+
+  /* 탭메뉴 리스트 */
+  const tabList = [
+    {
+      id: 0,
+      name: '전체',
+    },
+    {
+      id: 1,
+      name: '예약많은 순',
+    },
+    {
+      id: 2,
+      name: '신규등록 순',
+    },
+  ];
+
+  /* 지역 리스트 */
+  const areas = [
+    { value: '', label: '지역 전체' },
+    { value: '서울', label: '서울시' },
+    { value: '부산', label: '부산시' },
+  ];
+
+  /* 구장유형 리스트 */
+  const fieldTypeList = [
+    { value: '', label: '구장유형 전체' },
+    { value: 'f', label: '풋살장' },
+    { value: 's', label: '축구장' },
+  ];
 
   /* 데이터 조회 */
   useEffect(() => {
@@ -70,17 +113,44 @@ const FieldList = () => {
     });
   }, []);
 
-  const settings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 2,
+  /* 구장유형 선택 */
+  const handleChangeArea = (value: string, label: string) => {
+    setSchArea({ value: value, label: label });
+  };
+
+  /* 구장유형 선택 */
+  const handleChangeFieldType = (value: string, label: string) => {
+    setSchFieldType({ value: value, label: label });
   };
 
   return (
     <Row>
       <Col span={24}>
+        <TabMenu>
+          {tabList.map((item) => (
+            <Tab
+              key={item.id}
+              active={activeTab === item.id}
+              onClick={() => setActiveTab(item.id)}
+            >
+              {item.name}
+            </Tab>
+          ))}
+        </TabMenu>
+        <Space wrap>
+          <Select
+            defaultValue={areas[0].label}
+            style={{ width: 120 }}
+            onChange={() => handleChangeArea}
+            options={areas}
+          />
+          <Select
+            defaultValue={fieldTypeList[0].label}
+            style={{ width: 120 }}
+            onChange={() => handleChangeFieldType}
+            options={fieldTypeList}
+          />
+        </Space>
         <FieldItemWrap>
           {!isLoading &&
             rowDataList.map((data: IRowData) => (
@@ -92,21 +162,29 @@ const FieldList = () => {
           주변 관심 종목 구장 리스트
           <MoreBtn>더보기</MoreBtn>
         </SlideTitle>
-        <SliderWrap>
-          {rowDataList.length > 0 && (
-            <Slider {...settings}>
-              {rowDataList.map((data: IRowData) => (
-                <FieldListItem data={data} key={data.field_id} />
-              ))}
-            </Slider>
-          )}
-        </SliderWrap>
       </Col>
     </Row>
   );
 };
 
 export default FieldList;
+
+const TabMenu = styled.div`
+  display: flex;
+  justify-contents: start;
+  align-items: center;
+  margin: 1.8rem;
+  margin-left: 0;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.5rem;
+`;
+
+const Tab = styled.div<{ active: boolean }>`
+  margin-right: 1.5rem;
+  font-size: 20px;
+  color: ${(props) => (props.active ? '#444' : '#868e96')};
+`;
 
 const FieldItemWrap = styled.div`
   width: 100%;
@@ -160,42 +238,5 @@ const MoreBtn = styled.button`
   &:hover {
     color: #a2a1a1;
     transition: all 0.5s ease;
-  }
-`;
-
-const SliderWrap = styled.div`
-  width: 100%;
-
-  .slick-track {
-    margin: 0;
-    display: flex;
-    justify-content: start;
-    overflow: hidden;
-  }
-
-  .slick-prev:before,
-  .slick-next:before {
-    color: #c2c2c2;
-    font-size: 30px;
-    opacity: 1;
-  }
-
-  .slick-slide {
-    width: calc(25% - 1rem);
-    text-align: center;
-    margin-right: 1rem;
-  }
-
-  @media screen and (max-width: 600px) {
-    width: 100%;
-
-    .slick-arrow {
-      right: 0;
-    }
-
-    .slick-prev:before,
-    .slick-next:before {
-      display: none;
-    }
   }
 `;
