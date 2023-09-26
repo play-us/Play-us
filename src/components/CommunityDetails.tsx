@@ -1,14 +1,15 @@
 import * as MypageS from '../styles/Mypage';
+import * as MypageCommuS from '../styles/MypageCommu';
 
 const CommunityDetails = () => {
     return(
         <MypageS.MyListRight>
-            <MypageS.CommuConBox>
-                <MypageS.CommuStateWrap>
-                    <MypageS.CommuStateBtn>작성 글</MypageS.CommuStateBtn>
-                    <MypageS.CommuStateBtn>작성 댓글</MypageS.CommuStateBtn>
-                </MypageS.CommuStateWrap>
-            </MypageS.CommuConBox>
+            <MypageCommuS.CommuConBox>
+                <MypageCommuS.CommuStateWrap>
+                    <MypageCommuS.CommuStateBtn>작성 글</MypageCommuS.CommuStateBtn>
+                    <MypageCommuS.CommuStateBtn>작성 댓글</MypageCommuS.CommuStateBtn>
+                </MypageCommuS.CommuStateWrap>
+            </MypageCommuS.CommuConBox>
         </MypageS.MyListRight>
     )
 }

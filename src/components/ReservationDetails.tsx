@@ -1,10 +1,14 @@
+import * as MypageReserS from '../styles/MypageReser';
 import * as MypageS from '../styles/Mypage';
 import { MapPin, CalendarDays, Clock10 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../stores/Store';
 import { reserFetch } from '../stores/features/GetReservationSlice';
 import { useEffect, useRef } from 'react';
-
-const ReservationDetails = () => {
+import React, { SetStateAction, Dispatch } from 'react'
+interface setModalProp {
+  setModalState : Dispatch<SetStateAction<boolean>>;
+}
+const ReservationDetails = (props:setModalProp) => {
   const reserDatas = useAppSelector((state) => {
     return state.getReserData.reserdata;
   });
@@ -24,7 +28,7 @@ const ReservationDetails = () => {
   const callback = (entries: any[], observer: any) => {
     entries.forEach((entry: any) => {
       if (entry.isIntersecting) {
-        // 대상 요소가 화면에 나타났을 때 실행할 코드
+        // 대상 태그(<div ref={target}></div>)가 화면에 나타났을 때 실행할 코드
         changeDispatch(reserFetch());
       }
     });
@@ -35,59 +39,59 @@ const ReservationDetails = () => {
   }
   return (
     <MypageS.MyListRight ref={targetCont}>
-      <MypageS.ReserConWrap>
+      <MypageReserS.ReserConWrap>
         {reserDatas.map(function (reserData, i) {
           return (
-            <MypageS.ReserConBox>
-              <MypageS.ReserTitleBox>
-                <MypageS.ReserTitle>
+            <MypageReserS.ReserConBox>
+              <MypageReserS.ReserTitleBox>
+                <MypageReserS.ReserTitle>
                   {reserData.resv_field_name}
-                </MypageS.ReserTitle>
+                </MypageReserS.ReserTitle>
                 {reserData.resv_state === 0 && (
-                  <MypageS.ReserCurrent>예약취소</MypageS.ReserCurrent>
+                  <MypageReserS.ReserCurrent>예약취소</MypageReserS.ReserCurrent>
                 )}
                 {reserData.resv_state === 1 && (
-                  <MypageS.ReserCurrent>예약완료</MypageS.ReserCurrent>
+                  <MypageReserS.ReserCurrent>예약완료</MypageReserS.ReserCurrent>
                 )}
                 {reserData.resv_state === 2 && (
-                  <MypageS.ReserCurrent>사용완료</MypageS.ReserCurrent>
+                  <MypageReserS.ReserCurrent>사용완료</MypageReserS.ReserCurrent>
                 )}
-              </MypageS.ReserTitleBox>
-              <MypageS.ReserStateBox>
-                <MypageS.ReserDetailsWrap>
-                  <MypageS.ReserListWrap>
+              </MypageReserS.ReserTitleBox>
+              <MypageReserS.ReserStateBox>
+                <MypageReserS.ReserDetailsWrap>
+                  <MypageReserS.ReserListWrap>
                     <MapPin strokeWidth={2} size={20} />
-                    <MypageS.ReserListText>
+                    <MypageReserS.ReserListText>
                       {reserData.resv_field_loca}
-                    </MypageS.ReserListText>
-                  </MypageS.ReserListWrap>
-                  <MypageS.ReserListWrap>
+                    </MypageReserS.ReserListText>
+                  </MypageReserS.ReserListWrap>
+                  <MypageReserS.ReserListWrap>
                     <CalendarDays strokeWidth={2} size={20} />
-                    <MypageS.ReserListText>
+                    <MypageReserS.ReserListText>
                       {reserData.resv_date}
-                    </MypageS.ReserListText>
-                  </MypageS.ReserListWrap>
-                  <MypageS.ReserListWrap>
+                    </MypageReserS.ReserListText>
+                  </MypageReserS.ReserListWrap>
+                  <MypageReserS.ReserListWrap>
                     <Clock10 strokeWidth={2} size={20} />
-                    <MypageS.ReserListText>
+                    <MypageReserS.ReserListText>
                       {reserData.resv_time}
-                    </MypageS.ReserListText>
-                  </MypageS.ReserListWrap>
-                </MypageS.ReserDetailsWrap>
-                <MypageS.ReserStateWrap>
+                    </MypageReserS.ReserListText>
+                  </MypageReserS.ReserListWrap>
+                </MypageReserS.ReserDetailsWrap>
+                <MypageReserS.ReserStateWrap>
                   {reserData.resv_state === 1 && (
-                    <MypageS.ReserStateBtn>예약취소</MypageS.ReserStateBtn>
+                    <MypageReserS.ReserStateBtn>예약취소</MypageReserS.ReserStateBtn>
                   )}
                   {reserData.resv_state === 2 && (
-                    <MypageS.ReserStateBtn>후기등록</MypageS.ReserStateBtn>
+                    <MypageReserS.ReserStateBtn>후기등록</MypageReserS.ReserStateBtn>
                   )}
-                </MypageS.ReserStateWrap>
-              </MypageS.ReserStateBox>
-            </MypageS.ReserConBox>
+                </MypageReserS.ReserStateWrap>
+              </MypageReserS.ReserStateBox>
+            </MypageReserS.ReserConBox>
           );
         })}
         <div ref={target}></div> {/* 무한스크롤 맨밑 위치를 위한 태그 */}
-      </MypageS.ReserConWrap>
+      </MypageReserS.ReserConWrap>
     </MypageS.MyListRight>
   );
 };
