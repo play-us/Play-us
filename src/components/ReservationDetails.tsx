@@ -3,17 +3,15 @@ import * as MypageS from '../styles/Mypage';
 import { MapPin, CalendarDays, Clock10 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../stores/Store';
 import { reserFetch } from '../stores/features/GetReservationSlice';
-import { useEffect, useRef } from 'react';
-import React, { SetStateAction, Dispatch } from 'react'
-interface setModalProp {
-  setModalState : Dispatch<SetStateAction<boolean>>;
-}
-const ReservationDetails = (props:setModalProp) => {
+import { useRef, useState } from 'react';
+import ReserCancle from '../components/ReserCancleModal';
+
+const ReservationDetails = () => {
   const reserDatas = useAppSelector((state) => {
     return state.getReserData.reserdata;
   });
-  // 예약 데이터 dispatch
-  const changeDispatch = useAppDispatch();
+  // 예약내역 데이터 호출 dispatch
+  const mocDataDispatch = useAppDispatch();
   // 무한 스크롤 intersection observer api
   const target = useRef<HTMLDivElement>(null);
   const targetCont = useRef<HTMLDivElement>(null);
@@ -29,7 +27,7 @@ const ReservationDetails = (props:setModalProp) => {
     entries.forEach((entry: any) => {
       if (entry.isIntersecting) {
         // 대상 태그(<div ref={target}></div>)가 화면에 나타났을 때 실행할 코드
-        changeDispatch(reserFetch());
+        mocDataDispatch(reserFetch());
       }
     });
   };
@@ -37,8 +35,14 @@ const ReservationDetails = (props:setModalProp) => {
   if (target.current) {
     observer.observe(target.current);
   }
+  // 모달 공통 state
+  const [modalState, setModalState] = useState<boolean>(false);
+  // 모달창에 전달할 해당 예약데이터 인덱스 번호 state
+  const [dataIndex,setDataIndex] = useState<number>(0);
   return (
     <MypageS.MyListRight ref={targetCont}>
+      {/* 예약취소 모달 */}
+      {modalState === true ? <ReserCancle setModalState={setModalState} dataIndex ={dataIndex}></ReserCancle>: null}
       <MypageReserS.ReserConWrap>
         {reserDatas.map(function (reserData, i) {
           return (
@@ -48,13 +52,19 @@ const ReservationDetails = (props:setModalProp) => {
                   {reserData.resv_field_name}
                 </MypageReserS.ReserTitle>
                 {reserData.resv_state === 0 && (
-                  <MypageReserS.ReserCurrent>예약취소</MypageReserS.ReserCurrent>
+                  <MypageReserS.ReserCurrent>
+                    예약취소
+                  </MypageReserS.ReserCurrent>
                 )}
                 {reserData.resv_state === 1 && (
-                  <MypageReserS.ReserCurrent>예약완료</MypageReserS.ReserCurrent>
+                  <MypageReserS.ReserCurrent>
+                    예약완료
+                  </MypageReserS.ReserCurrent>
                 )}
                 {reserData.resv_state === 2 && (
-                  <MypageReserS.ReserCurrent>사용완료</MypageReserS.ReserCurrent>
+                  <MypageReserS.ReserCurrent>
+                    사용완료
+                  </MypageReserS.ReserCurrent>
                 )}
               </MypageReserS.ReserTitleBox>
               <MypageReserS.ReserStateBox>
@@ -80,10 +90,19 @@ const ReservationDetails = (props:setModalProp) => {
                 </MypageReserS.ReserDetailsWrap>
                 <MypageReserS.ReserStateWrap>
                   {reserData.resv_state === 1 && (
-                    <MypageReserS.ReserStateBtn>예약취소</MypageReserS.ReserStateBtn>
+                    <MypageReserS.ReserStateBtn
+                      onClick={() => {
+                        setModalState(true);
+                        setDataIndex(i);
+                      }}
+                    >
+                      예약취소
+                    </MypageReserS.ReserStateBtn>
                   )}
                   {reserData.resv_state === 2 && (
-                    <MypageReserS.ReserStateBtn>후기등록</MypageReserS.ReserStateBtn>
+                    <MypageReserS.ReserStateBtn>
+                      후기등록
+                    </MypageReserS.ReserStateBtn>
                   )}
                 </MypageReserS.ReserStateWrap>
               </MypageReserS.ReserStateBox>

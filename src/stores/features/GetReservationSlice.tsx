@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { stat } from 'fs';
 
 // 예약 데이터 thunk
@@ -36,15 +36,19 @@ const initialState: reserDataState = {
 export const getReserDataSlice = createSlice({
   name: 'getReserData',
   initialState,
-  reducers: {},
+  reducers: {
+    reserStateChange:(state,action:PayloadAction<{reserState:number,index:number}>) => {
+      state.reserdata[action.payload.index].resv_state = action.payload.reserState;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(reserFetch.pending, (state, action) => {});
     builder.addCase(reserFetch.fulfilled, (state, action) => {
       const mocDatas = action.payload.reserData; // action을 통해 받아온 목데이터
       const stateDatas = state.reserdata; // 스테이트에 저장된 목데이터
       let stateIndex = state.stateIndex; // 스테이트에 다음 인덱스 번호를 저장하기 위한 변수
-      let stateLastIndex: number = 0; // 스테이트로 다음 인덱스를 보내주기 위한 변수
-      let mocDatasLength:number = mocDatas.length; // 목데이터 개수
+      let stateLastIndex = 0; // 스테이트로 다음 인덱스를 보내주기 위한 변수
+      let mocDatasLength = mocDatas.length; // 목데이터 개수
       let stateDataLength = stateDatas.length; // 스테이트에 저장된 데이터 개수
       // 스테이트에  목데이터를 3개 씩 담아주는 구문
       if (mocDatasLength - stateDataLength >= 3 ) {
@@ -75,3 +79,4 @@ export const getReserDataSlice = createSlice({
 });
 
 export { reserFetch };
+export let{reserStateChange} = getReserDataSlice.actions;

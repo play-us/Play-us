@@ -1,5 +1,15 @@
 import * as MypageCanModalS from '../styles/MypageReviewCancleModal';
-const ReserCancle = () => {
+import React, { SetStateAction, Dispatch } from 'react';
+import { useAppDispatch } from '../stores/Store';
+import { reserStateChange } from '../stores/features/GetReservationSlice';
+interface setModalProp {
+  setModalState: Dispatch<SetStateAction<boolean>>;
+  dataIndex: number;
+}
+const ReserCancle = (props: setModalProp) => {
+   // 예약내역 데이터 호출 dispatch
+   const mocDataDispatch = useAppDispatch();
+   console.log(props);
   return (
     <MypageCanModalS.CancleWrap>
       <MypageCanModalS.CancleBox>
@@ -17,8 +27,21 @@ const ReserCancle = () => {
           </MypageCanModalS.CancleWarnText>
         </MypageCanModalS.CancleImgTxtWrap>
         <MypageCanModalS.CancleWarnBtnWrap>
-          <MypageCanModalS.CancleWarnBtn>취소</MypageCanModalS.CancleWarnBtn>
-          <MypageCanModalS.CancleWarnBtn>확인</MypageCanModalS.CancleWarnBtn>
+          <MypageCanModalS.CancleWarnBtn
+            onClick={() => {
+              props.setModalState(false);
+            }}
+          >
+            취소
+          </MypageCanModalS.CancleWarnBtn>
+          <MypageCanModalS.CancleWarnBtn
+            onClick={() => {
+              mocDataDispatch(reserStateChange({ reserState: 0, index: props.dataIndex }));
+              props.setModalState(false);
+            }}
+          >
+            확인
+          </MypageCanModalS.CancleWarnBtn>
         </MypageCanModalS.CancleWarnBtnWrap>
       </MypageCanModalS.CancleBox>
     </MypageCanModalS.CancleWrap>

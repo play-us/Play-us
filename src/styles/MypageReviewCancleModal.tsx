@@ -70,6 +70,7 @@ export const CancleWarnBtn = styled.li`
   border-radius: 10px;
   box-sizing: border-box;
   font-weight: bold;
+  cursor: pointer;
   &:nth-child(1){
     background-color: #d9d9d9;
   }
