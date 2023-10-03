@@ -7,7 +7,7 @@ import MyPage from './pages/MyPage';
 import Community from './pages/Community';
 import RecruitTeamDetail from './components/recruitTeam/RecruitTeamDetail';
 import SocialKakao from './components/kakaoLogin/SocialKakao';
-import SignIn from './pages/SingIn';
+import SignIn from './pages/SignIn';
 
 const Wrap = styled.div`
   background-color: #f2f5f7;
