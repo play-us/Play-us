@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { Eye, Heart } from 'lucide-react';
 
 interface IRowData {
@@ -18,29 +19,26 @@ const FieldListItem = (props: { data: IRowData }) => {
 
   return (
     <Wrap key={data.field_id}>
-      <ThumbImg>
-        <img src={data.img_url} alt="썸네일 이미지" />
-      </ThumbImg>
-      <InfoWrap>
-        <Date>10월 22일 일요일</Date>
-        <FieldName>{data.field_name}</FieldName>
-        <Addr>
-          {data.area} {data.addr}
-          <a href="#">주소 복사</a>
-          <a href="#">지도 보기</a>
-        </Addr>
-        <Interest>
-          <Eye />
-          {data.views}
-          <Heart />
-          {data.like_cnt}
-        </Interest>
-        <Contour />
-        <UseInfo>
-          <Price>{data.price}원</Price>
-          <Hours>/ {data.hours}시간</Hours>
-        </UseInfo>
-      </InfoWrap>
+      <Link to={`/fieldDetail?id=${data.field_id}`}>
+        <ThumbImg>
+          <img src={data.img_url} alt="썸네일 이미지" />
+        </ThumbImg>
+        <InfoWrap>
+          <Date>10월 22일 일요일</Date>
+          <FieldName>{data.field_name}</FieldName>
+          <Interest>
+            <Eye />
+            {data.views}
+            <Heart />
+            {data.like_cnt}
+          </Interest>
+          <Contour />
+          <UseInfo>
+            <Price>{data.price}원</Price>
+            <Hours>/ {data.hours}시간</Hours>
+          </UseInfo>
+        </InfoWrap>
+      </Link>
     </Wrap>
   );
 };
@@ -97,6 +95,7 @@ const InfoWrap = styled.div`
 
 const Date = styled.div`
   font-size: 1.1rem;
+  color: #7b7b7b;
 `;
 
 const FieldName = styled.div`
@@ -107,19 +106,7 @@ const FieldName = styled.div`
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
-`;
-
-const Addr = styled.div`
-  color: #9c9c9c;
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  text-overflow: ellipsis;
-
-  & a {
-    margin: 0 0.4rem;
-  }
+  color: #222;
 `;
 
 const Interest = styled.div`
