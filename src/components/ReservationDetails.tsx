@@ -4,7 +4,8 @@ import { MapPin, CalendarDays, Clock10 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../stores/Store';
 import { reserFetch } from '../stores/features/GetReservationSlice';
 import { useRef, useState } from 'react';
-import ReserCancle from '../components/ReserCancleModal';
+import CancleModal from '../components/CancleModal';
+import ReviewWriteModal from './ReviewWriteModal';
 
 const ReservationDetails = () => {
   const reserDatas = useAppSelector((state) => {
@@ -35,14 +36,22 @@ const ReservationDetails = () => {
   if (target.current) {
     observer.observe(target.current);
   }
-  // 모달 공통 state
-  const [modalState, setModalState] = useState<boolean>(false);
+  // 예약취소,후기등록 모달  state
+  const [cModalState, setCModalState] = useState<boolean>(false);
+  const [wModalState, setWModalState] = useState<boolean>(false);
   // 모달창에 전달할 해당 예약데이터 인덱스 번호 state
-  const [dataIndex,setDataIndex] = useState<number>(0);
+  const [dataIndex, setDataIndex] = useState<number>(0);
+  // 모달 상태에 따라 변수에 담아줄 컴포넌트
+  let showModal: null | JSX.Element = null;
+  if (cModalState === true) {
+    showModal = <CancleModal setCModalState={setCModalState} dataIndex={dataIndex}></CancleModal>;
+  }else if(wModalState === true) {
+    showModal = <ReviewWriteModal setWModalState ={setWModalState}></ReviewWriteModal>;
+  }
   return (
     <MypageS.MyListRight ref={targetCont}>
       {/* 예약취소 모달 */}
-      {modalState === true ? <ReserCancle setModalState={setModalState} dataIndex ={dataIndex}></ReserCancle>: null}
+      {showModal}
       <MypageReserS.ReserConWrap>
         {reserDatas.map(function (reserData, i) {
           return (
@@ -92,7 +101,7 @@ const ReservationDetails = () => {
                   {reserData.resv_state === 1 && (
                     <MypageReserS.ReserStateBtn
                       onClick={() => {
-                        setModalState(true);
+                        setCModalState(true);
                         setDataIndex(i);
                       }}
                     >
@@ -100,7 +109,11 @@ const ReservationDetails = () => {
                     </MypageReserS.ReserStateBtn>
                   )}
                   {reserData.resv_state === 2 && (
-                    <MypageReserS.ReserStateBtn>
+                    <MypageReserS.ReserStateBtn
+                      onClick={() => {
+                        setWModalState(true);
+                      }}
+                    >
                       후기등록
                     </MypageReserS.ReserStateBtn>
                   )}

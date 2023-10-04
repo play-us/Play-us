@@ -37,6 +37,7 @@ export const getReserDataSlice = createSlice({
   name: 'getReserData',
   initialState,
   reducers: {
+    // 예약취소 모달  예약 데이터 상태 변경 함수 (변경할 예약 상태 번호와 해당 데이터 인덱스 번호 매개변수로 받아옴)
     reserStateChange:(state,action:PayloadAction<{reserState:number,index:number}>) => {
       state.reserdata[action.payload.index].resv_state = action.payload.reserState;
     }

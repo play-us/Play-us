@@ -1,6 +1,6 @@
-// 마이페이지 리뷰 취소 모달 컴포넌트 css
+// 마이페이지 리뷰 취소 모달, 관리자 페이지 상품등록 취소 컴포넌트 css
 import { css, styled } from 'styled-components';
-import warn from '../assets/images/mypagemodalwarning.png';
+import warn from '../../assets/images/mypagemodalwarning.png';
 
 export const CancleWrap = styled.div`
   width: 100%;

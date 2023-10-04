@@ -1,15 +1,15 @@
-import * as MypageCanModalS from '../styles/MypageReviewCancleModal';
+//예약 취소 , 관리자 상품등록 취소 모달 컴포넌트
+import * as MypageCanModalS from '../styles/common/CancleModal';
 import React, { SetStateAction, Dispatch } from 'react';
 import { useAppDispatch } from '../stores/Store';
 import { reserStateChange } from '../stores/features/GetReservationSlice';
-interface setModalProp {
-  setModalState: Dispatch<SetStateAction<boolean>>;
+interface cModalProp {
+  setCModalState: Dispatch<SetStateAction<boolean>>;
   dataIndex: number;
 }
-const ReserCancle = (props: setModalProp) => {
-   // 예약내역 데이터 호출 dispatch
+const ReserCancle = (props: cModalProp) => {
+   // 예약내역 데이터 변경 dispatch
    const mocDataDispatch = useAppDispatch();
-   console.log(props);
   return (
     <MypageCanModalS.CancleWrap>
       <MypageCanModalS.CancleBox>
@@ -29,7 +29,7 @@ const ReserCancle = (props: setModalProp) => {
         <MypageCanModalS.CancleWarnBtnWrap>
           <MypageCanModalS.CancleWarnBtn
             onClick={() => {
-              props.setModalState(false);
+              props.setCModalState(false);
             }}
           >
             취소
@@ -37,7 +37,7 @@ const ReserCancle = (props: setModalProp) => {
           <MypageCanModalS.CancleWarnBtn
             onClick={() => {
               mocDataDispatch(reserStateChange({ reserState: 0, index: props.dataIndex }));
-              props.setModalState(false);
+              props.setCModalState(false);
             }}
           >
             확인
