@@ -8,6 +8,7 @@ import FieldListPage from './pages/FieldListPage';
 import FieldDetailPage from './pages/FieldDetailPage';
 import Community from './pages/Community';
 import RecruitTeamDetail from './components/recruitTeam/RecruitTeamDetail';
+import Home from './pages/index';
 import SocialKakao from './components/kakaoLogin/SocialKakao';
 import SignIn from './pages/SignIn';
 
@@ -28,7 +29,7 @@ function App() {
       <Wrap>
         <InnerWrap>
           <Routes>
-            <Route path="/"></Route>
+            <Route path="/" element={<Home />}></Route>
             <Route path="/signIn" element={<SignIn />}></Route>
             <Route path="/signUp"></Route>
             <Route path="/mypage" element={<MyPage></MyPage>}></Route>
