@@ -19,6 +19,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	font-family: 'NanumSquareNeo', sans-serif;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -43,7 +44,7 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-utton{
+button{
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
@@ -52,6 +53,14 @@ utton{
 	-moz-appearance: none;
 	appearance: none;
 }
+@font-face {
+    font-family: 'Noto Sans KR';
+    src:url('./fonts/NanumSquareNeoTTF-bRg.ttf') format('woff'),
+        url('./fonts/NanumSquareNeoTTF-bRg.ttf') format('woff2');
+    /* 이런식으로 weight를 지정해서 사용할 수도 있다!*/
+    font-weight: 400;
+}
+
 `;
 
 export default GlobalStyle;
