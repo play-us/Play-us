@@ -69,10 +69,11 @@ const Home = () => {
 
   /* 전체로 조회 */
   const getDataAll = () => {
+    setIsLoading(true);
     Axios.get<IFieldItem[]>('/json/field.json').then((response) => {
       const data = response.data;
 
-      if (data.length > 0) {
+      if (data && data.length > 0) {
         const rows: IRowData[] = [];
         data.slice(0, 6).forEach((d: IFieldItem) => {
           const row = {

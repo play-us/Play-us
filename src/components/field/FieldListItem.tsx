@@ -46,8 +46,7 @@ const FieldListItem = (props: { data: IRowData }) => {
 export default FieldListItem;
 
 const Wrap = styled.div`
-  width: 100%
-  border-radius: 4px;
+  width: 100%;
   overflow: hidden;
   ointer-events: none;
   outline: 1px solid rgba(23, 23, 23, 0.08);
