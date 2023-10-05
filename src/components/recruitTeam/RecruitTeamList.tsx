@@ -4,6 +4,7 @@ import { Eye, Hand, MessageSquare, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import RecruitTeamAddMoadl from './RecruitTeamAddModal';
 
 //url 팀원모집 게시판 리스트
 const urlGetRecruitTeamList = '/json/community.json';
@@ -46,12 +47,15 @@ interface CommunityHeaderWrapProps {
 const RecruitTeamList = () => {
   const { Title } = Typography;
   const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [rowDataList, setRowDataList] = useState<IRowData[]>([]);
 
-  const NavigateCommunityDetail = () => {
-    navigate('/recruitTeamDetail');
+  const handleModalOpenOnClick = () => {
+    setModalOpen(true);
   };
-
+  const handleModalCloseOnClick = () => {
+    setModalOpen(false);
+  };
   // 화면 진입시 커뮤니티 게시글들 렌더링 하기.
   useEffect(() => {
     // 타입설정 없이 초기 연결
@@ -99,13 +103,19 @@ const RecruitTeamList = () => {
         {/* 커뮤니티 헤더 */}
         <CommunityHearderWrap wrapWidth="100%">
           <Title level={4}>커뮤니티 게시판</Title>
-          <CommunityModalButton onClick={NavigateCommunityDetail}>
+          <CommunityModalButton onClick={handleModalOpenOnClick}>
             글쓰기
           </CommunityModalButton>
         </CommunityHearderWrap>
         {/* 커뮤니티 게시글 리스트 */}
         {communityList}
       </Col>
+      {modalOpen ? (
+        <RecruitTeamAddMoadl
+          open={modalOpen}
+          onClose={handleModalCloseOnClick}
+        />
+      ) : null}
     </Row>
   );
 };
