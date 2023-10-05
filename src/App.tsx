@@ -4,6 +4,8 @@ import Header from './components/common/Navbar';
 import { styled } from 'styled-components';
 import { Route, Routes } from 'react-router-dom';
 import MyPage from './pages/MyPage';
+import FieldListPage from './pages/FieldListPage';
+import FieldDetailPage from './pages/FieldDetailPage';
 import Community from './pages/Community';
 import RecruitTeamDetail from './components/recruitTeam/RecruitTeamDetail';
 import SocialKakao from './components/kakaoLogin/SocialKakao';
@@ -30,7 +32,8 @@ function App() {
             <Route path="/signIn" element={<SignIn />}></Route>
             <Route path="/signUp"></Route>
             <Route path="/mypage" element={<MyPage></MyPage>}></Route>
-            <Route path="/fieldList"></Route>
+            <Route path="/fieldList" element={<FieldListPage />}></Route>
+            <Route path="/fieldDetail" element={<FieldDetailPage />}></Route>
             <Route path="/community" element={<Community />}></Route>
             <Route
               path="/recruitTeamDetail"
