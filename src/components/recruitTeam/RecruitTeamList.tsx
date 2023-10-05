@@ -208,8 +208,13 @@ const CommunityItemWrap = styled.div`
   width: 100%;
   height: 150px;
   margin: 0 auto;
-  border: 1px solid #000000;
+  /* border: 1px solid #000000; */
   margin-bottom: 1rem;
+  border-radius: 8px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgb(255 255 255 / 12%) 0px 0px 2px 0px inset,
+    rgb(0 0 0 / 5%) 0px 0px 2px 1px, rgb(0 0 0 / 15%) 0px 4px 12px;
+  box-sizing: border-box;
 `;
 
 const UserInfo = styled.div`
