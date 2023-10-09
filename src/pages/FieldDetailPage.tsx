@@ -3,17 +3,15 @@ import Axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import {
-  Eye,
+  MessageSquare,
   Heart,
   Flag,
   ShowerHead,
   CarFront,
   Footprints,
 } from 'lucide-react';
-import { useNavigate } from 'react-router';
-import { Col, Row, Button, Typography } from 'antd';
-import FieldListItem from '../components/field/FieldListItem';
-import FieldSearchbar from '../components/field/FieldSearchbar';
+import { Button, Typography } from 'antd';
+import { RedColor } from '../styles/CommonStyle';
 
 interface IFieldItem {
   field_id: string;
@@ -58,7 +56,8 @@ const FieldDetailPage = () => {
   const field_id = searchParams.get('id');
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [rowDataList, setRowDataList] = useState<IRowData[]>([]);
+  const [data, setData] = useState<IRowData[]>([]);
+  const [liked, setLiked] = useState<boolean>(false);
 
   /* 데이터 조회 */
   useEffect(() => {
@@ -88,10 +87,15 @@ const FieldDetailPage = () => {
           rows.push(row);
         });
 
-        setRowDataList(rows);
+        setData(rows);
         setIsLoading(false);
       }
     });
+  };
+
+  /* 좋아요 기능 */
+  const putLiked = () => {
+    setLiked(!liked);
   };
 
   /* 카카오 맵 지도 */
@@ -148,14 +152,14 @@ const FieldDetailPage = () => {
     <Wrap>
       <BackgroundImg>
         <ActionWrap>
-          <WishBtn>
-            <Heart color="#696969" />
+          <WishBtn onClick={() => putLiked()}>
+            <Heart color={liked ? RedColor : '#696969'} />
           </WishBtn>
         </ActionWrap>
       </BackgroundImg>
       <SectionWrap>
         <Interest>
-          <Eye />
+          <MessageSquare />
           12
           <Heart />1
         </Interest>
@@ -216,8 +220,10 @@ const FieldDetailPage = () => {
         </SectionHeader>
         <Title level={5}>신청 취소 시 환불 기준</Title>
         <Contents>
-          예약신청일 ~ 매치 3일 전 : 무료 취소 매치 2일 전 : 80% 환급 매치 1일
-          전 : 환불 불가
+          예약신청일 ~ 매치 3일 전 : 무료 취소 <br />
+          매치 2일 전 : 80% 환급 <br />
+          매치 1일 전 : 환불 불가
+          <br />
         </Contents>
         <Title level={5}>그 외 취소 기준</Title>
         <Contents>
@@ -228,6 +234,7 @@ const FieldDetailPage = () => {
           않을 시 카카오톡 혹은 LMS으로 안내되며, 자동 전액 환불됩니다. (단,
           공지 전 직접 취소하시는 경우 상단 일반 환불 규정대로 처리되니
           유의하시길 바랍니다)
+          <br />
         </Contents>
         <Title level={5}>다음의 경우는 환불이 불가합니다.</Title>
         <Contents>
@@ -235,6 +242,7 @@ const FieldDetailPage = () => {
           사정으로 신청된 매치에 참여하지 못하는 경우 단체 혹은 지인과의 참가로
           매치 취소 혹은 변경을 원하는 경우 황사/미세먼지로 인해 취소 혹은
           변경을 요청하는 경우 단순 변심으로 취소 혹은 변경을 요청하는 경우
+          <br />
         </Contents>
       </SectionWrap>
     </Wrap>
@@ -259,21 +267,25 @@ const ActionWrap = styled.div`
   position: absolute;
   right: 10px;
   top: 10px;
-  display: flex;
-  justify-contents: start;
-  align-items: center;
 `;
 
-const WishBtn = styled.span`
+const WishBtn = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #fff;
   padding: 8px;
   border-radius: 4px;
+  cursor: pointer;
 `;
 
 const SectionWrap = styled.div`
   background-color: #fff;
   padding: 20px;
   margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 
 const SectionHeader = styled.div`
@@ -283,7 +295,7 @@ const SectionHeader = styled.div`
 const Interest = styled.div`
   color: #9c9c9c;
   display: flex;
-  justify-content: flex-start;
+  justify-content: end;
   align-items: center;
   margin-top: 0.8rem;
 
@@ -334,6 +346,7 @@ const FieldInfo = styled.ul`
     display: inline-flex;
     align-items: center;
     color: #979799;
+    text-decoration: line-through;
 
     & svg {
       padding-right: 8px;
@@ -347,4 +360,5 @@ const Contents = styled.pre`
   font-size: 14px;
   line-height: 22px;
   overflow: auto;
+  margin: 10px 0;
 `;

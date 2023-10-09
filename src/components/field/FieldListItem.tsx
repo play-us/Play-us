@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Eye, Heart } from 'lucide-react';
+import { MessageSquare, Heart } from 'lucide-react';
 
 interface IRowData {
   field_id: string;
@@ -27,7 +27,7 @@ const FieldListItem = (props: { data: IRowData }) => {
           <Date>10월 22일 일요일</Date>
           <FieldName>{data.field_name}</FieldName>
           <Interest>
-            <Eye />
+            <MessageSquare />
             {data.views}
             <Heart />
             {data.like_cnt}

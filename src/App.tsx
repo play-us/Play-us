@@ -18,7 +18,6 @@ const Wrap = styled.div`
 `;
 const InnerWrap = styled.div`
   width: 51.25rem;
-  height: 1200px;
   margin: 0 auto;
   background-color: #ffffff;
 `;
