@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Button, Typography } from 'antd';
 import { RedColor } from '../styles/CommonStyle';
+import FieldResvModal from '../components/field/FieldResvModal';
 
 interface IFieldItem {
   field_id: string;
@@ -58,6 +59,8 @@ const FieldDetailPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<IRowData[]>([]);
   const [liked, setLiked] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   /* 데이터 조회 */
   useEffect(() => {
@@ -148,6 +151,22 @@ const FieldDetailPage = () => {
     map.setCenter(position);
   }); */
 
+  /* 모달 상태 관련 이벤트 핸들러 */
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setIsModalOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   return (
     <Wrap>
       <BackgroundImg>
@@ -173,7 +192,7 @@ const FieldDetailPage = () => {
             <Price>10,000원</Price>
             <Hours>/ 2시간</Hours>
           </div>
-          <Button type="primary" size="large">
+          <Button type="primary" size="large" onClick={showModal}>
             예약신청
           </Button>
         </FlexWrap>
@@ -245,6 +264,12 @@ const FieldDetailPage = () => {
           <br />
         </Contents>
       </SectionWrap>
+      <FieldResvModal
+        isModalOpen={isModalOpen}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+        confirmLoading={confirmLoading}
+      />
     </Wrap>
   );
 };
