@@ -265,6 +265,7 @@ const FieldDetailPage = () => {
         </Contents>
       </SectionWrap>
       <FieldResvModal
+        fieldName="구장이름"
         isModalOpen={isModalOpen}
         handleOk={handleOk}
         handleCancel={handleCancel}
