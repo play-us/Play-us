@@ -4,6 +4,7 @@ import { Eye, Hand, MessageSquare, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { primaryColor } from '../../styles/CommonStyle';
 
 //url 팀원모집 게시판 리스트
 const urlGetRecruitTeamList = '/json/community.json';
@@ -210,7 +211,7 @@ const CommunityItemWrap = styled.div`
   margin: 0 auto;
   /* border: 1px solid #000000; */
   margin-bottom: 1rem;
-  border-radius: 8px;
+  border-radius: 0.75rem;
   background-color: rgb(255, 255, 255);
   box-shadow: rgb(255 255 255 / 12%) 0px 0px 2px 0px inset,
     rgb(0 0 0 / 5%) 0px 0px 2px 1px, rgb(0 0 0 / 15%) 0px 4px 12px;
@@ -235,11 +236,12 @@ const UserItemInfoWrap = styled.div`
 `;
 
 const CommunityModalButton = styled.button`
-  background-color: #00ffff;
+  background-color: ${primaryColor};
   color: white;
   border: none;
   width: 6.25rem;
   height: 1.875rem;
+  border-radius: 0.375rem;
 `;
 
 const CommunityItemInfo = styled.div`
