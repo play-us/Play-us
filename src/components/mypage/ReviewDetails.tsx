@@ -1,5 +1,5 @@
-import * as MypageS from '../styles/Mypage';
-import * as MypageReviewS from '../styles/MypageReview';
+import * as MypageS from '../../styles/mypage/Mypage';
+import * as MypageReviewS from '../../styles/mypage/MypageReview';
 const ReviewDetails = () => {
     const RevDatas = [1,2,3,4,5,6]; //임시 데이터 배열
     // 별점 총 개수를 위한 배열

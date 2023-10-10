@@ -1,4 +1,4 @@
-import * as MypageCommuS from '../styles/MypageCommu';
+import * as MypageCommuS from '../../styles/mypage/MypageCommu';
 import { PiHandPalmLight } from 'react-icons/pi';
 import { BiSolidCommentDots } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';

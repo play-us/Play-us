@@ -1,4 +1,4 @@
-import * as MypageCommuS from '../styles/MypageCommu';
+import * as MypageCommuS from '../../styles/mypage/MypageCommu';
 const CommuCoList = () => {
     return(
         <MypageCommuS.CommuListBox>

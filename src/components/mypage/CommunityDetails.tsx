@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import * as MypageS from '../styles/Mypage';
-import * as MypageCommuS from '../styles/MypageCommu';
+import * as MypageS from '../../styles/mypage/Mypage';
+import * as MypageCommuS from '../../styles/mypage/MypageCommu';
 import CommuPostList from './CommuPostList';
 import CommuCoList from './CommuCmList';
 

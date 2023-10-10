@@ -1,11 +1,11 @@
-import * as MypageS from '../styles/Mypage';
-import * as MypageMenuBarS from '../styles/MypageMenuBar';
+import * as MypageS from '../styles/mypage/Mypage';
+import * as MypageMenuBarS from '../styles/mypage/MypageMenuBar';
 import {  useState } from 'react';
 import {  useAppSelector } from '../stores/Store';
-import MypageMenu from './../components/MypageMenu';
-import ReservationDetails from './../components/ReservationDetails';
-import CommunityDetails from './../components/CommunityDetails';
-import ReviewDetails from './../components/ReviewDetails';
+import MypageMenu from '../components/mypage/MypageMenu';
+import ReservationDetails from '../components/mypage/ReservationDetails';
+import CommunityDetails from '../components/mypage/CommunityDetails';
+import ReviewDetails from '../components/mypage/ReviewDetails';
 
 
 const MyPage = () => {

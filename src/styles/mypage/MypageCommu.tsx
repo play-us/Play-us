@@ -1,6 +1,6 @@
 //마이페이지 커뮤니티 디테일 컴포넌트 css
 import { styled } from 'styled-components';
-import userpro from '../assets/images/mypageuserpro.png';
+import userpro from '../../assets/images/mypageuserpro.png';
 
 
 //마이페이지 오른쪽 커뮤니티 상세

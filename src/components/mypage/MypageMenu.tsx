@@ -1,7 +1,7 @@
-import { useAppDispatch, useAppSelector } from '../stores/Store';
-import { reserFetch } from '../stores/features/GetReservationSlice';
-import { menuChange } from '../stores/features/MypageMenuSlice';
-import * as MypageMenuBarS from '../styles/MypageMenuBar';
+import { useAppDispatch, useAppSelector } from '../../stores/Store';
+import { reserFetch } from '../../stores/features/GetReservationSlice';
+import { menuChange } from '../../stores/features/MypageMenuSlice';
+import * as MypageMenuBarS from '../../styles/mypage/MypageMenuBar';
 import { useEffect } from 'react';
 const MypageMenu = () => {
   console.log('렌더링');

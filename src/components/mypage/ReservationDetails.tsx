@@ -1,10 +1,10 @@
-import * as MypageReserS from '../styles/MypageReser';
-import * as MypageS from '../styles/Mypage';
+import * as MypageReserS from '../../styles/mypage/MypageReser';
+import * as MypageS from '../../styles/mypage/Mypage';
 import { MapPin, CalendarDays, Clock10 } from 'lucide-react';
-import { useAppDispatch, useAppSelector } from '../stores/Store';
-import { reserFetch } from '../stores/features/GetReservationSlice';
+import { useAppDispatch, useAppSelector } from '../../stores/Store';
+import { reserFetch } from '../../stores/features/GetReservationSlice';
 import { useRef, useState } from 'react';
-import CancleModal from '../components/CancleModal';
+import CancleModal from './CancleModal';
 import ReviewWriteModal from './ReviewWriteModal';
 
 const ReservationDetails = () => {

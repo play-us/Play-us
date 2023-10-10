@@ -1,8 +1,8 @@
 //예약 취소 , 관리자 상품등록 취소 모달 컴포넌트
-import * as MypageCanModalS from '../styles/common/CancleModal';
+import * as MypageCanModalS from '../../styles/common/CancleModal';
 import React, { SetStateAction, Dispatch } from 'react';
-import { useAppDispatch } from '../stores/Store';
-import { reserStateChange } from '../stores/features/GetReservationSlice';
+import { useAppDispatch } from '../../stores/Store';
+import { reserStateChange } from '../../stores/features/GetReservationSlice';
 interface cModalProp {
   setCModalState: Dispatch<SetStateAction<boolean>>;
   dataIndex: number;

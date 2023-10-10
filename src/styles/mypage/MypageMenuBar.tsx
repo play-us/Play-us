@@ -1,8 +1,8 @@
 // 마이페이지 메뉴바 컴포넌트 css
 import { css, styled } from 'styled-components';
-import calendar from '../assets/images/mypagecalendar.png';
-import commu from '../assets/images/mypagecommu.png';
-import review from '../assets/images/mypagereview.png';
+import calendar from '../../assets/images/mypagecalendar.png';
+import commu from '../../assets/images/mypagecommu.png';
+import review from '../../assets/images/mypagereview.png';
 
 
 
