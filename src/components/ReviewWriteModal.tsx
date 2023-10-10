@@ -1,4 +1,4 @@
-import * as ReviewWrites from '../styles/mypageReviewModal';
+import * as ReviewWrites from '../styles/MypageReviewModal';
 import { FaStar, FaStarHalf } from 'react-icons/fa';
 import { useState,useRef,SetStateAction, Dispatch  } from 'react';
 interface wModalProp {

@@ -60,7 +60,7 @@ export const StarInput = styled.input`
 `;
 export const StarLable = styled.label<{$isHalf:boolean}>`
   cursor: pointer;
-  font-size: 3.75rem;
+  font-size: 3.75rem; // 별 크기 조절
   color: lightgray;
   ${({ $isHalf }) =>
     $isHalf &&

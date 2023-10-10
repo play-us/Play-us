@@ -18,7 +18,7 @@ export const MyListLeft = styled.div`
   width: 20%;
 `;
 
-export const ListMenu = styled.div<{ $menuState?: string }>`
+export const ListMenu = styled.div<{ $menuState: string }>`
   display: flex;
   align-items: center;
   cursor: pointer;
