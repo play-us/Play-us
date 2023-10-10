@@ -1,35 +1,67 @@
-import { Col, Input, Modal, Radio, Row, Select, DatePicker } from 'antd';
+import { Col, Input, Modal, Row, Select, DatePicker, Typography } from 'antd';
+import styled from 'styled-components';
 import TextArea from 'antd/es/input/TextArea';
+import Axios from 'axios';
+import { useState } from 'react';
+const { Title } = Typography;
+
 const { Option } = Select;
-const { RangePicker } = DatePicker;
+
+const url = '';
 
 const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
   const { open, onClose } = props;
+  const [recruitCountType, setRecruitCountType] = useState<number>(0);
+  const [groundType, setGroundType] = useState<string>('전체');
+  const [recruitTitle, setRecruitTitle] = useState<string>('');
+  const [recruitText, setRecruitText] = useState<string>('');
 
   const handleAddOnClick = () => {
     // 등록 api
     console.log('OkAdd:::');
+    Axios.post(url).then((response) => {
+      // if(response === '성공'){
+      // // '성공알럿'
+      //   onClose()
+      // }
+      // else{
+      //  //실패 앐럿
+      //  //창 유지
+      // }
+    });
   };
-
+  const handleSelectChange = (type: string) => (e: any) => {
+    if (type === 'deliType') setRecruitCountType(e);
+    else if (type === 'salesType') setGroundType(e);
+  };
   const handleCloseOnClick = () => {
     onClose();
+  };
+  const handleRecruitTitleOnChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const { value } = e.target;
+    setRecruitTitle(value);
+  };
+  const handleRecruitTextOnChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    const { value } = e.target;
+    setRecruitText(value);
   };
 
   const ModalContent = () => {
     return (
       <>
-        <Col span={24} className="grid_search_parent">
-          <Row className="grid_search_row">
-            <Col span={8} className="grid_search_label">
-              종목
-            </Col>
-            <Col span={16} className="grid_search_content_last">
+        <Col span={24}>
+          <Container>
+            <ColumnName>종목</ColumnName>
+            <Col span={24}>
               <Row align="middle" style={{ height: '100%' }}>
                 <Select
-                  defaultValue={0}
-                  // disabled={isDisable.bal}
-                  // onChange={setReckoningId}
-                  // value={reckoningId}
+                  value={groundType}
+                  onChange={handleSelectChange}
+                  // value={}
                   style={{ width: '100%' }}
                 >
                   <Option value={0}>선택</Option>
@@ -41,18 +73,14 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
                 </Select>
               </Row>
             </Col>
-          </Row>
-          <Row className="grid_search_row">
-            <Col span={8} className="grid_search_label">
-              인원
-            </Col>
-            <Col span={16} className="grid_search_content_last">
+          </Container>
+          <Container>
+            <ColumnName>모집 인원</ColumnName>
+            <Col span={24}>
               <Row align="middle" style={{ height: '100%' }}>
                 <Select
-                  defaultValue={0}
-                  // disabled={isDisable.bal}
-                  // onChange={setReckoningId}
-                  // value={reckoningId}
+                  // value={recruitCountType}
+                  onChange={handleSelectChange}
                   style={{ width: '100%' }}
                 >
                   <Option value={0}>선택</Option>
@@ -64,44 +92,39 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
                 </Select>
               </Row>
             </Col>
-          </Row>
-          <Col
-            span={6}
-            className="grid_search_label"
-            style={{ height: '100%' }}
-          >
-            기간검색
-          </Col>
-          <Col span={18} className="grid_search_content_last">
-            <RangePicker
-              style={{ width: '100%' }}
-              // format={enDateFormatType.Picker}
-              // value={createdDate}
-              // ranges={{
-              //   오늘: [moment(), moment()],
-              //   '최근 7일': [moment().add(-7, 'd'), moment()],
-              //   '최근 30일': [moment().add(-30, 'd'), moment()],
-              // }}
-              // onChange={handleCreatedDateOnChange}
-            />
-          </Col>
-          <Row className="grid_search_row">
-            <Col span={8} className="grid_search_label">
-              제목
+          </Container>
+          <Container>
+            <ColumnName style={{ height: '100%' }}>모집 마감일</ColumnName>
+            <Col span={24}>
+              <DatePicker
+                style={{ width: '100%' }}
+                // defaultValue={moment()}
+                // onChange={handleDateOnChange('end')}
+                // value={moment(propsRow.validityEnd)}
+                // format={enDateFormatType.Picker}
+              />
             </Col>
-            <Col span={16} className="grid_search_content_last">
+          </Container>
+
+          <Container>
+            <ColumnName>제목</ColumnName>
+            <Col span={24}>
               <Input
-              //  value={solution} onChange={handleResiterSolution}
+                value={recruitTitle}
+                onChange={handleRecruitTitleOnChange}
               />
             </Col>
-          </Row>
-          <Row>
-            <Col span={24} className="grid_search_content_last">
+          </Container>
+          <Container>
+            <Col span={24}>
               <TextArea
-              // value={ip} onChange={handleRegisterIP} rows={1}
+                style={{ height: 200 }}
+                value={recruitText}
+                onChange={handleRecruitTextOnChange}
+                rows={4}
               />
             </Col>
-          </Row>
+          </Container>
         </Col>
       </>
     );
@@ -109,8 +132,17 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
   return (
     <>
       <Modal
-        width={'40%'}
-        title={'함께 할 때 더 즐거운 순간'}
+        width={'50%'}
+        bodyStyle={{ height: '550px' }}
+        title={
+          <Row style={{ height: '100%', marginBottom: '10px' }}>
+            <Title level={2}>함께 할 때 더 즐거운 순간</Title>
+            <Col span={24}>
+              {' '}
+              "이름" play-us에서 다양한 사람들을 만나고 즐겁게 운동하세요
+            </Col>
+          </Row>
+        }
         open={open}
         maskClosable={false}
         onOk={handleAddOnClick}
@@ -124,4 +156,12 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
   );
 };
 
+const Container = styled.div`
+  margin-bottom: 10px;
+  margin-top: 10px;
+`;
+
+const ColumnName = styled.div`
+  margin-bottom: 5px;
+`;
 export default RecruitTeamAddMoadl;
