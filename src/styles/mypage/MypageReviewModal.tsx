@@ -2,10 +2,10 @@
 import { styled } from 'styled-components';
 import { css } from "styled-components";
 export const ReWriteWrap = styled.div`
+  position: fixed;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.8);
-  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
