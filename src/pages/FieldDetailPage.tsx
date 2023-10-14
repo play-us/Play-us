@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Axios from 'axios';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   MessageSquare,
@@ -53,6 +53,7 @@ declare global {
 const { Title, Text } = Typography;
 
 const FieldDetailPage = () => {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const field_id = searchParams.get('id');
 
@@ -161,6 +162,7 @@ const FieldDetailPage = () => {
     setTimeout(() => {
       setIsModalOpen(false);
       setConfirmLoading(false);
+      navigate('/completePayment');
     }, 2000);
   };
 
