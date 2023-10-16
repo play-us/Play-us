@@ -36,3 +36,47 @@
     transform: rotate(360deg);
   }
 }
+.recruit_detail_title {
+  margin-top: 20px;
+  text-align: left;
+}
+.recruit_detail_button {
+  border-radius: 10px; /* 원하는 값으로 변경 */
+  background-color: EFEFEF;
+  max-height: 24px;
+}
+.recruit_detail_name {
+  color: #333;
+  font-size: 18px;
+  font-weight: 700;
+}
+.commnent_info_title {
+  text-align: left;
+  font-size: 20px;
+  font-weight: 700;
+  color: #717171;
+  margin-bottom: 10px;
+}
+.comment_info_content {
+  text-align: left;
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+}
+.comment_info_name {
+  color: #333;
+  font-weight: 700;
+}
+.comment_info_date {
+  font-size: 14px;
+  line-height: 126.5%;
+  letter-spacing: -0.005em;
+  color: #9f9f9f;
+}
+.comment {
+  color: #333;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  letter-spacing: -0.004em;
+  word-break: break-all;
+}
