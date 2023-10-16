@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import Header from './components/common/Navbar';
 import { styled } from 'styled-components';
-import { Route, Routes } from 'react-router-dom';
+import {  Route, Routes } from 'react-router-dom';
 import MyPage from './pages/MyPage';
 import FieldListPage from './pages/FieldListPage';
 import FieldDetailPage from './pages/FieldDetailPage';
@@ -11,6 +11,7 @@ import RecruitTeamDetail from './components/recruitTeam/RecruitTeamDetail';
 import Home from './pages/index';
 import SocialKakao from './components/kakaoLogin/SocialKakao';
 import SignIn from './pages/SignIn';
+import ProfileRetouch from './pages/ProfileRetouch';
 
 const Wrap = styled.div`
   background-color: #f2f5f7;
@@ -20,6 +21,7 @@ const InnerWrap = styled.div`
   width: 51.25rem;
   margin: 0 auto;
   background-color: #ffffff;
+  height: 100vh;
 `;
 function App() {
   return (
@@ -32,6 +34,7 @@ function App() {
             <Route path="/signIn" element={<SignIn />}></Route>
             <Route path="/signUp"></Route>
             <Route path="/mypage" element={<MyPage></MyPage>}></Route>
+            <Route path='profileRetouch' element={<ProfileRetouch></ProfileRetouch>}></Route>
             <Route path="/fieldList" element={<FieldListPage />}></Route>
             <Route path="/fieldDetail" element={<FieldDetailPage />}></Route>
             <Route path="/community" element={<Community />}></Route>

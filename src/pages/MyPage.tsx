@@ -6,6 +6,7 @@ import MypageMenu from '../components/mypage/MypageMenu';
 import ReservationDetails from '../components/mypage/ReservationDetails';
 import CommunityDetails from '../components/mypage/CommunityDetails';
 import ReviewDetails from '../components/mypage/ReviewDetails';
+import { useNavigate} from 'react-router-dom';
 
 
 const MyPage = () => {
@@ -18,6 +19,7 @@ const MyPage = () => {
   }else if(getMenuState === 'review'){
     showDetails = <ReviewDetails></ReviewDetails>
   }
+  let navigate = useNavigate()
   return (
     <MypageS.MypageWrap>
       <MypageS.MypageInfo>
@@ -28,7 +30,7 @@ const MyPage = () => {
             <MypageS.KakaoImg></MypageS.KakaoImg>
           </MypageS.UserInfoCode>
         </MypageS.MyInfoLeft>
-        <MypageS.MyInfoRight to="/profile">프로필 보기</MypageS.MyInfoRight>
+        <MypageS.MyInfoRight onClick={()=>{navigate('/profileRetouch')}}>프로필 보기</MypageS.MyInfoRight>
       </MypageS.MypageInfo>
       <MypageMenuBarS.MyListWrap>
         <MypageMenu></MypageMenu>

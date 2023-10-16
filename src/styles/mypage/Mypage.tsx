@@ -34,7 +34,7 @@ export const KakaoImg = styled.div`
   background-color: yellow;
 `;
 
-export const MyInfoRight = styled(Link)`
+export const MyInfoRight = styled.button`
   text-decoration-line: none;
   background-color: #3ce4a8;
   border-radius: 10px;
@@ -42,6 +42,7 @@ export const MyInfoRight = styled(Link)`
   font-size: 1.25rem;
   color: #ffffff;
   box-sizing: border-box;
+  cursor: pointer;
 `;
 
 

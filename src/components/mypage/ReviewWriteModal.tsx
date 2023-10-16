@@ -1,9 +1,13 @@
 import * as ReviewWrites from '../../styles/mypage/MypageReviewModal';
 import { FaStar, FaStarHalf } from 'react-icons/fa';
 import { useState,useRef,SetStateAction, Dispatch  } from 'react';
+// 별점 총 개수를 위한 배열 (상수는 대문자로 따로 뺴놓기)
+const STARCOUNT = [5,4.5,4,3.5,3,2.5,2,1.5,1,0.5];
+
 interface wModalProp {
   setWModalState: Dispatch<SetStateAction<boolean>>;
 }
+//컴포넌트 함수
 const ReviewWriteModal = (props:wModalProp) => {
   // 별점을 저장해둘 스테이트
   const [rating, setRating] = useState(0);
@@ -12,8 +16,6 @@ const ReviewWriteModal = (props:wModalProp) => {
   handleOverRating = function (value) {
     setRating(value);
   };
-  // 별점 총 개수를 위한 배열
-  const starsCount = [5,4.5,4,3.5,3,2.5,2,1.5,1,0.5];
   const inputRef = useRef<any>([]);
   if(inputRef.current.length !== 0){
     console.log(inputRef.current[0].previousSibling);
@@ -24,8 +26,8 @@ const ReviewWriteModal = (props:wModalProp) => {
         <ReviewWrites.ReWriteTit>리뷰 작성</ReviewWrites.ReWriteTit>
         <ReviewWrites.ReWriteSubTit>별점등록 ({rating}/5)</ReviewWrites.ReWriteSubTit>
         <ReviewWrites.StarInputField>
-          {starsCount.map(function(star,i){
-            let isHalf: null | boolean = null;
+          {STARCOUNT.map(function(star,i){
+            let isHalf: boolean = false;
             if(Number.isInteger(star) === true){
               isHalf = false;
             }else{

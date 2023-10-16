@@ -53,6 +53,9 @@ button{
 	-moz-appearance: none;
 	appearance: none;
 }
+input{
+	outline	:  none;
+}
 @font-face {
     font-family: 'Noto Sans KR';
     src:url('./fonts/NanumSquareNeoTTF-bRg.ttf') format('woff'),
