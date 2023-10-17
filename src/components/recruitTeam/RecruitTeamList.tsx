@@ -9,7 +9,7 @@ import { primaryColor } from '../../styles/CommonStyle';
 //url 팀원모집 게시판 리스트
 const urlGetRecruitTeamList = '/json/community.json';
 
-interface ICommunityItem {
+export interface ICommunityItem {
   created_date: string;
   commu_title: string;
   like_cnt: number;
@@ -20,9 +20,11 @@ interface ICommunityItem {
   deadLine: string;
   member_count: number;
   stadium: string;
+  content?: string;
+  location?: string;
 }
 
-interface IRowData {
+export interface IRowData {
   createdDate: string;
   commuTitle: string;
   likeCnt: number;
@@ -33,6 +35,8 @@ interface IRowData {
   deadLine: string;
   memberCount: number;
   stadium: string;
+  content?: string;
+  location?: string;
 }
 
 interface CommunityHeaderWrapProps {

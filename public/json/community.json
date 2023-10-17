@@ -10,7 +10,9 @@
     "views": 1,
     "deadLine": "2023-08-10 13:42:30",
     "member_count": 5,
-    "stadium": "축구"
+    "stadium": "축구",
+    "content": "우리는 축구에 미쳐있다 , 축구를 하고 싶다 , 우리에게 와라",
+    "location": "서울시 구로구 개봉동"
   },
   {
     "name": "추성훈 동생",
@@ -23,7 +25,9 @@
     "views": 1,
     "deadLine": "2023-08-30 13:42:30",
     "member_count": 5,
-    "stadium": "축구"
+    "stadium": "농구",
+    "content": "우리는 축구에 미쳐있다 , 축구를 하고 싶다 , 우리에게 와라",
+    "location": "서울시 구로구 개봉동"
   },
   {
     "name": "홍범진",
@@ -36,6 +40,8 @@
     "views": 1,
     "deadLine": "2023-08-30 13:42:30",
     "member_count": 5,
-    "stadium": "농구"
+    "stadium": "농구",
+    "content": "우리는 농구에 미쳐있다 , 축구를 하고 싶다 , 우리에게 와라",
+    "location": "서울시 성북구"
   }
 ]
