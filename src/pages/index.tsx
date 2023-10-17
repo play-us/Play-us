@@ -5,6 +5,15 @@ import { useNavigate } from 'react-router';
 import { Col, Row } from 'antd';
 import FieldListItem from '../components/field/FieldListItem';
 import FieldSearchbar from '../components/field/FieldSearchbar';
+import RecruitTeamInfo from '../components/recruitTeam/RecruitTeamInfo';
+import {
+  ICommunityItem,
+  ICommunityRowData,
+} from '../components/recruitTeam/RecruitTeamList';
+import { boolean } from 'yargs';
+import { MoveRight } from 'lucide-react';
+
+const urlGetRecruitTeamList = '/json/community.json';
 
 interface IFieldItem {
   field_id: string;
@@ -41,7 +50,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [rowDataList, setRowDataList] = useState<IRowData[]>([]);
   const [activeTab, setActiveTab] = useState<number>(0);
-
+  const [recruitData, setRecruitData] = useState<ICommunityRowData[]>([]);
   /* 탭메뉴 리스트 */
   const tabList = [
     {
@@ -128,7 +137,32 @@ const Home = () => {
       }
     });
   };
+  useEffect(() => {
+    Axios.get<ICommunityItem[]>(urlGetRecruitTeamList).then((response) => {
+      const data = response.data;
 
+      if (data.length > 0) {
+        const rows: ICommunityRowData[] = [];
+        data.forEach((element: ICommunityItem) => {
+          const row = {
+            createdDate: element.created_date,
+            commuTitle: element.commu_title,
+            likeCnt: element.like_cnt,
+            commentCnt: element.comment_cnt,
+            name: element.name,
+            userImg: element.p_img,
+            deadLine: element.deadLine,
+            memberCount: element.member_count,
+            stadium: element.stadium,
+            views: element.views,
+          };
+          rows.push(row);
+        });
+
+        setRecruitData(rows);
+      }
+    });
+  }, []);
   return (
     <Row>
       <Col span={24}>
@@ -154,6 +188,27 @@ const Home = () => {
           더보기
         </FieldItemMoreBtn>
       </Col>
+      <Col span={24}>
+        <RecruitSlideWrap>
+          <RecruitSlideHeader font={true} cursor={false} marginRight={false}>
+            플레이어구해요
+          </RecruitSlideHeader>
+          <RecruitSlideHeader
+            marginRight={true}
+            font={false}
+            cursor={true}
+            onClick={() => navigate('/community')}
+          >
+            더 많은 플랜보기 <MoveRight />
+          </RecruitSlideHeader>
+        </RecruitSlideWrap>
+      </Col>
+      <StyledThreeBoxesGrid>
+        {/* <RecruitTeamInfo item={recruitData} /> */}
+        {recruitData.map((item, index) => (
+          <RecruitTeamInfo item={item} key={index}></RecruitTeamInfo>
+        ))}
+      </StyledThreeBoxesGrid>
     </Row>
   );
 };
@@ -214,4 +269,30 @@ const FieldItemMoreBtn = styled.button`
     background-color: #f0f0f0;
     color: #a2a1a1;
   }
+`;
+const RecruitSlideWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 1.5rem;
+`;
+const RecruitSlideHeader = styled.div<{
+  cursor: boolean;
+  font: boolean;
+  marginRight: boolean;
+}>`
+  align-items: center;
+  cursor: ${(props) => (props.cursor ? 'pointer' : 'auto')};
+  font-weight: ${(props) =>
+    props.font ? 700 : 'normal'}; /* 700 또는 'normal' */
+  margin-right: ${(props) =>
+    props.marginRight ? '10px' : '0px'}; /* 700 또는 'normal' */
+  margin-bottom: 1.8rem;
+`;
+const StyledThreeBoxesGrid = styled.div`
+  width: 100%;
+  height: 200px;
+  display: flex;
+  gap: 16px; /* 각 박스 사이의 간격 설정, 원하는 크기로 조절하세요 */
 `;
