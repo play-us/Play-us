@@ -14,7 +14,7 @@ import SignIn from './pages/SignIn';
 import ProfileRetouch from './pages/ProfileRetouch';
 
 const Wrap = styled.div`
-  background-color: #f2f5f7;
+  background-color: #ffffff;
   margin: 0 auto;
 `;
 const InnerWrap = styled.div`

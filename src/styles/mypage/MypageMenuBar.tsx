@@ -8,67 +8,55 @@ import review from '../../assets/images/mypagereview.png';
 
 //마이페이지 메뉴, 리스트
 export const MyListWrap = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 50px;
+  margin-top: 100px;
 `;
 
 // 마이페이지 왼쪽 메뉴 선택
-export const MyListLeft = styled.div`
-  width: 20%;
+export const ListMenuWrap = styled.div`
+  display: flex;
 `;
 
-export const ListMenu = styled.div<{ $menuState: string }>`
+export const ListMenu = styled.button<{$menuState:string}>`
   display: flex;
   align-items: center;
   cursor: pointer;
-  &:nth-child(1) {
-    background-color: ${(props) => {
-      if (props.$menuState === 'reservation') {
-        return '#3ce48a';
-      } else {
-        return '#ffffff';
-      }
-    }};
-  }
-  &:nth-child(2) {
-    background-color: ${(props) => {
-      if (props.$menuState === 'community') {
-        return '#3ce48a';
-      } else {
-        return '#ffffff';
-      }
-    }};
-  }
-  &:nth-child(3) {
-    background-color: ${(props) => {
-      if (props.$menuState === 'review') {
-        return '#3ce48a';
-      } else {
-        return '#ffffff';
-      }
-    }};
-  }
-  border-radius: 10px;
-  padding: 10px;
+  border: 1px solid #dcdcdc;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1.25rem;
+  padding: 7px 25px;
+  margin-right: 15px;
+  margin-bottom: 25px;  
+  background-color: transparent;
   box-sizing: border-box;
+  color: #646464;
+  &:focus{
+    background-color:#3ce48a;
+    color: #ffffff;
+  }
+  &:nth-of-type(1){
+    background-color: ${
+      (props) => {
+        if(props.$menuState === '예약'){
+          return '#3ce48a';
+        }else {
+          return 'transparent'
+        }
+      }
+    };
+    color: ${
+      (props) => {
+        if(props.$menuState === '예약'){
+          return '#ffffff';
+        }else {
+          return '#646464'
+        }
+      }
+    };
+  }
 `;
-export const ListIcon = styled.div`
-  width: 30px;
-  height: 30px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-right: 20px;
-`;
-export const ListIcon1 = styled(ListIcon)`
-  background-image: url(${calendar});
-`;
-export const ListIcon2 = styled(ListIcon)`
-  background-image: url(${commu});
-`;
-export const ListIcon3 = styled(ListIcon)`
-  background-image: url(${review});
-`;
+
+
 export const ListTitle = styled.div`
   font-size: 1rem;
   color: #5a5a5a5a;

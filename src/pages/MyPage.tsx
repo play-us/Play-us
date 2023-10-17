@@ -12,11 +12,11 @@ import { useNavigate} from 'react-router-dom';
 const MyPage = () => {
   const getMenuState = useAppSelector((state) => state.menu.MState);
   let showDetails: JSX.Element | null = null; // 탭 메뉴별로 보여줄 ReservationDetails 컴포넌트
-  if(getMenuState === 'reservation'){
+  if(getMenuState === '예약'){
     showDetails = <ReservationDetails></ReservationDetails>;
-  }else if (getMenuState === 'community'){
+  }else if (getMenuState === '작성 글'){
     showDetails = <CommunityDetails></CommunityDetails>
-  }else if(getMenuState === 'review'){
+  }else if(getMenuState === '리뷰'){
     showDetails = <ReviewDetails></ReviewDetails>
   }
   let navigate = useNavigate()
@@ -24,11 +24,14 @@ const MyPage = () => {
     <MypageS.MypageWrap>
       <MypageS.MypageInfo>
         <MypageS.MyInfoLeft>
-          <MypageS.UserInfoName>홍범진</MypageS.UserInfoName>
-          <MypageS.UserInfoCode>
-            29567372
-            <MypageS.KakaoImg></MypageS.KakaoImg>
-          </MypageS.UserInfoCode>
+          <MypageS.UserProImg></MypageS.UserProImg>
+          <MypageS.MyInfoLeftInner>
+            <MypageS.UserInfoName>홍범진</MypageS.UserInfoName>
+            <MypageS.UserInfoCode>
+              potato980124@gmail.com
+              <MypageS.KakaoImg></MypageS.KakaoImg>
+            </MypageS.UserInfoCode>
+          </MypageS.MyInfoLeftInner>
         </MypageS.MyInfoLeft>
         <MypageS.MyInfoRight onClick={()=>{navigate('/profileRetouch')}}>프로필 보기</MypageS.MyInfoRight>
       </MypageS.MypageInfo>

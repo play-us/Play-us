@@ -1,11 +1,11 @@
 import * as MypageReserS from '../../styles/mypage/MypageReser';
 import * as MypageS from '../../styles/mypage/Mypage';
-import { MapPin, CalendarDays, Clock10 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../stores/Store';
 import { reserFetch } from '../../stores/features/GetReservationSlice';
 import { useRef, useState } from 'react';
 import CancleModal from './CancleModal';
 import ReviewWriteModal from './ReviewWriteModal';
+
 
 const ReservationDetails = () => {
   const reserDatas = useAppSelector((state) => {
@@ -38,6 +38,8 @@ const ReservationDetails = () => {
   if (target.current) {
     observer.observe(target.current);
   }
+
+  
   // 예약취소,후기등록 모달  state   (스테이트 변수명에 state제거하기!!, 스테이트 하나로 만들기)
   const [cModalState, setCModalState] = useState<boolean>(false);
   const [wModalState, setWModalState] = useState<boolean>(false);
@@ -65,17 +67,17 @@ const ReservationDetails = () => {
                   {reserData.resv_field_name}
                 </MypageReserS.ReserTitle>
                 {reserData.resv_state === 0 && ( // 필요없는 반목문 줄이기
-                  <MypageReserS.ReserCurrent>
+                  <MypageReserS.ReserCurrent $resv_state ={reserData.resv_state}>
                     예약취소
                   </MypageReserS.ReserCurrent>
                 )}
                 {reserData.resv_state === 1 && (
-                  <MypageReserS.ReserCurrent>
+                  <MypageReserS.ReserCurrent $resv_state ={reserData.resv_state}>
                     예약완료
                   </MypageReserS.ReserCurrent>
                 )}
                 {reserData.resv_state === 2 && (
-                  <MypageReserS.ReserCurrent>
+                  <MypageReserS.ReserCurrent $resv_state ={reserData.resv_state}>
                     사용완료
                   </MypageReserS.ReserCurrent>
                 )}
@@ -83,19 +85,19 @@ const ReservationDetails = () => {
               <MypageReserS.ReserStateBox>
                 <MypageReserS.ReserDetailsWrap>
                   <MypageReserS.ReserListWrap>
-                    <MapPin strokeWidth={2} size={20} />
+                    <MypageReserS.PinIcon size={20} />
                     <MypageReserS.ReserListText>
                       {reserData.resv_field_loca}
                     </MypageReserS.ReserListText>
                   </MypageReserS.ReserListWrap>
                   <MypageReserS.ReserListWrap>
-                    <CalendarDays strokeWidth={2} size={20} />
+                    <MypageReserS.CalendarIcon size={20}/>
                     <MypageReserS.ReserListText>
                       {reserData.resv_date}
                     </MypageReserS.ReserListText>
                   </MypageReserS.ReserListWrap>
                   <MypageReserS.ReserListWrap>
-                    <Clock10 strokeWidth={2} size={20} />
+                    <MypageReserS.TimeIcon size={20}/>
                     <MypageReserS.ReserListText>
                       {reserData.resv_time}
                     </MypageReserS.ReserListText>
@@ -104,6 +106,7 @@ const ReservationDetails = () => {
                 <MypageReserS.ReserStateWrap>
                   {reserData.resv_state === 1 && ( //함수로 분기처리
                     <MypageReserS.ReserStateBtn
+                      $resv_state ={reserData.resv_state}
                       onClick={() => { // 무명함수 사용 안 하기
                         setCModalState(true);
                         setDataIndex(i);
@@ -114,6 +117,7 @@ const ReservationDetails = () => {
                   )}
                   {reserData.resv_state === 2 && (
                     <MypageReserS.ReserStateBtn
+                      $resv_state ={reserData.resv_state}
                       onClick={() => {
                         setWModalState(true);
                       }}
