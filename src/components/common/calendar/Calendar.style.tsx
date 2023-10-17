@@ -1,6 +1,12 @@
 import { styled } from 'styled-components';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import {
+  primaryColor,
+  RedColor,
+  OpacityPrimaryBGColor,
+  OpacityPrimaryTextColor,
+} from '../../../styles/CommonStyle';
 
 export const CalendarBox = styled.div`
   display: flex;
@@ -9,7 +15,7 @@ export const CalendarBox = styled.div`
 `;
 
 export const StyleCalendar = styled(Calendar)`
-  max-width: 100%;
+  width: 100%;
   border: none;
   margin-bottom: 15px;
   padding: 20px;
@@ -58,14 +64,31 @@ export const StyleCalendar = styled(Calendar)`
     background-color: #797979;
   }
 
-  .react-calendar__tile--active {
-    color: #ffffff;
-    background-color: #6a6a6a;
+  .react-calendar__tile--active:enabled:hover,
+  .react-calendar__tile--active:enabled:focus {
+    background-color: ${primaryColor};
+  }
+
+  .react-calendar__month-view__days__day--weekend {
+    color: ${RedColor};
+  }
+  .react-calendar__tile:hover {
+    color: ${primaryColor};
+    background-color: ${OpacityPrimaryBGColor};
     border-radius: 7px;
   }
 
-  .react-calendar__tile--active:enabled:hover,
-  .react-calendar__tile--active:enabled:focus {
-    background-color: #6a6a6a;
+  .react-calendar__tile--active {
+    color: #ffffff;
+    background-color: ${primaryColor};
+    border-radius: 7px;
+  }
+
+  .react-calendar__tile--active:hover {
+    color: #ffffff;
+  }
+
+  .highlight {
+    background: #f3a95f;
   }
 `;
