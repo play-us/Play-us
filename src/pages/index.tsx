@@ -12,6 +12,12 @@ import {
 } from '../components/recruitTeam/RecruitTeamList';
 import { boolean } from 'yargs';
 import { MoveRight } from 'lucide-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import { Navigation } from 'swiper/modules';
 
 const urlGetRecruitTeamList = '/json/community.json';
 
@@ -203,12 +209,32 @@ const Home = () => {
           </RecruitSlideHeader>
         </RecruitSlideWrap>
       </Col>
-      <StyledThreeBoxesGrid>
+      {/* <StyledThreeBoxesGrid>
         {/* <RecruitTeamInfo item={recruitData} /> */}
-        {recruitData.map((item, index) => (
-          <RecruitTeamInfo item={item} key={index}></RecruitTeamInfo>
-        ))}
-      </StyledThreeBoxesGrid>
+      {/* {recruitData.map((item, index) => ( */}
+      {/* <RecruitTeamInfo item={item} key={index}></RecruitTeamInfo> */}
+      {/* ))} */}
+      {/* </StyledThreeBoxesGrid> */}
+      <Col span={24}>
+        <Swiper
+          slidesPerView={3}
+          spaceBetween={20}
+          loop={true}
+          pagination={{
+            clickable: true,
+          }}
+          navigation={true}
+          className="mySwiper"
+        >
+          {recruitData.map((item, idx) => {
+            return (
+              <SwiperSlide key={idx}>
+                <RecruitTeamInfo item={item}></RecruitTeamInfo>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </Col>
     </Row>
   );
 };

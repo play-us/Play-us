@@ -61,12 +61,11 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
 export default RecruitTeamInfo;
 
 const InfoWrap = styled.div`
-  flex: 1;
-  max-width: calc(100% / 3);
   height: 100%;
   border-radius: 30px;
   padding: 20px 25px 0;
   border: 2px solid #d1d1d1;
+  margin-bottom: 20px;
 `;
 const ButtonWrap = styled.button<ButtonProps>`
   border-radius: 10px; /* 원하는 값으로 변경 */
