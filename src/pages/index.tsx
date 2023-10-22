@@ -215,7 +215,7 @@ const Home = () => {
       {/* <RecruitTeamInfo item={item} key={index}></RecruitTeamInfo> */}
       {/* ))} */}
       {/* </StyledThreeBoxesGrid> */}
-      <Col span={24}>
+      <Col span={24} style={{ marginBottom: '20px' }}>
         <Swiper
           slidesPerView={3}
           spaceBetween={20}
