@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Modal, TimePicker } from 'antd';
-import { MouseEventHandler } from 'react';
-import * as S from '../common/calendar/Calendar.style';
 import moment from 'moment';
+import { Modal } from 'antd';
+import { MouseEventHandler } from 'react';
 import { css, styled } from 'styled-components';
 import { primaryColor } from '../../styles/CommonStyle';
+import * as S from '../common/calendar/Calendar.style';
+import CustomCalendar from '../common/calendar/Calendar';
 
 interface IModalData {
   fieldName: string;
@@ -25,22 +26,14 @@ const FieldResvModal = ({
   handleCancel,
   confirmLoading,
 }: IModalData) => {
-  const [today, setToday] = useState<Value>(new Date());
-  const curDate = new Date(); // 현재 날짜
-  const [value, onChange] = useState(curDate); // 클릭한 날짜 (초기값으로 현재 날짜 넣어줌)
-  const activeDate = moment(value).format('YYYY-MM-DD'); // 클릭한 날짜 (년-월-일))
-  const monthOfActiveDate = moment(value).format('YYYY-MM');
-  const [activeMonth, setActiveMonth] = useState(monthOfActiveDate);
+  const [date, setDate] = useState<any>(new Date());
+  const [selectRange, setSelectRange] = useState<boolean>(false);
 
   // onChange 이벤트에 넣어줘서 날짜가 지날 때마다 today값이 업데이트 되도록 구현
   /* const onChange = () => {
     setToday(today);
   }; */
 
-  const getActiveMonth = (activeStartDate: moment.MomentInput) => {
-    const newActiveMonth = moment(activeStartDate).format('YYYY-MM');
-    setActiveMonth(newActiveMonth);
-  };
   return (
     <Modal
       title={fieldName}
@@ -52,15 +45,20 @@ const FieldResvModal = ({
         '결제를 진행중입니다. 잠시만 기다려주세요.'
       ) : (
         <>
-          <S.CalendarBox>
+          <CustomCalendar
+            date={date}
+            setDate={setDate}
+            selectRange={selectRange}
+            setSelectRange={setSelectRange}
+          />
+          {/*  <S.CalendarBox>
             <S.StyleCalendar
-              locale="en"
-              onActiveStartDateChange={({ activeStartDate }) =>
-                getActiveMonth(activeStartDate)
-              }
-              value={value}
+              date={date}
+              setDate={setDate}
+              selectRange={selectRange}
+              setSelectRange={setSelectRange}
             />
-          </S.CalendarBox>
+          </S.CalendarBox> */}
           {/* <TimePicker minuteStep={15} secondStep={10} hourStep={1} /> */}
           <SelectDay>10. 17(화)</SelectDay>
           <TimeRange>
