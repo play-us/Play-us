@@ -1,30 +1,20 @@
 import './App.css';
-import Actions from './Partials/Actions';
 import CalendarComponent from './Partials/Calendar';
-import Title from './Partials/Title';
 
 interface ICalendarProps {
   setDate: any;
   date: any;
-  selectRange: boolean;
-  setSelectRange: any;
+  blackoutDates: any;
 }
 
 const CustomCalendar = (props: ICalendarProps) => {
-  const { setDate, date, selectRange, setSelectRange } = props;
+  const { setDate, date, blackoutDates } = props;
   return (
     <div style={{ display: 'grid', placeItems: 'center' }}>
-      <Title title={'Calendar'} />
       <CalendarComponent
         setDate={setDate}
         date={date}
-        selectRange={selectRange}
-      />
-      <Actions
-        setDate={setDate}
-        date={date}
-        selectRange={selectRange}
-        setSelectRange={setSelectRange}
+        blackoutDates={blackoutDates}
       />
     </div>
   );

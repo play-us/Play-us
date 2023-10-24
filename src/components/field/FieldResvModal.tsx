@@ -15,10 +15,6 @@ interface IModalData {
   handleCancel: MouseEventHandler;
 }
 
-type ValuePiece = Date | null;
-
-type Value = ValuePiece | [ValuePiece, ValuePiece];
-
 const FieldResvModal = ({
   fieldName,
   isModalOpen,
@@ -27,12 +23,13 @@ const FieldResvModal = ({
   confirmLoading,
 }: IModalData) => {
   const [date, setDate] = useState<any>(new Date());
-  const [selectRange, setSelectRange] = useState<boolean>(false);
+  const [disabledDates, setDisabledDates] = useState<any>([]);
 
-  // onChange 이벤트에 넣어줘서 날짜가 지날 때마다 today값이 업데이트 되도록 구현
-  /* const onChange = () => {
-    setToday(today);
-  }; */
+  const bDate1 = new Date('2023-10-27').getDate();
+  const bDate2 = new Date('2023-11-02').getDate();
+  const bDate3 = new Date('2023-11-11').getDate();
+
+  const blackoutDates = [bDate1, bDate2, bDate3];
 
   return (
     <Modal
@@ -48,19 +45,9 @@ const FieldResvModal = ({
           <CustomCalendar
             date={date}
             setDate={setDate}
-            selectRange={selectRange}
-            setSelectRange={setSelectRange}
+            blackoutDates={blackoutDates}
           />
-          {/*  <S.CalendarBox>
-            <S.StyleCalendar
-              date={date}
-              setDate={setDate}
-              selectRange={selectRange}
-              setSelectRange={setSelectRange}
-            />
-          </S.CalendarBox> */}
-          {/* <TimePicker minuteStep={15} secondStep={10} hourStep={1} /> */}
-          <SelectDay>10. 17(화)</SelectDay>
+          <SelectDay>{date.toDateString()}</SelectDay>
           <TimeRange>
             <Item>
               <Timetxt>
@@ -126,6 +113,7 @@ const SelectDay = styled.div`
   font-weight: 600;
   font-size: 17px;
   box-sizing: border-box;
+  text-align: center;
 `;
 
 const TimeRange = styled.ul`

@@ -5,18 +5,25 @@ import '../App.css';
 interface CalendarProps {
   setDate: any;
   date: any;
-  selectRange: boolean;
+  blackoutDates: any;
 }
 const CalendarComponent = (props: CalendarProps) => {
-  const { setDate, date, selectRange } = props;
+  const { setDate, date, blackoutDates } = props;
+  console.log('setDate,', setDate);
+  console.log('date', date);
+
   return (
     <motion.div
-      initial={{ x: 1000 }}
-      animate={{ x: 0 }}
       transition={{ duration: 1, ease: 'easeInOut', delay: 0.5 }}
       className="calendar-container"
     >
-      <Calendar onChange={setDate} value={date} selectRange={selectRange} />
+      <Calendar
+        onChange={setDate}
+        value={date}
+        locale="ko-KO"
+        minDate={new Date()}
+        tileDisabled={({ date }) => blackoutDates.includes(date.getDate())}
+      />
     </motion.div>
   );
 };
