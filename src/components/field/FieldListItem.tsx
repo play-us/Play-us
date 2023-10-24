@@ -24,7 +24,7 @@ const FieldListItem = (props: { data: IRowData }) => {
           <img src={data.img_url} alt="썸네일 이미지" />
         </ThumbImg>
         <InfoWrap>
-          <Date>10월 22일 일요일</Date>
+          <Addr>경기도 부천시 주소주소</Addr>
           <FieldName>{data.field_name}</FieldName>
           <Interest>
             <MessageSquare />
@@ -92,14 +92,15 @@ const InfoWrap = styled.div`
   text-align: left;
 `;
 
-const Date = styled.div`
-  font-size: 1.1rem;
+const Addr = styled.div`
+  font-size: 0.9rem;
+  padding-bottom: 0.2rem;
   color: #7b7b7b;
 `;
 
 const FieldName = styled.div`
   font-size: 1.3rem;
-  padding: 0.5rem 0;
+  margin: 0.5rem 0;
   display: -webkit-box;
   overflow: hidden;
   -webkit-line-clamp: 1;
