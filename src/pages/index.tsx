@@ -164,6 +164,7 @@ const Home = () => {
           };
           rows.push(row);
         });
+        console.log(rows, ' data');
 
         setRecruitData(rows);
       }
@@ -224,6 +225,8 @@ const Home = () => {
             clickable: true,
           }}
           navigation={true}
+          // pagination
+          modules={[Navigation]}
           className="mySwiper"
         >
           {recruitData.map((item, idx) => {
@@ -322,3 +325,20 @@ const StyledThreeBoxesGrid = styled.div`
   display: flex;
   gap: 16px; /* 각 박스 사이의 간격 설정, 원하는 크기로 조절하세요 */
 `;
+// <Swiper
+//   id="swiper"
+//   virtual
+//   slidesPerView={3}
+//   spaceBetween={30}
+//   navigation={true}
+//   pagination
+//   modules={[Navigation]}
+// >
+//   {recruitData.map((item, idx) => {
+//     return (
+//       <SwiperSlide key={idx}>
+//         <RecruitTeamInfo item={item}></RecruitTeamInfo>
+//       </SwiperSlide>
+//     );
+//   })}
+// </Swiper>
