@@ -1,4 +1,4 @@
-import * as MypageReserS from '../../styles/mypage/MypageReser';
+import * as MypageReserS from '../../styles/mypage/Reser';
 import * as MypageS from '../../styles/mypage/Mypage';
 import { useAppDispatch, useAppSelector } from '../../stores/Store';
 import { reserFetch } from '../../stores/features/GetReservationSlice';

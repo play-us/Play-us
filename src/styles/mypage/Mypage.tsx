@@ -24,9 +24,9 @@ export const MyInfoLeftInner = styled.div`
 `;
 
 
-export const UserProImg = styled.div`
-  height: 120px;
-  width: 120px;
+export const UserProImg = styled.div<{$size:string}>`
+  width: ${(props)=>props.$size};
+  height: ${(props)=>props.$size};
   border: 1px solid #e1e1e1;
   border-radius: 50%;
   background-image: url(${proImg});

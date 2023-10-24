@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../stores/Store';
 import { reserFetch } from '../../stores/features/GetReservationSlice';
 import { menuChange } from '../../stores/features/MypageMenuSlice';
-import * as MypageMenuBarS from '../../styles/mypage/MypageMenuBar';
+import * as MypageMenuBarS from '../../styles/mypage/MenuBar';
 import { useEffect } from 'react';
 
 const menuStates = ['예약','작성 글','작성 댓글','리뷰','찜 목록']

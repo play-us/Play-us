@@ -1,4 +1,4 @@
-import * as ReviewWrites from '../../styles/mypage/MypageReviewModal';
+import * as ReviewWrites from '../../styles/mypage/ReviewModal';
 import { FaStar, FaStarHalf } from 'react-icons/fa';
 import { useState,useRef,SetStateAction, Dispatch  } from 'react';
 // 별점 총 개수를 위한 배열 (상수는 대문자로 따로 뺴놓기)

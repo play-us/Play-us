@@ -13,6 +13,7 @@ export const ReviewConBox = styled.article`
 export const ReviewTopWrap= styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 ` ;
 
 export const NameStarsWrap= styled.div`
@@ -20,7 +21,8 @@ export const NameStarsWrap= styled.div`
   align-items: center;
 ` ;
 export const ReviewUserName= styled.p`
-   margin-right: 10px;
+  font-size: 1.25rem;
+   margin: 0 20px;
    font-weight: bold;
 ` ;
 export const StarsWrap= styled.div`
@@ -55,8 +57,22 @@ export const ReviewReserDate= styled.p`
   color: #939393;
 ` ;
 
+export const ReviewInfoBox= styled.p`
+  width: fit-content;
+  font-weight: bold;
+  color: #666666;
+  padding: 12px 15px;
+  border-radius: 20px;
+  box-sizing: border-box;
+  background-color: #f2f2f2;
+  &:nth-of-type(1){
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+` ;
+
 export const ReviewContent= styled.p`
-  margin: 20px 0;
+  margin: 20px 0 0 0;
   font-weight: bold;
   display: -webkit-box;
   overflow: hidden;
@@ -65,7 +81,4 @@ export const ReviewContent= styled.p`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis; /* CSS4에서 추가될 말줄임표 사용자 정의 */
-` ;
-export const ReviewUseDateTime= styled.p`
-  color: #939393;
 ` ;
