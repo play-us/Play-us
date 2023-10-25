@@ -5,7 +5,7 @@ const AdminFilter = () => {
     return(
         <FilterWrap>
             <ListCount>1824개의 구장이 있습니다</ListCount>
-            
+            <></>
         </FilterWrap>
     );
 }
