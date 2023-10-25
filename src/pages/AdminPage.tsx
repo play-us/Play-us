@@ -34,7 +34,7 @@ const SearchInput = styled.input`
     width: 100%;
     border: 1px solid #d8d8d8;
     border-radius: 10px;
-    padding: 25px 20px;
+    padding: 20px 20px;
     box-sizing: border-box;
     &::placeholder {
     color: #d8d8d8; 
@@ -42,8 +42,7 @@ const SearchInput = styled.input`
 `
 
 const FieldListWrap = styled.div`
-    background-color: #F8F8F8;
-    height: 200px;
+    /* background-color: #f4f4f4; */
 `
 
 export default AdminPage;

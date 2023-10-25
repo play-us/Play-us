@@ -20,6 +20,7 @@ const AdminMenuBar = () =>{
 const MenuBarWrap = styled.ul`
     display: flex;
     margin-top: 30px;
+    border-bottom: 3px solid  rgba(0,0,0,5%);
 `
 const MenuBox = styled.li`
     display: flex;
