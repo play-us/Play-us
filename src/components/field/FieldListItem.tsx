@@ -48,7 +48,7 @@ export default FieldListItem;
 const Wrap = styled.div`
   width: 100%;
   overflow: hidden;
-  ointer-events: none;
+  pointer-events: none;
   outline: 1px solid rgba(23, 23, 23, 0.08);
   border-radius: 12px;
   outline-offset: -1px;

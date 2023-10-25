@@ -12,6 +12,7 @@ import Home from './pages/index';
 import SocialKakao from './components/kakaoLogin/SocialKakao';
 import SignIn from './pages/SignIn';
 import ProfileRetouch from './pages/ProfileRetouch';
+import AdminPage from './pages/AdminPage';
 
 const Wrap = styled.div`
   background-color: #ffffff;
@@ -34,6 +35,7 @@ function App() {
             <Route path="/signIn" element={<SignIn />}></Route>
             <Route path="/signUp"></Route>
             <Route path="/mypage" element={<MyPage></MyPage>}></Route>
+            <Route path="/admin" element={<AdminPage></AdminPage>}></Route>
             <Route path='profileRetouch' element={<ProfileRetouch></ProfileRetouch>}></Route>
             <Route path="/fieldList" element={<FieldListPage />}></Route>
             <Route path="/fieldDetail" element={<FieldDetailPage />}></Route>

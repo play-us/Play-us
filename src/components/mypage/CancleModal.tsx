@@ -1,5 +1,5 @@
 //예약 취소 , 관리자 상품등록 취소 모달 컴포넌트
-import * as MypageCanModalS from '../../styles/common/CancleModal';
+import * as MypageModalS from '../../styles/common/Modal';
 import React, { SetStateAction, Dispatch } from 'react';
 import { useAppDispatch } from '../../stores/Store';
 import { reserStateChange } from '../../stores/features/GetReservationSlice';
@@ -11,40 +11,50 @@ const ReserCancle = (props: cModalProp) => {
    // 예약내역 데이터 변경 dispatch
    const mocDataDispatch = useAppDispatch();
   return (
-    <MypageCanModalS.CancleWrap>
-      <MypageCanModalS.CancleBox>
-        <MypageCanModalS.CancleImgTxtWrap>
-          <MypageCanModalS.CancleWarnImg></MypageCanModalS.CancleWarnImg>
-          <MypageCanModalS.CancleWarnText>
-            예약을{' '}
-            <MypageCanModalS.CancleWarnAccText>
+    <MypageModalS.ModalWrap>
+      <MypageModalS.ModalBox>
+        <MypageModalS.ContentWrap>
+          <MypageModalS.Title>예약 취소</MypageModalS.Title>
+          <MypageModalS.SubTitle>예약 내역</MypageModalS.SubTitle>
+          <MypageModalS.InfoBox>
+            <MypageModalS.InfoTxt $color ={'#5a5a5a'}>서울 영등포 더에프 필드 B구장</MypageModalS.InfoTxt>
+            <MypageModalS.InfoTxt>10월 12일 목요일</MypageModalS.InfoTxt>
+            <MypageModalS.InfoTxt>14:00 ~ 16:00</MypageModalS.InfoTxt>
+          </MypageModalS.InfoBox>
+          <MypageModalS.ReserPriceWrap>
+            <MypageModalS.SubTitle>이용금액</MypageModalS.SubTitle>
+            <MypageModalS.ReserPrice>10000원</MypageModalS.ReserPrice>
+          </MypageModalS.ReserPriceWrap>
+          <MypageModalS.WarnText $color ={'#5a5a5a'}>
+            예약{' '}
+            <MypageModalS.WarnAccText>
               취소
-            </MypageCanModalS.CancleWarnAccText>
-            하고 나가시겠습니까?
-          </MypageCanModalS.CancleWarnText>
-          <MypageCanModalS.CancleWarnText>
-            선택한 예약내역은 모두 초기화 됩니다.
-          </MypageCanModalS.CancleWarnText>
-        </MypageCanModalS.CancleImgTxtWrap>
-        <MypageCanModalS.CancleWarnBtnWrap>
-          <MypageCanModalS.CancleWarnBtn
-            onClick={() => {
-              props.setCModalState(false);
-            }}
-          >
-            취소
-          </MypageCanModalS.CancleWarnBtn>
-          <MypageCanModalS.CancleWarnBtn
+            </MypageModalS.WarnAccText>
+            시 예약 내역은 삭제되어 복구가 불가합니다.
+          </MypageModalS.WarnText>
+          <MypageModalS.WarnText>
+            정말로 취소하시겠어요?
+          </MypageModalS.WarnText>
+        </MypageModalS.ContentWrap>
+        <MypageModalS.WarnBtnWrap>
+          <MypageModalS.WarnBtn
             onClick={() => {
               mocDataDispatch(reserStateChange({ reserState: 0, index: props.dataIndex }));
               props.setCModalState(false);
             }}
           >
-            확인
-          </MypageCanModalS.CancleWarnBtn>
-        </MypageCanModalS.CancleWarnBtnWrap>
-      </MypageCanModalS.CancleBox>
-    </MypageCanModalS.CancleWrap>
+            예약취소
+          </MypageModalS.WarnBtn>
+          <MypageModalS.WarnBtn
+            onClick={() => {
+              props.setCModalState(false);
+            }}
+          >
+            닫기
+          </MypageModalS.WarnBtn>
+        </MypageModalS.WarnBtnWrap>
+      </MypageModalS.ModalBox>
+    </MypageModalS.ModalWrap>
   );
 };
 

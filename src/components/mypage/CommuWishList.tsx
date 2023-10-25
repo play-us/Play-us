@@ -1,5 +1,6 @@
 import { styled } from 'styled-components';
 import { BsHeart } from 'react-icons/bs';
+import ReserState from './ReserState';
 
 const CommuWishList = () =>{
 
@@ -8,10 +9,7 @@ const CommuWishList = () =>{
             <WishImg></WishImg>
             <WishConWrap>
                 <WishFieldName>수원 스타필드 이마트 트레이더스 풋살장</WishFieldName>
-                <WishInfoWrap>
-                    <WishInfoIcon></WishInfoIcon>
-                    <WishInfoTxt></WishInfoTxt>
-                </WishInfoWrap>
+                <ReserState></ReserState>
             </WishConWrap>
             <WishIconWrap>
                 <WishIcon fontSize={42} color='#dadada'/>
@@ -53,6 +51,7 @@ const WishFieldName = styled.p`
     font-weight: bold;
     color: #464646;
     line-height : 35px;
+    margin-bottom: 20px;
 `
 const WishInfoWrap = styled.div`
 `

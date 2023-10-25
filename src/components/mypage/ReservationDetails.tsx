@@ -5,6 +5,7 @@ import { reserFetch } from '../../stores/features/GetReservationSlice';
 import { useRef, useState } from 'react';
 import CancleModal from './CancleModal';
 import ReviewWriteModal from './ReviewWriteModal';
+import ReserState from './ReserState';
 
 
 const ReservationDetails = () => {
@@ -83,26 +84,7 @@ const ReservationDetails = () => {
                 )}
               </MypageReserS.ReserTitleBox>
               <MypageReserS.ReserStateBox>
-                <MypageReserS.ReserDetailsWrap>
-                  <MypageReserS.ReserListWrap>
-                    <MypageReserS.PinIcon size={20} />
-                    <MypageReserS.ReserListText>
-                      {reserData.resv_field_loca}
-                    </MypageReserS.ReserListText>
-                  </MypageReserS.ReserListWrap>
-                  <MypageReserS.ReserListWrap>
-                    <MypageReserS.CalendarIcon size={20}/>
-                    <MypageReserS.ReserListText>
-                      {reserData.resv_date}
-                    </MypageReserS.ReserListText>
-                  </MypageReserS.ReserListWrap>
-                  <MypageReserS.ReserListWrap>
-                    <MypageReserS.TimeIcon size={20}/>
-                    <MypageReserS.ReserListText>
-                      {reserData.resv_time}
-                    </MypageReserS.ReserListText>
-                  </MypageReserS.ReserListWrap>
-                </MypageReserS.ReserDetailsWrap>
+                <ReserState reserData={reserData}></ReserState>
                 <MypageReserS.ReserStateWrap>
                   {reserData.resv_state === 1 && ( //함수로 분기처리
                     <MypageReserS.ReserStateBtn
