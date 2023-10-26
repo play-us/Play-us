@@ -1,7 +1,6 @@
 import { styled } from 'styled-components';
 import { Select} from 'antd';
 import React, { useState} from 'react';
-import { type } from 'os';
 
 const provinceData = ['서울', '부산'];
 
@@ -63,6 +62,10 @@ const AdminFilter = () => {
     );
 }
 
+
+
+export default AdminFilter;
+
 interface SelectProps  {
     onChange?:
     | string
@@ -109,6 +112,3 @@ const FieldAddBtn = styled.button`
     font-weight: bold;
     cursor: pointer;
 `
-
-
-export default AdminFilter;

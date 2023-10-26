@@ -17,6 +17,8 @@ const AdminMenuBar = () =>{
     )
 }
 
+export default AdminMenuBar;
+
 const MenuBarWrap = styled.ul`
     display: flex;
     margin-top: 30px;
@@ -35,7 +37,3 @@ const MenuTxt = styled.p`
     font-weight: bold;
     color: #3ce48a;
 `
-const Wraps = styled.div`
-    
-`
-export default AdminMenuBar;

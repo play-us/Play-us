@@ -2,6 +2,7 @@ import { styled } from 'styled-components';
 import { useState } from 'react';
 import AdminMenuBar from './../components/admin/AdminMenuBar';
 import AdminFilter from './../components/admin/AdminFilter';
+import AdminDetail from '../components/admin/AdminDetail';
   
 
 const AdminPage = () =>{
@@ -11,9 +12,10 @@ const AdminPage = () =>{
             <MenuTitle>{menu}</MenuTitle>
             <SearchInput placeholder='빠른 검색...'/>
             <AdminMenuBar/>
-            <FieldListWrap>
+            <FieldContentWrap>
                 <AdminFilter/>
-            </FieldListWrap>
+                <AdminDetail/>
+            </FieldContentWrap>
         </Wrap>
     )
 }
@@ -41,8 +43,9 @@ const SearchInput = styled.input`
   }
 `
 
-const FieldListWrap = styled.div`
-    /* background-color: #f4f4f4; */
+const FieldContentWrap = styled.div`
+    /* background-color: rgba(248,248,248,90%);
+    border-radius: 20px; */
 `
 
 export default AdminPage;
