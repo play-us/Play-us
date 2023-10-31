@@ -102,15 +102,48 @@ const RecruitTeamList = () => {
   return (
     <Row>
       <Col span={24} style={{ marginBottom: '20px' }}>
+        {/* display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3.125rem;
+  margin: 0 auto;
+  margin-top: 1.875rem;
+  margin-bottom: 1.875rem;
+  border-bottom: 1px solid #000000; */}
         {/* 커뮤니티 헤더 */}
-        <CommunityHearderWrap wrapWidth="100%">
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: '3.125rem',
+          }}
+        >
           <Title level={4}>커뮤니티 게시판</Title>
           <CommunityModalButton onClick={NavigateCommunityDetail}>
             글쓰기
           </CommunityModalButton>
-        </CommunityHearderWrap>
-        {/* 커뮤니티 게시글 리스트 */}
-        <GridContainer>{communityList}</GridContainer>
+        </div>
+        {/* 커뮤니티 게시글 리스트 
+        width: 820px;
+  height: 720px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px; // 그리드 간격 조절 (선택 사항)
+        */}
+        {/* <GridContainer>{communityList}</GridContainer> */}
+        <div
+          style={{
+            height: '720px',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateRows: 'repeat(3, 1fr)',
+            gap: '10px',
+          }}
+        >
+          {communityList}
+        </div>
       </Col>
       <Col span={24}>
         <Pagination
@@ -195,11 +228,10 @@ const RecruitTeamList = () => {
 
 export default RecruitTeamList;
 
-const CommunityHearderWrap = styled.div<CommunityHeaderWrapProps>`
+const CommunityHearderWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: ${(props) => (props.wrapWidth ? props.wrapWidth : '100%')};
   height: 3.125rem;
   margin: 0 auto;
   margin-top: 1.875rem;
