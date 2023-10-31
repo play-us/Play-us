@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { motion } from 'framer-motion';
 import Calendar from 'react-calendar';
 import '../App.css';
@@ -9,8 +10,6 @@ interface CalendarProps {
 }
 const CalendarComponent = (props: CalendarProps) => {
   const { setDate, date, blackoutDates } = props;
-  console.log('setDate,', setDate);
-  console.log('date', date);
 
   return (
     <motion.div
@@ -22,7 +21,7 @@ const CalendarComponent = (props: CalendarProps) => {
         value={date}
         locale="ko-KO"
         minDate={new Date()}
-        tileDisabled={({ date }) => blackoutDates.includes(date.getDate())}
+        tileDisabled={({ date }) => blackoutDates.includes(date)}
       />
     </motion.div>
   );

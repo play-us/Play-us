@@ -25,9 +25,9 @@ const FieldResvModal = ({
   const [date, setDate] = useState<any>(new Date());
   const [disabledDates, setDisabledDates] = useState<any>([]);
 
-  const bDate1 = new Date('2023-10-27').getDate();
-  const bDate2 = new Date('2023-11-02').getDate();
-  const bDate3 = new Date('2023-11-11').getDate();
+  const bDate1 = new Date('2023-10-27');
+  const bDate2 = new Date('2023-11-02');
+  const bDate3 = new Date('2023-11-11');
 
   const blackoutDates = [bDate1, bDate2, bDate3];
 
@@ -47,7 +47,7 @@ const FieldResvModal = ({
             setDate={setDate}
             blackoutDates={blackoutDates}
           />
-          <SelectDay>{date.toDateString()}</SelectDay>
+          <SelectDay>{moment(date).format('YYYY년 MM월 DD일')}</SelectDay>
           <TimeRange>
             <Item>
               <Timetxt>
