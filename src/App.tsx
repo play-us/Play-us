@@ -11,6 +11,7 @@ import RecruitTeamDetail from './components/recruitTeam/RecruitTeamDetail';
 import Home from './pages/index';
 import SocialKakao from './components/kakaoLogin/SocialKakao';
 import SignIn from './pages/SignIn';
+import CompletePaymentPage from './pages/CompletePaymentPage';
 
 const Wrap = styled.div`
   background-color: #f2f5f7;
@@ -38,6 +39,10 @@ function App() {
             <Route
               path="/recruitTeamDetail"
               element={<RecruitTeamDetail />}
+            ></Route>
+            <Route
+              path="/completePayment"
+              element={<CompletePaymentPage />}
             ></Route>
           </Routes>
         </InnerWrap>
