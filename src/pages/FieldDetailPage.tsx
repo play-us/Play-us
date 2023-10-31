@@ -10,9 +10,10 @@ import {
   CarFront,
   Footprints,
 } from 'lucide-react';
-import { Button, Typography } from 'antd';
+import { Button, Typography, message } from 'antd';
 import { RedColor } from '../styles/CommonStyle';
 import FieldResvModal from '../components/field/FieldResvModal';
+import KakaoMap from '../components/common/KakaoMap';
 
 interface IFieldItem {
   field_id: string;
@@ -62,6 +63,7 @@ const FieldDetailPage = () => {
   const [liked, setLiked] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   /* 데이터 조회 */
   useEffect(() => {
@@ -169,6 +171,12 @@ const FieldDetailPage = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  /* 주소 복사 */
+  const handleCopyclipBoard = async (text: string) => {
+    navigator.clipboard.writeText(text);
+    message.info(`주소를 복사하였습니다!`);
+  };
   return (
     <Wrap>
       <BackgroundImg>
@@ -186,7 +194,13 @@ const FieldDetailPage = () => {
         </Interest>
         <Title level={2}>구장이름</Title>
         <FlexWrap type="secondary">
-          경기도 부천시 주소주소<AddressCopy underline>주소복사</AddressCopy>
+          경기도 부천시 주소주소
+          <Button
+            type="link"
+            onClick={() => handleCopyclipBoard('주소를 복사했습니다')}
+          >
+            주소복사
+          </Button>
         </FlexWrap>
         <Contour />
         <FlexWrap>
@@ -232,7 +246,7 @@ const FieldDetailPage = () => {
       <SectionWrap>
         <SectionHeader>
           <Title level={4}>지도</Title>
-          {/* <div id="map" style={{ width: "100vw", height: "100vh" }} /> */}
+          <KakaoMap />
         </SectionHeader>
       </SectionWrap>
       <SectionWrap>
