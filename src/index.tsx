@@ -7,7 +7,6 @@ import GlobalStyle from './styles/Global';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from "react-redux";
 import { store } from './stores/Store';
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );

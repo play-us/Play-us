@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { stat } from 'fs';
 
 // 예약 데이터 thunk
 const reserFetch = createAsyncThunk(

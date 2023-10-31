@@ -1,18 +1,21 @@
-import * as MypageReserS from '../../styles/mypage/MypageReser';
+import * as MypageReserS from '../../styles/mypage/Reser';
 import * as MypageS from '../../styles/mypage/Mypage';
-import { MapPin, CalendarDays, Clock10 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../stores/Store';
 import { reserFetch } from '../../stores/features/GetReservationSlice';
 import { useRef, useState } from 'react';
 import CancleModal from './CancleModal';
 import ReviewWriteModal from './ReviewWriteModal';
+import ReserState from './ReserState';
+
 
 const ReservationDetails = () => {
   const reserDatas = useAppSelector((state) => {
     return state.getReserData.reserdata;
   });
+
   // 예약내역 데이터 호출 dispatch
   const mocDataDispatch = useAppDispatch();
+
   // 무한 스크롤 intersection observer api
   const target = useRef<HTMLDivElement>(null);
   const targetCont = useRef<HTMLDivElement>(null);
@@ -36,16 +39,20 @@ const ReservationDetails = () => {
   if (target.current) {
     observer.observe(target.current);
   }
-  // 예약취소,후기등록 모달  state
+
+  
+  // 예약취소,후기등록 모달  state   (스테이트 변수명에 state제거하기!!, 스테이트 하나로 만들기)
   const [cModalState, setCModalState] = useState<boolean>(false);
   const [wModalState, setWModalState] = useState<boolean>(false);
+
   // 모달창에 전달할 해당 예약데이터 인덱스 번호 state
   const [dataIndex, setDataIndex] = useState<number>(0);
+
   // 모달 상태에 따라 변수에 담아줄 컴포넌트
   let showModal: null | JSX.Element = null;
-  if (cModalState === true) {
+  if (cModalState) {
     showModal = <CancleModal setCModalState={setCModalState} dataIndex={dataIndex}></CancleModal>;
-  }else if(wModalState === true) {
+  }else if(wModalState) {
     showModal = <ReviewWriteModal setWModalState ={setWModalState}></ReviewWriteModal>;
   }
   return (
@@ -60,47 +67,29 @@ const ReservationDetails = () => {
                 <MypageReserS.ReserTitle>
                   {reserData.resv_field_name}
                 </MypageReserS.ReserTitle>
-                {reserData.resv_state === 0 && (
-                  <MypageReserS.ReserCurrent>
+                {reserData.resv_state === 0 && ( // 필요없는 반목문 줄이기
+                  <MypageReserS.ReserCurrent $resv_state ={reserData.resv_state}>
                     예약취소
                   </MypageReserS.ReserCurrent>
                 )}
                 {reserData.resv_state === 1 && (
-                  <MypageReserS.ReserCurrent>
+                  <MypageReserS.ReserCurrent $resv_state ={reserData.resv_state}>
                     예약완료
                   </MypageReserS.ReserCurrent>
                 )}
                 {reserData.resv_state === 2 && (
-                  <MypageReserS.ReserCurrent>
+                  <MypageReserS.ReserCurrent $resv_state ={reserData.resv_state}>
                     사용완료
                   </MypageReserS.ReserCurrent>
                 )}
               </MypageReserS.ReserTitleBox>
               <MypageReserS.ReserStateBox>
-                <MypageReserS.ReserDetailsWrap>
-                  <MypageReserS.ReserListWrap>
-                    <MapPin strokeWidth={2} size={20} />
-                    <MypageReserS.ReserListText>
-                      {reserData.resv_field_loca}
-                    </MypageReserS.ReserListText>
-                  </MypageReserS.ReserListWrap>
-                  <MypageReserS.ReserListWrap>
-                    <CalendarDays strokeWidth={2} size={20} />
-                    <MypageReserS.ReserListText>
-                      {reserData.resv_date}
-                    </MypageReserS.ReserListText>
-                  </MypageReserS.ReserListWrap>
-                  <MypageReserS.ReserListWrap>
-                    <Clock10 strokeWidth={2} size={20} />
-                    <MypageReserS.ReserListText>
-                      {reserData.resv_time}
-                    </MypageReserS.ReserListText>
-                  </MypageReserS.ReserListWrap>
-                </MypageReserS.ReserDetailsWrap>
+                <ReserState reserData={reserData}></ReserState>
                 <MypageReserS.ReserStateWrap>
-                  {reserData.resv_state === 1 && (
+                  {reserData.resv_state === 1 && ( //함수로 분기처리
                     <MypageReserS.ReserStateBtn
-                      onClick={() => {
+                      $resv_state ={reserData.resv_state}
+                      onClick={() => { // 무명함수 사용 안 하기
                         setCModalState(true);
                         setDataIndex(i);
                       }}
@@ -110,6 +99,7 @@ const ReservationDetails = () => {
                   )}
                   {reserData.resv_state === 2 && (
                     <MypageReserS.ReserStateBtn
+                      $resv_state ={reserData.resv_state}
                       onClick={() => {
                         setWModalState(true);
                       }}

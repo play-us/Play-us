@@ -1,17 +1,15 @@
-import * as MypageCommuS from '../../styles/mypage/MypageCommu';
+import * as MypageCommuS from '../../styles/mypage/Community';
 const CommuCoList = () => {
     return(
-        <MypageCommuS.CommuListBox>
+        <MypageCommuS.CommuListBox $padding={"50px"}>
             <MypageCommuS.CommuListInfoWrap>
-                <MypageCommuS.CommuListInfoLeft>
-                    <MypageCommuS.UserImg></MypageCommuS.UserImg>
-                    <MypageCommuS.UserName>홍범진</MypageCommuS.UserName>
-                </MypageCommuS.CommuListInfoLeft>
-                <MypageCommuS.CommuListInfoRight>
-                    <MypageCommuS.CommuListDate>2023.08.12</MypageCommuS.CommuListDate>
-                </MypageCommuS.CommuListInfoRight>
+                <MypageCommuS.CommentImg></MypageCommuS.CommentImg>
+                <MypageCommuS.CommentTxtWrap>
+                    <MypageCommuS.CommentPostTitle>강서구에서 풋살 하실분 모집합니다.</MypageCommuS.CommentPostTitle>
+                    <MypageCommuS.CommentTxt>저 참여하고싶습니다!!!</MypageCommuS.CommentTxt>
+                </MypageCommuS.CommentTxtWrap>
+                <MypageCommuS.CommuListDate>2023.04.01</MypageCommuS.CommuListDate>
             </MypageCommuS.CommuListInfoWrap>
-            <MypageCommuS.CommentTxt>댓글~~</MypageCommuS.CommentTxt>
         </MypageCommuS.CommuListBox>
     )
 }

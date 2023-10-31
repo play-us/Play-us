@@ -1,34 +1,45 @@
 import * as MypageS from '../styles/mypage/Mypage';
-import * as MypageMenuBarS from '../styles/mypage/MypageMenuBar';
+import * as MypageMenuBarS from '../styles/mypage/MenuBar';
 import {  useState } from 'react';
 import {  useAppSelector } from '../stores/Store';
 import MypageMenu from '../components/mypage/MypageMenu';
 import ReservationDetails from '../components/mypage/ReservationDetails';
-import CommunityDetails from '../components/mypage/CommunityDetails';
+import CommunityDetails from '../components/mypage/CommuPostDetails';
 import ReviewDetails from '../components/mypage/ReviewDetails';
+import CommuComentDetail from './../components/mypage/CommuComentDetail';
+import { useNavigate} from 'react-router-dom';
+import CommuWishDetails from './../components/mypage/CommuWishDetails';
 
 
 const MyPage = () => {
   const getMenuState = useAppSelector((state) => state.menu.MState);
   let showDetails: JSX.Element | null = null; // 탭 메뉴별로 보여줄 ReservationDetails 컴포넌트
-  if(getMenuState === 'reservation'){
+  if(getMenuState === '예약'){
     showDetails = <ReservationDetails></ReservationDetails>;
-  }else if (getMenuState === 'community'){
+  }else if (getMenuState === '작성 글'){
     showDetails = <CommunityDetails></CommunityDetails>
-  }else if(getMenuState === 'review'){
+  }else if(getMenuState === '작성 댓글'){
+    showDetails = <CommuComentDetail></CommuComentDetail>
+  }else if(getMenuState === '리뷰'){
     showDetails = <ReviewDetails></ReviewDetails>
+  }else if(getMenuState === '찜 목록'){
+    showDetails = <CommuWishDetails></CommuWishDetails>
   }
+  let navigate = useNavigate()
   return (
     <MypageS.MypageWrap>
       <MypageS.MypageInfo>
         <MypageS.MyInfoLeft>
-          <MypageS.UserInfoName>홍범진</MypageS.UserInfoName>
-          <MypageS.UserInfoCode>
-            29567372
-            <MypageS.KakaoImg></MypageS.KakaoImg>
-          </MypageS.UserInfoCode>
+          <MypageS.UserProImg $size = {'120px'}></MypageS.UserProImg>
+          <MypageS.MyInfoLeftInner>
+            <MypageS.UserInfoName>홍범진</MypageS.UserInfoName>
+            <MypageS.UserInfoCode>
+              potato980124@gmail.com
+              <MypageS.KakaoImg></MypageS.KakaoImg>
+            </MypageS.UserInfoCode>
+          </MypageS.MyInfoLeftInner>
         </MypageS.MyInfoLeft>
-        <MypageS.MyInfoRight to="/profile">프로필 보기</MypageS.MyInfoRight>
+        <MypageS.MyInfoRight onClick={()=>{navigate('/profileRetouch')}}>프로필 보기</MypageS.MyInfoRight>
       </MypageS.MypageInfo>
       <MypageMenuBarS.MyListWrap>
         <MypageMenu></MypageMenu>

@@ -6,7 +6,7 @@ interface menuState{
 }
 
 const initialState:menuState = {
-    MState: 'reservation'
+    MState: '예약'
 }
 
 export const MenuSlice = createSlice(
