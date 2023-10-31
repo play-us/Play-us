@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Axios from 'axios';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   MessageSquare,
@@ -10,8 +10,10 @@ import {
   CarFront,
   Footprints,
 } from 'lucide-react';
-import { Button, Typography } from 'antd';
+import { Button, Typography, message } from 'antd';
 import { RedColor } from '../styles/CommonStyle';
+import FieldResvModal from '../components/field/FieldResvModal';
+import KakaoMap from '../components/common/KakaoMap';
 
 interface IFieldItem {
   field_id: string;
@@ -52,12 +54,15 @@ declare global {
 const { Title, Text } = Typography;
 
 const FieldDetailPage = () => {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const field_id = searchParams.get('id');
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<IRowData[]>([]);
   const [liked, setLiked] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   /* 데이터 조회 */
   useEffect(() => {
@@ -98,56 +103,29 @@ const FieldDetailPage = () => {
     setLiked(!liked);
   };
 
-  /* 카카오 맵 지도 */
-  /* useEffect(() => {
-    let container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-    let options = {
-      //지도를 생성할 때 필요한 기본 옵션
-      center: new window.kakao.maps.LatLng(37.586272, 127.029005), //지도의 중심좌표
-      level: 1, //지도의 레벨(확대, 축소 정도)
-    };
-    let map = new window.kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-    //---> 기본 맵 container, options, map 설정.
+  /* 모달 상태 관련 이벤트 핸들러 */
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
 
-    for (let i = 0; i < dummy.data.length; i++) {
-      displayMarker(dummy.data[i], i);
-    }
+  const handleOk = () => {
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setIsModalOpen(false);
+      setConfirmLoading(false);
+      navigate('/completePayment');
+    }, 2000);
+  };
 
-    function displayMarker<
-      T extends {
-        name: string;
-        location_y: number;
-        location_x: number;
-        active: boolean;
-        point: number;
-      },
-    >(data: T, i: number) {
-      // 인포윈도우 표시될 위치(좌표)
-      let iwPosition = new window.kakao.maps.LatLng(
-        data.location_y,
-        data.location_x,
-      );
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
-      // 인포윈도우에 표출될 내용. HTML 문자열이나 document element 등이 가능하다.
-      var inactiveInfoWindow = `<div class="inactive infowindow""><span>${data.name}</span></div>`;
-
-      //인포윈도우
-      let infowindow;
-
-      infowindow = new window.kakao.maps.InfoWindow({
-        zIndex: 1,
-        position: iwPosition,
-        content: inactiveInfoWindow,
-        disableAutoPan: false,
-        map: map, //map에 해당 인포윈도우를 적용한다.
-      });
-    }
-
-    //중심좌표 재설정
-    var position = new window.kakao.maps.LatLng(37.586272, 127.029005);
-    map.setCenter(position);
-  }); */
-
+  /* 주소 복사 */
+  const handleCopyclipBoard = async (text: string) => {
+    navigator.clipboard.writeText(text);
+    message.info(`주소를 복사하였습니다!`);
+  };
   return (
     <Wrap>
       <BackgroundImg>
@@ -165,7 +143,13 @@ const FieldDetailPage = () => {
         </Interest>
         <Title level={2}>구장이름</Title>
         <FlexWrap type="secondary">
-          경기도 부천시 주소주소<AddressCopy underline>주소복사</AddressCopy>
+          경기도 부천시 주소주소
+          <Button
+            type="link"
+            onClick={() => handleCopyclipBoard('주소를 복사했습니다')}
+          >
+            주소복사
+          </Button>
         </FlexWrap>
         <Contour />
         <FlexWrap>
@@ -173,7 +157,7 @@ const FieldDetailPage = () => {
             <Price>10,000원</Price>
             <Hours>/ 2시간</Hours>
           </div>
-          <Button type="primary" size="large">
+          <Button type="primary" size="large" onClick={showModal}>
             예약신청
           </Button>
         </FlexWrap>
@@ -211,7 +195,7 @@ const FieldDetailPage = () => {
       <SectionWrap>
         <SectionHeader>
           <Title level={4}>지도</Title>
-          {/* <div id="map" style={{ width: "100vw", height: "100vh" }} /> */}
+          <KakaoMap mapX={33.450701} mapY={126.570667} />
         </SectionHeader>
       </SectionWrap>
       <SectionWrap>
@@ -245,6 +229,13 @@ const FieldDetailPage = () => {
           <br />
         </Contents>
       </SectionWrap>
+      <FieldResvModal
+        fieldName="구장이름"
+        isModalOpen={isModalOpen}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+        confirmLoading={confirmLoading}
+      />
     </Wrap>
   );
 };

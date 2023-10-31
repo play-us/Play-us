@@ -14,6 +14,7 @@ import SignIn from './pages/SignIn';
 import ProfileRetouch from './pages/ProfileRetouch';
 import AdminPage from './pages/AdminPage';
 import FieldRegis from './pages/FieldRegis';
+import CompletePaymentPage from './pages/CompletePaymentPage';
 
 const Wrap = styled.div`
   background-color: #ffffff;
@@ -45,6 +46,10 @@ function App() {
             <Route
               path="/recruitTeamDetail"
               element={<RecruitTeamDetail />}
+            ></Route>
+            <Route
+              path="/completePayment"
+              element={<CompletePaymentPage />}
             ></Route>
           </Routes>
         </InnerWrap>
