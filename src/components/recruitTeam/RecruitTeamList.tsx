@@ -1,10 +1,11 @@
-import { Button, Col, Row, Typography } from 'antd';
+import { Button, Col, Pagination, Row, Typography } from 'antd';
 import Axios from 'axios';
 import { Eye, Hand, MessageSquare, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { primaryColor } from '../../styles/CommonStyle';
+import RecruitTeamInfo from './RecruitTeamInfo';
 
 //url 팀원모집 게시판 리스트
 const urlGetRecruitTeamList = '/json/community.json';
@@ -42,16 +43,22 @@ export interface ICommunityRowData {
 interface CommunityHeaderWrapProps {
   wrapWidth?: string;
 }
+const ITEM_PER_PAGE = 9;
+const { Title } = Typography;
 
-// interface CommunityProps {
-//   wrapWidth?: string;
-//   w;
-// }
-// 팀원 모집 게시판 컴포넌트
 const RecruitTeamList = () => {
-  const { Title } = Typography;
   const navigate = useNavigate();
-  const [rowDataList, setRowDataList] = useState<ICommunityRowData[]>([]);
+
+  const [rowDataList, setRowDataList] = useState<ICommunityRowData[]>([]); //팀원 모집글 데이터
+  const [currentPage, setCurrentPage] = useState(1); //페이지네이션 현재페이지
+
+  const startIndex = (currentPage - 1) * ITEM_PER_PAGE;
+  const endIndex = startIndex + ITEM_PER_PAGE;
+
+  // 페이지네이션 이벤트 함수
+  const handlePageChange = (page: any) => {
+    setCurrentPage(page);
+  };
 
   const NavigateCommunityDetail = () => {
     navigate('/recruitTeamDetail');
@@ -91,101 +98,144 @@ const RecruitTeamList = () => {
     });
   }, []);
 
-  // 리스트 컴포넌트
-  const communityList = rowDataList.map((data: ICommunityRowData) => (
-    <CommunityItemWrap>
-      <CommunutyListItem itemData={data} />
-    </CommunityItemWrap>
-  ));
+  // 팀원 모집 리스트 컴포넌트
+  const communityList = rowDataList
+    .slice(startIndex, endIndex)
+    .map((data: ICommunityRowData) => <RecruitTeamInfo item={data} />);
 
   return (
     <Row>
-      <Col span={24}>
+      <Col span={24} style={{ marginBottom: '20px' }}>
+        {/* display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3.125rem;
+  margin: 0 auto;
+  margin-top: 1.875rem;
+  margin-bottom: 1.875rem;
+  border-bottom: 1px solid #000000; */}
         {/* 커뮤니티 헤더 */}
-        <CommunityHearderWrap wrapWidth="100%">
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: '3.125rem',
+          }}
+        >
           <Title level={4}>커뮤니티 게시판</Title>
           <CommunityModalButton onClick={NavigateCommunityDetail}>
             글쓰기
           </CommunityModalButton>
-        </CommunityHearderWrap>
-        {/* 커뮤니티 게시글 리스트 */}
-        {communityList}
+        </div>
+        {/* 커뮤니티 게시글 리스트 
+        width: 820px;
+  height: 720px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px; // 그리드 간격 조절 (선택 사항)
+        */}
+        {/* <GridContainer>{communityList}</GridContainer> */}
+        <div
+          style={{
+            height: '720px',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gridTemplateRows: 'repeat(3, 1fr)',
+            gap: '10px',
+          }}
+        >
+          {communityList}
+        </div>
+      </Col>
+      <Col span={24}>
+        <Pagination
+          current={currentPage}
+          total={rowDataList.length}
+          pageSize={ITEM_PER_PAGE}
+          onChange={handlePageChange}
+        ></Pagination>
       </Col>
     </Row>
   );
 };
 
 // 커뮤니티 게시글
-const CommunutyListItem = (props: { itemData: ICommunityRowData }) => {
-  const { Title } = Typography;
-  const { itemData } = props;
-  console.log(itemData);
+// const CommunutyListItem = (props: { itemData: ICommunityRowData }) => {
+//   const { Title } = Typography;
+//   const { itemData } = props;
+//   console.log(itemData);
 
-  // 커뮤니티 게시글 정보
-  const createdDate = `${itemData.createdDate}`;
-  const stadiumValue = `${itemData.stadium} | ${itemData.memberCount}명 | ~${itemData.deadLine}`;
-  const communityTitle = `${itemData.commuTitle}`;
-  const commnnityName = itemData.name;
-  const likeCnt = itemData.likeCnt;
-  const commentCnt = itemData.commentCnt;
-  const views = itemData.views;
+//   // 커뮤니티 게시글 정보
+//   const createdDate = `${itemData.createdDate}`;
+//   const stadiumValue = `${itemData.stadium} | ${itemData.memberCount}명 | ~${itemData.deadLine}`;
+//   const communityTitle = `${itemData.commuTitle}`;
+//   const commnnityName = itemData.name;
+//   const likeCnt = itemData.likeCnt;
+//   const commentCnt = itemData.commentCnt;
+//   const views = itemData.views;
 
-  return (
-    <Row style={{ border: '1px solid #000000;' }}>
-      {/* 날짜와 구장 정보 */}
-      <ItemInfo>
-        <Col>
-          {/* 날짜 데이터 */}
-          {/* 2021.04.13 */}
-          {createdDate}
-        </Col>
-        {/* <Col>축구장 | 10명 | ~2023.09.06</Col> */}
-        <Col span={8}>{stadiumValue}</Col>
-      </ItemInfo>
+//   return (
+//     //이전 리스트
+//     // <Row style={{ border: '1px solid #000000;' }}>
+//     //   {/* 날짜와 구장 정보 */}
+//     //   <ItemInfo>
+//     //     <Col>
+//     //       {/* 날짜 데이터 */}
+//     //       {/* 2021.04.13 */}
+//     //       {createdDate}
+//     //     </Col>
+//     //     {/* <Col>축구장 | 10명 | ~2023.09.06</Col> */}
+//     //     <Col span={8}>{stadiumValue}</Col>
+//     //   </ItemInfo>
 
-      {/* 제목 */}
-      <ItemTitle>
-        <Title level={4}>{communityTitle}</Title>
-      </ItemTitle>
-      {/* 작성자 정보와 게시글 정보 */}
-      <UserItemInfoWrap>
-        {/* <UserOutlined /> */}
+//     //   {/* 제목 */}
+//     //   <ItemTitle>
+//     //     <Title level={4}>{communityTitle}</Title>
+//     //   </ItemTitle>
+//     //   {/* 작성자 정보와 게시글 정보 */}
+//     //   <UserItemInfoWrap>
+//     //     {/* <UserOutlined /> */}
 
-        <UserInfo>
-          <Col> {itemData.userImg === null ? <User /> : itemData.userImg}</Col>
-          <Col>{commnnityName}</Col>
-        </UserInfo>
-        <Col
-          style={{ display: 'flex', justifyContent: 'space-between' }}
-          span={8}
-        >
-          {/* <Col>게시글 정보 컴포넌트</Col> */}
-          <CommunityItemInfo>
-            <Hand />
-            {likeCnt}
-          </CommunityItemInfo>
+//     //     <UserInfo>
+//     //       <Col> {itemData.userImg === null ? <User /> : itemData.userImg}</Col>
+//     //       <Col>{commnnityName}</Col>
+//     //     </UserInfo>
+//     //     <Col
+//     //       style={{ display: 'flex', justifyContent: 'space-between' }}
+//     //       span={8}
+//     //     >
+//     //       {/* <Col>게시글 정보 컴포넌트</Col> */}
+//     //       <CommunityItemInfo>
+//     //         <Hand />
+//     //         {likeCnt}
+//     //       </CommunityItemInfo>
 
-          <CommunityItemInfo>
-            <MessageSquare />
-            {commentCnt}
-          </CommunityItemInfo>
-          <CommunityItemInfo>
-            <Eye />
-            {views}
-          </CommunityItemInfo>
-        </Col>
-      </UserItemInfoWrap>
-    </Row>
-  );
-};
+//     //       <CommunityItemInfo>
+//     //         <MessageSquare />
+//     //         {commentCnt}
+//     //       </CommunityItemInfo>
+//     //       <CommunityItemInfo>
+//     //         <Eye />
+//     //         {views}
+//     //       </CommunityItemInfo>
+//     //     </Col>
+//     //   </UserItemInfoWrap>
+//     // </Row>
+//     <Row style={{ border: '1px solid #000000;' }}>
+
+//       <RecruitTeamInfo item={item}></RecruitTeamInfo>
+//     </Row>
+//   );
+// };
 
 export default RecruitTeamList;
 
-const CommunityHearderWrap = styled.div<CommunityHeaderWrapProps>`
+const CommunityHearderWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: ${(props) => (props.wrapWidth ? props.wrapWidth : '100%')};
   height: 3.125rem;
   margin: 0 auto;
   margin-top: 1.875rem;
@@ -209,17 +259,13 @@ const ItemTitle = styled.div`
   height: 3.125rem;
   margin: 0 auto;
 `;
-const CommunityItemWrap = styled.div`
-  width: 100%;
-  height: 150px;
-  margin: 0 auto;
-  /* border: 1px solid #000000; */
-  margin-bottom: 1rem;
-  border-radius: 0.75rem;
-  background-color: rgb(255, 255, 255);
-  box-shadow: rgb(255 255 255 / 12%) 0px 0px 2px 0px inset,
-    rgb(0 0 0 / 5%) 0px 0px 2px 1px, rgb(0 0 0 / 15%) 0px 4px 12px;
-  box-sizing: border-box;
+const GridContainer = styled.div`
+  width: 820px;
+  height: 720px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px; // 그리드 간격 조절 (선택 사항)
 `;
 
 const UserInfo = styled.div`
