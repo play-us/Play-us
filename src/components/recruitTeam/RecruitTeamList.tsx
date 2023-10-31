@@ -24,7 +24,7 @@ export interface ICommunityItem {
   location?: string;
 }
 
-export interface IRowData {
+export interface ICommunityRowData {
   createdDate: string;
   commuTitle: string;
   likeCnt: number;
@@ -51,7 +51,7 @@ interface CommunityHeaderWrapProps {
 const RecruitTeamList = () => {
   const { Title } = Typography;
   const navigate = useNavigate();
-  const [rowDataList, setRowDataList] = useState<IRowData[]>([]);
+  const [rowDataList, setRowDataList] = useState<ICommunityRowData[]>([]);
 
   const NavigateCommunityDetail = () => {
     navigate('/recruitTeamDetail');
@@ -69,7 +69,7 @@ const RecruitTeamList = () => {
       const data = response.data;
 
       if (data.length > 0) {
-        const rows: IRowData[] = [];
+        const rows: ICommunityRowData[] = [];
         data.forEach((element: ICommunityItem) => {
           const row = {
             createdDate: element.created_date,
@@ -92,7 +92,7 @@ const RecruitTeamList = () => {
   }, []);
 
   // 리스트 컴포넌트
-  const communityList = rowDataList.map((data: IRowData) => (
+  const communityList = rowDataList.map((data: ICommunityRowData) => (
     <CommunityItemWrap>
       <CommunutyListItem itemData={data} />
     </CommunityItemWrap>
@@ -116,7 +116,7 @@ const RecruitTeamList = () => {
 };
 
 // 커뮤니티 게시글
-const CommunutyListItem = (props: { itemData: IRowData }) => {
+const CommunutyListItem = (props: { itemData: ICommunityRowData }) => {
   const { Title } = Typography;
   const { itemData } = props;
   console.log(itemData);

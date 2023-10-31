@@ -4,7 +4,7 @@ import Axios from 'axios';
 import { ArrowLeft, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ICommunityItem, IRowData } from './RecruitTeamList';
+import { ICommunityItem, ICommunityRowData } from './RecruitTeamList';
 
 const urlGetCommentList = '/json/comment.json';
 const urlGetRecruitTeamList = '/json/communityDetail.json';
@@ -43,7 +43,7 @@ const CommentData = (props: { data: ICommentData }) => {
   );
 };
 //팀원모집상세 컴포넌트
-const RecruitInfoData = (props: { data: IRowData }) => {
+const RecruitInfoData = (props: { data: ICommunityRowData }) => {
   const { data } = props;
   // const createdDate = `${data.createdDate}`;
   // const stadiumValue = `${data.stadium} | ${data.memberCount}명 | ~${data.deadLine}`;
@@ -144,7 +144,7 @@ const RecruitInfoData = (props: { data: IRowData }) => {
 
 //전체 팀원모집 상세 페이지
 const RecruitTeamDetail = () => {
-  const [rowDataList, setRowDataList] = useState<IRowData[]>([]);
+  const [rowDataList, setRowDataList] = useState<ICommunityRowData[]>([]);
   const [commentDataList, setCommentDataList] = useState<any>([]);
 
   //화면 랜더링시 api
@@ -175,7 +175,7 @@ const RecruitTeamDetail = () => {
       const data = response.data;
 
       if (data.length > 0) {
-        const rows: IRowData[] = [];
+        const rows: ICommunityRowData[] = [];
         data.forEach((element: ICommunityItem) => {
           const row = {
             createdDate: element.created_date,
@@ -200,7 +200,7 @@ const RecruitTeamDetail = () => {
   }, []);
 
   //팀원모집 상세 정보 데이터 주입
-  const RecruitTeamInfo = rowDataList.map((data: IRowData) => (
+  const RecruitTeamInfo = rowDataList.map((data: ICommunityRowData) => (
     <RecruitInfoData data={data} />
   ));
   // 댓글 리스트 데이터 주입
