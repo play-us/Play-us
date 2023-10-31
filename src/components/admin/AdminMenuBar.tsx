@@ -1,18 +1,48 @@
 import { GiSoccerField } from 'react-icons/gi';
 import { MdPostAdd } from 'react-icons/md';
 import { styled } from 'styled-components';
+import { Tabs } from 'antd';
+import type { TabsProps } from 'antd';
 
-const AdminMenuBar = () =>{
+const items: TabsProps['items'] = [
+    {
+      key: '1',
+      label: (
+        <span>
+            <GiSoccerField></GiSoccerField>
+            구장 목록
+        </span>
+        ),
+    },
+    {
+      key: '2',
+      label: (
+        <span>
+            <MdPostAdd></MdPostAdd>
+            글목록
+        </span>
+        ),
+    },
+  ];
+
+
+
+
+const AdminMenuBar = ({setMenu}:{setMenu:React.Dispatch<React.SetStateAction<string>>}) =>{
+    const changeMenu = (e:any) => {
+        if(e === 1){
+            setMenu('구장 목록');
+        }else{
+            setMenu('등록 글 목록');
+        }
+    };
     return(
         <MenuBarWrap>
-            <MenuBox>
-                <GiSoccerField size={"20px"} color='#3ce48a'/>
-                <MenuTxt>구장</MenuTxt>
-            </MenuBox>
-            <MenuBox>
-                <MdPostAdd size={"20px"} color='#DADADA'></MdPostAdd>
-                <MenuTxt>게시글</MenuTxt>
-            </MenuBox>
+            <Tabs
+                defaultActiveKey="1"
+                items= {items}
+                onChange={changeMenu}
+            />
         </MenuBarWrap>
     )
 }
@@ -22,7 +52,6 @@ export default AdminMenuBar;
 const MenuBarWrap = styled.ul`
     display: flex;
     margin-top: 30px;
-    border-bottom: 3px solid  rgba(0,0,0,5%);
 `
 const MenuBox = styled.li`
     display: flex;

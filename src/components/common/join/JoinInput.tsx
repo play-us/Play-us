@@ -1,6 +1,7 @@
 import {InputWrap,InputBox,InputTit,CommonInput,RetouchBtn} from '../../../styles/common/join/JoinInput';
 import { ConfigProvider ,Select} from 'antd';
 import { useState} from 'react';
+import { primaryColor } from './../../../styles/CommonStyle';
 
 const provinceData = ['서울', '부산'];
 
@@ -57,7 +58,7 @@ const JoinInput = () => {
                 components: {
                     Select: {
                         controlHeight:60,
-                        controlItemBgActive:'#5a5a5a5a',
+                        controlItemBgActive: primaryColor,
                         colorPrimaryHover:'#3ce48a',
                     },
                 },

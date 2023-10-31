@@ -2,19 +2,36 @@ import { styled } from 'styled-components';
 import { useState } from 'react';
 import AdminMenuBar from './../components/admin/AdminMenuBar';
 import AdminFilter from './../components/admin/AdminFilter';
-import AdminDetail from '../components/admin/AdminDetail';
-  
+import AdminFieldLists from '../components/admin/AdminFieldLists';
+
+interface componentsType {
+    filterComponent:null | React.ReactElement
+    fieldListComponent:null | React.ReactElement
+}
 
 const AdminPage = () =>{
-    const [menu,setMenu] = useState('구장 목록');
+    const [menu,setMenu] = useState<string>('구장 목록');
+    const [components,setComponents] = useState<componentsType>({filterComponent:null,fieldListComponent:null});
+    if(menu === '구장 목록'){
+        setComponents((prevComponents)=>({
+            ...prevComponents,
+            filterComponent:<AdminFilter/>
+
+        }));    
+        // components.filterComponent = <AdminFilter/>;
+        // components.fieldListComponent = <AdminFieldLists/>;
+    }else{
+        // components.filterComponent = null;
+        // components.fieldListComponent = null;
+    }
     return(
         <Wrap>
             <MenuTitle>{menu}</MenuTitle>
             <SearchInput placeholder='빠른 검색...'/>
-            <AdminMenuBar/>
+            <AdminMenuBar setMenu ={setMenu}/>
             <FieldContentWrap>
-                <AdminFilter/>
-                <AdminDetail/>
+                {components.filterComponent}
+                {components.fieldListComponent}
             </FieldContentWrap>
         </Wrap>
     )
