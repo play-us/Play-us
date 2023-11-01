@@ -33,7 +33,7 @@ const AdminFilter = () => {
                     <SelectBox
                         defaultValue={"서울"}
                         bordered = {false}
-                        style={{ width: 100  }}
+                        style={{ width: 100 }}
                         onChange={handleProvinceChange}
                         options={provinceData.map((province) => ({ label: province, value: province }))}
                     />
@@ -56,7 +56,11 @@ const AdminFilter = () => {
                         ]}
                     />
                 </FilterLeftWrap>
-                <FieldAddBtn>구장 등록</FieldAddBtn>
+                <FieldBtnWrap>
+                    <FieldBtn>삭제</FieldBtn>
+                    <FieldBtn>수정</FieldBtn>
+                    <FieldBtn>구장 등록</FieldBtn>
+                </FieldBtnWrap>
             </FilterInnerWrap>
         </FilterWrap>
     );
@@ -103,10 +107,13 @@ const FilterTit = styled.p`
 const SelectBox =styled(Select)<SelectProps>`
     text-align: center;
 `
-
-const FieldAddBtn = styled.button`
+const FieldBtnWrap = styled.div`
+`
+const FieldBtn = styled.button`
+    margin-left: 10px;
     padding: 10px 15px;
     border-radius: 10px;
+    box-sizing: border-box;
     background-color: #3CE4A8;
     color: #ffffff;
     font-weight: bold;
