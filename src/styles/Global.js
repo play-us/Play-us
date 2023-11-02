@@ -29,7 +29,7 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
 }
-ol, ul {
+ol, ul,li {
 	list-style: none;
 }
 blockquote, q {
@@ -63,7 +63,11 @@ input{
     /* 이런식으로 weight를 지정해서 사용할 수도 있다!*/
     font-weight: 400;
 }
-
+a{
+	color: #191919;
+	cursor: pointer;
+	text-decoration: none;
+}
 `;
 
 export default GlobalStyle;
