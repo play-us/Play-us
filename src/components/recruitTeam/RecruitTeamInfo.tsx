@@ -26,7 +26,9 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
     <InfoWrap>
       <InfoHeaderWrap>
         <InfoHeader>
-          <ButtonWrap>{stadium}</ButtonWrap>
+          <ButtonWrap style={{ marginRight: '5px' }} backgroundColor="EFEFEF">
+            {stadium}
+          </ButtonWrap>
           <ButtonWrap color="rgb(62, 133, 244)" backgroundColor="EFEFEF">
             {memberCount}
           </ButtonWrap>
@@ -48,10 +50,16 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
             <Col className="recruit_detail_name"> {name}</Col>
           </InfoUser>
         </div>
-        <div>
-          <Hand color="#d1d1d1" />
-          <MessageSquare color="#d1d1d1" />
-        </div>
+        <LikeCommentWrap>
+          <LikeComment>
+            <Hand color="#d1d1d1" />
+            {1}
+          </LikeComment>
+          <LikeComment>
+            <MessageSquare color="#d1d1d1" />
+            {2}
+          </LikeComment>
+        </LikeCommentWrap>
       </InfoFooterWrap>
     </InfoWrap>
     // </div>
@@ -61,11 +69,16 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
 export default RecruitTeamInfo;
 
 const InfoWrap = styled.div`
-  height: 200px;
+  height: 270px;
+  /* width: 340; */
   /* width: 1000px; */
   border-radius: 30px;
-  padding: 20px 25px 0;
-  border: 2px solid #d1d1d1;
+  padding: 0px 20px;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  flex-direction: column;
+  border: 3px solid #d1d1d1;
   /* margin-bottom: 20px; */
 `;
 const ButtonWrap = styled.button<ButtonProps>`
@@ -98,6 +111,7 @@ const InfoTitle = styled.div`
   -webkit-line-clamp: 2;
   word-break: break-all;
   overflow: hidden;
+  margin-bottom: 60px;
 `;
 
 const InfoUser = styled.div`
@@ -116,7 +130,19 @@ const Contents = styled.pre`
   margin: 10px 0;
   text-align: left;
 `;
+const LikeComment = styled.pre`
+  display: flex;
+  align-items: center;
+  color: #999;
+  grid-gap: 5px;
+  gap: 5px;
+`;
 
+const LikeCommentWrap = styled.pre`
+  display: flex;
+  grid-gap: 10px;
+  gap: 10px;
+`;
 const InfoFooterWrap = styled.div`
   display: flex;
   font-size: 14px;
