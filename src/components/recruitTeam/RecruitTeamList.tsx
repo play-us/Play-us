@@ -139,7 +139,6 @@ const RecruitTeamList = () => {
         {/* <GridContainer>{communityList}</GridContainer> */}
         <div
           style={{
-            height: '720px',
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
             gridTemplateRows: 'repeat(3, 1fr)',

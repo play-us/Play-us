@@ -246,7 +246,7 @@ export default Home;
 
 const TabMenu = styled.div`
   display: flex;
-  justify-contents: start;
+  justify-content: start;
   align-items: center;
   margin: 1.8rem;
   margin-left: 0;
