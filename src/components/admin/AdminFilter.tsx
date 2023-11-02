@@ -11,6 +11,8 @@ const cityData = {
 
 type CityName = keyof typeof cityData;
 
+
+
 const AdminFilter = () => {
     const [cities, setCities] = useState(cityData[provinceData[0] as CityName]);
 
@@ -24,6 +26,8 @@ const AdminFilter = () => {
     const onSecondCityChange = (value: CityName) => {
         setSecondCity(value);
       };
+
+    
     return(
         <FilterWrap>
             <ListCount>1,824개의 구장이 있습니다</ListCount>
