@@ -4,7 +4,7 @@ import { Eye, Hand, MessageSquare, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { primaryColor } from '../../styles/CommonStyle';
+import { primaryColor, PageStyle, ButtonStyle } from '../../styles/CommonStyle';
 import RecruitTeamInfo from './RecruitTeamInfo';
 
 //url 팀원모집 게시판 리스트
@@ -115,19 +115,12 @@ const RecruitTeamList = () => {
   margin-bottom: 1.875rem;
   border-bottom: 1px solid #000000; */}
         {/* 커뮤니티 헤더 */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            height: '3.125rem',
-          }}
-        >
-          <Title level={4}>커뮤니티 게시판</Title>
-          <CommunityModalButton onClick={NavigateCommunityDetail}>
-            글쓰기
-          </CommunityModalButton>
-        </div>
+        <PageTopWrap>
+          <PageTitle>커뮤니티 게시판</PageTitle>
+          <DarkButton onClick={NavigateCommunityDetail}>
+            팀 모집 글쓰기
+          </DarkButton>
+        </PageTopWrap>
         {/* 커뮤니티 게시글 리스트 
         width: 820px;
   height: 720px;
@@ -142,7 +135,7 @@ const RecruitTeamList = () => {
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
             gridTemplateRows: 'repeat(3, 1fr)',
-            gap: '10px',
+            gap: '1.2rem',
           }}
         >
           {communityList}
@@ -159,7 +152,8 @@ const RecruitTeamList = () => {
     </Row>
   );
 };
-
+const { PageTopWrap, PageTitle } = PageStyle;
+const { DarkButton } = ButtonStyle;
 // 커뮤니티 게시글
 // const CommunutyListItem = (props: { itemData: ICommunityRowData }) => {
 //   const { Title } = Typography;

@@ -164,7 +164,6 @@ const Home = () => {
           };
           rows.push(row);
         });
-        console.log(rows, ' data');
 
         setRecruitData(rows);
       }
@@ -172,7 +171,7 @@ const Home = () => {
   }, []);
   return (
     <Row>
-      <Col span={24}>
+      <Col span={24} style={{ marginBottom: '20px' }}>
         <TabMenu>
           {tabList.map((item) => (
             <Tab
@@ -200,14 +199,14 @@ const Home = () => {
           <RecruitSlideHeader font={true} cursor={false} marginRight={false}>
             플레이어구해요
           </RecruitSlideHeader>
-          <RecruitSlideHeader
+          <MoreRecruitButton
             marginRight={true}
             font={false}
             cursor={true}
             onClick={() => navigate('/community')}
           >
             더 많은 플랜보기 <MoveRight />
-          </RecruitSlideHeader>
+          </MoreRecruitButton>
         </RecruitSlideWrap>
       </Col>
       {/* <StyledThreeBoxesGrid>
@@ -312,12 +311,24 @@ const RecruitSlideHeader = styled.div<{
   marginRight: boolean;
 }>`
   align-items: center;
+  font-size: 20px;
+  color: #444;
   cursor: ${(props) => (props.cursor ? 'pointer' : 'auto')};
   font-weight: ${(props) =>
     props.font ? 700 : 'normal'}; /* 700 또는 'normal' */
   margin-right: ${(props) =>
     props.marginRight ? '10px' : '0px'}; /* 700 또는 'normal' */
   margin-bottom: 1.8rem;
+`;
+
+const MoreRecruitButton = styled(RecruitSlideHeader)`
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+
+  & > svg {
+    width: 12px;
+  }
 `;
 const StyledThreeBoxesGrid = styled.div`
   width: 100%;

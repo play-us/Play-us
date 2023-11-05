@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Col, Row, Pagination } from 'antd';
 import FieldListItem from '../components/field/FieldListItem';
 import FieldSearchbar from '../components/field/FieldSearchbar';
+import { PageStyle } from '../styles/CommonStyle';
 
 interface IFieldItem {
   field_id: string;
@@ -77,7 +78,9 @@ const FieldListPage = () => {
   return (
     <Row>
       <Col span={24}>
-        <PageTitle>구장리스트</PageTitle>
+        <PageTopWrap>
+          <PageTitle>구장리스트</PageTitle>
+        </PageTopWrap>
         <FieldSearchbar />
         <FieldItemWrap>
           {!isLoading &&
@@ -92,15 +95,7 @@ const FieldListPage = () => {
 };
 
 export default FieldListPage;
-
-const PageTitle = styled.div`
-  font-size: 1.5rem;
-  padding: 1.3rem 0;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #dfe0e1;
-  box-sizing: border-box;
-  text-align: left;
-`;
+const { PageTopWrap, PageTitle } = PageStyle;
 
 const FieldItemWrap = styled.div`
   width: 100%;

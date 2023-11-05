@@ -5,12 +5,11 @@ import { Col, Row } from 'antd';
 interface ButtonProps {
   backgroundColor?: string;
   marginRight?: string;
+  fontWeight?: string;
   color?: string;
 }
 
 const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
-  const { item } = props;
-  console.log(item);
   const {
     memberCount,
     stadium,
@@ -19,69 +18,75 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
     commuTitle,
     name,
     commentCnt,
-  } = item;
+  } = props.item;
 
   return (
-    // <div style={{ height: '340px' }}>
-    <InfoWrap>
-      <InfoHeaderWrap>
-        <InfoHeader>
-          <ButtonWrap style={{ marginRight: '5px' }} backgroundColor="EFEFEF">
-            {stadium}
-          </ButtonWrap>
-          <ButtonWrap color="rgb(62, 133, 244)" backgroundColor="EFEFEF">
-            {memberCount}
-          </ButtonWrap>
-        </InfoHeader>
-        <div>
-          <Hand color="#d1d1d1" />
-        </div>
-      </InfoHeaderWrap>
-      <InfoDeadLine>마감일 | {deadLine}</InfoDeadLine>
-      <InfoTitle>{commuTitle}</InfoTitle>
-      <InfoFooterWrap>
-        <div>
-          <InfoUser>
-            {/* <Col> {itemData.userImg === null ? <User /> : itemData.userImg}</Col> */}
-            <InfoIcon>
-              <User color="#d1d1d1" />
-            </InfoIcon>
-            {/* <Col>{commnnityName}</Col> */}
-            <Col className="recruit_detail_name"> {name}</Col>
-          </InfoUser>
-        </div>
-        <LikeCommentWrap>
-          <LikeComment>
+    <Wrap>
+      <Inwrap>
+        <InfoHeaderWrap>
+          <InfoHeader>
+            <RecruitTeam
+              style={{ marginRight: '5px' }}
+              backgroundColor="#EFEFEF"
+            >
+              ⚽ {stadium}
+            </RecruitTeam>
+            <RecruitTeam
+              color="#3E85F4"
+              backgroundColor="#F1F4F8"
+              fontWeight="bold"
+            >
+              {memberCount}명
+            </RecruitTeam>
+          </InfoHeader>
+          <div>
             <Hand color="#d1d1d1" />
-            {1}
-          </LikeComment>
-          <LikeComment>
-            <MessageSquare color="#d1d1d1" />
-            {2}
-          </LikeComment>
-        </LikeCommentWrap>
-      </InfoFooterWrap>
-    </InfoWrap>
-    // </div>
+          </div>
+        </InfoHeaderWrap>
+        <InfoDeadLine>마감일 | {deadLine}</InfoDeadLine>
+        <InfoTitle>{commuTitle}</InfoTitle>
+        <InfoFooterWrap>
+          <div>
+            <InfoUser>
+              {/* <Col> {itemData.userImg === null ? <User /> : itemData.userImg}</Col> */}
+              <ThumbImg
+                src="https://lh3.googleusercontent.com/-LNDcyoUZV3U/AAAAAAAAAAI/AAAAAAAAAAA/AML38-szSEwtVxDGrb8lU9truJxdb9pwWQ/photo.jpg?sz=46"
+                alt="프로필이미지"
+              />
+              {/* <Col>{commnnityName}</Col> */}
+              <Col className="recruit_detail_name"> {name}</Col>
+            </InfoUser>
+          </div>
+          <LikeCommentWrap>
+            <LikeComment>
+              <Hand color="#9C9C9C" />
+              {1}
+            </LikeComment>
+            <LikeComment>
+              <MessageSquare color="#9C9C9C" />
+              {2}
+            </LikeComment>
+          </LikeCommentWrap>
+        </InfoFooterWrap>
+      </Inwrap>
+    </Wrap>
   );
 };
 
 export default RecruitTeamInfo;
 
-const InfoWrap = styled.div`
-  height: 270px;
-  /* width: 340; */
-  /* width: 1000px; */
-  border-radius: 30px;
-  padding: 0px 20px;
-  display: flex;
-  justify-content: center;
-  /* align-items: center; */
-  flex-direction: column;
-  border: 3px solid #d1d1d1;
-  /* margin-bottom: 20px; */
+const Wrap = styled.div`
+  over-flow: hidden;
 `;
-const ButtonWrap = styled.button<ButtonProps>`
+
+const Inwrap = styled.div`
+  padding: 25px 20px;
+  border: 1px solid rgba(23, 23, 23, 0.08);
+  border-radius: 12px;
+  box-sizing: border-box;
+`;
+
+const RecruitTeam = styled.div<ButtonProps>`
   border-radius: 10px; /* 원하는 값으로 변경 */
   margin-right: ${(props) =>
     props.marginRight || '0'}; /* marginRight 프롭 값 또는 기본값 0 */
@@ -90,6 +95,9 @@ const ButtonWrap = styled.button<ButtonProps>`
   max-height: 24px;
   color: ${(props) =>
     props.color || '#717171'}; /* marginRight 프롭 값 또는 기본값 0 */
+  font-weight: ${(props) => props.fontWeight || 'normal'};
+  font-size: 12px;
+  padding: 0.3rem 0.4rem;
 `;
 
 const InfoHeaderWrap = styled.div`
@@ -98,27 +106,28 @@ const InfoHeaderWrap = styled.div`
 `;
 const InfoHeader = styled.div`
   margin-bottom: 15px;
+  display: flex;
+  justify-content: start;
 `;
 const InfoTitle = styled.div`
-  font-size: 17px;
-  min-height: 50px;
-  line-height: 28px;
-  font-weight: 700;
+  font-size: 20px;
+  height: 80px;
+  line-height: 1.4;
+  font-weight: 600;
   letter-spacing: -0.05em;
-  margin: 7px 15px 10px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   word-break: break-all;
   overflow: hidden;
-  margin-bottom: 60px;
+  text-align: left;
+  margin-bottom: 50px;
 `;
 
 const InfoUser = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 3.125rem;
 `;
 
 const Contents = styled.pre`
@@ -130,15 +139,20 @@ const Contents = styled.pre`
   margin: 10px 0;
   text-align: left;
 `;
-const LikeComment = styled.pre`
+const LikeComment = styled.div`
   display: flex;
   align-items: center;
-  color: #999;
+  color: #9c9c9c;
   grid-gap: 5px;
   gap: 5px;
+  font-size: 14px;
+
+  & > svg {
+    width: 18px;
+  }
 `;
 
-const LikeCommentWrap = styled.pre`
+const LikeCommentWrap = styled.div`
   display: flex;
   grid-gap: 10px;
   gap: 10px;
@@ -150,14 +164,23 @@ const InfoFooterWrap = styled.div`
   justify-content: space-between;
   letter-spacing: -0.04em;
   align-items: center;
-  border-top: 1px solid #d1d1d1;
+  border-top: 1px solid rgba(23, 23, 23, 0.08);
+  padding-top: 16px;
 `;
 const InfoDeadLine = styled.div`
   text-align: left;
-  color: #999;
+  color: #979799;
+  font-size: 1rem;
   margin-bottom: 15px;
 `;
 const InfoIcon = styled.div`
   text-align: left;
-  color: #717171'
+  color: #717171;
+`;
+
+const ThumbImg = styled.img`
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
 `;

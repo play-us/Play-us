@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
-import { Space, Select, Input, Button, DatePicker } from 'antd';
+import { Space, Select, Input, Button } from 'antd';
 
 interface IFieldTypeData {
   area: string;
@@ -10,8 +10,6 @@ interface IFieldTypeData {
   end: string;
   keyword: string;
 }
-
-const { RangePicker } = DatePicker;
 
 const FieldSearchbar = () => {
   const navigate = useNavigate();
@@ -73,7 +71,6 @@ const FieldSearchbar = () => {
         onChange={(e) => handleChangeFieldType(e)}
         options={fieldTypeList}
       />
-      <RangePicker onChange={(e) => console.log(e)} />
       <Space.Compact block>
         <Input
           placeholder="구장이름으로 찾기"

@@ -52,6 +52,7 @@ button{
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
+	cursor:pointer;
 }
 input{
 	outline	:  none;
