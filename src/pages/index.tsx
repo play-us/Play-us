@@ -20,6 +20,7 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 
 const urlGetRecruitTeamList = '/json/community.json';
+const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
 
 interface IFieldItem {
   field_id: string;
@@ -144,6 +145,33 @@ const Home = () => {
     });
   };
   useEffect(() => {
+    // 메인 페이지 데이터 init
+    Axios.get<any[]>(urlGetMainDataList).then((response) => {
+      const data = response.data;
+      console.log(data, ' data');
+
+      if (data.length > 0) {
+        const rows: any[] = [];
+        data.forEach((element: any) => {
+          const row = {
+            // createdDate: element.created_date,
+            // commuTitle: element.commu_title,
+            // likeCnt: element.like_cnt,
+            // commentCnt: element.comment_cnt,
+            // name: element.name,
+            // userImg: element.p_img,
+            // deadLine: element.deadLine,
+            // memberCount: element.member_count,
+            // stadium: element.stadium,
+            // views: element.views,
+          };
+          rows.push(row);
+        });
+
+        setRecruitData(rows);
+      }
+    });
+    // 기존 목데이터 연결
     Axios.get<ICommunityItem[]>(urlGetRecruitTeamList).then((response) => {
       const data = response.data;
 
