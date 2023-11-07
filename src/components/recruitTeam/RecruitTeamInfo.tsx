@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { ICommunityRowData } from './RecruitTeamList';
 import { Hand, MessageSquare, User } from 'lucide-react';
-import { Col, Row } from 'antd';
+import { Col } from 'antd';
+import React from 'react';
 interface ButtonProps {
   backgroundColor?: string;
   marginRight?: string;
@@ -10,6 +11,44 @@ interface ButtonProps {
 }
 
 const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
+  const LikeButton = () => {
+    const [liked, setLiked] = React.useState(false);
+
+    // 좋아요 버튼 클릭 시 API 호출을 트리거하기 위한 useEffect를 사용합니다.
+    React.useEffect(() => {
+      // API 호출을 수행하는 함수
+      const sendLikeToServer = async () => {
+        try {
+          // 좋아요 버튼이 클릭된 경우에만 API 호출
+          if (liked) {
+            const apiUrl = 'https://example.com/api/like'; //API 엔드포인트
+
+            // API 호출 (POST 요청)
+            // const response = await (apiUrl, {
+            // });
+
+            // console.log('API 응답:', response.data);
+          }
+        } catch (error) {
+          // 오류 처리 (예: 네트워크 문제 또는 API 오류)
+          console.error('API 오류:', error);
+        }
+      };
+
+      // 좋아요 버튼 클릭 상태가 변경될 때마다 API 호출 함수 호출
+      sendLikeToServer();
+    }, [liked]);
+
+    const toggleLike = () => {
+      setLiked((prevState) => !prevState);
+    };
+
+    return (
+      <LikeBtn onClick={toggleLike}>
+        {liked ? <Hand color="#F6E881" /> : <Hand color="#d1d1d1" />}
+      </LikeBtn>
+    );
+  };
   const {
     memberCount,
     stadium,
@@ -40,7 +79,7 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
             </RecruitTeam>
           </InfoHeader>
           <div>
-            <Hand color="#d1d1d1" />
+            <LikeButton />
           </div>
         </InfoHeaderWrap>
         <InfoDeadLine>마감일 | {deadLine}</InfoDeadLine>
@@ -183,4 +222,11 @@ const ThumbImg = styled.img`
   height: 24px;
   border-radius: 50%;
   overflow: hidden;
+`;
+const LikeBtn = styled.button`
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
 `;
