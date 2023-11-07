@@ -2,7 +2,9 @@ import { Row } from 'antd';
 import KakaoLogin from 'react-kakao-login';
 
 const SocialKakao = () => {
-  const kakaoClientId = '282635c779bca55f463be6f6ca7553aa';
+  const kakaoClientId = String(process.env.REACT_APP_KAKAO_ClientID);
+  console.log(kakaoClientId);
+
   const kakaoOnSuccess = async (data: any) => {
     console.log(data);
     const idToken = data.response.access_token; // 엑세스 토큰 백엔드로 전달
