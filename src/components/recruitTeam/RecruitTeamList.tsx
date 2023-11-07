@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { primaryColor, PageStyle, ButtonStyle } from '../../styles/CommonStyle';
 import RecruitTeamInfo from './RecruitTeamInfo';
+import RecruitTeamAddMoadl from './RecruitTeamAddModal';
 
 //url 팀원모집 게시판 리스트
 const urlGetRecruitTeamList = '/json/community.json';
@@ -47,6 +48,15 @@ const ITEM_PER_PAGE = 9;
 const { Title } = Typography;
 
 const RecruitTeamList = () => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  const handleModalOpenOnClick = () => {
+    setModalOpen(true);
+  };
+  const handleModalCloseOnClick = () => {
+    setModalOpen(false);
+  };
+
   const navigate = useNavigate();
 
   const [rowDataList, setRowDataList] = useState<ICommunityRowData[]>([]); //팀원 모집글 데이터
@@ -115,12 +125,19 @@ const RecruitTeamList = () => {
   margin-bottom: 1.875rem;
   border-bottom: 1px solid #000000; */}
         {/* 커뮤니티 헤더 */}
-        <PageTopWrap>
-          <PageTitle>커뮤니티 게시판</PageTitle>
-          <DarkButton onClick={NavigateCommunityDetail}>
-            팀 모집 글쓰기
-          </DarkButton>
-        </PageTopWrap>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: '3.125rem',
+          }}
+        >
+          <Title level={4}>커뮤니티 게시판</Title>
+          <CommunityModalButton onClick={handleModalOpenOnClick}>
+            글쓰기
+          </CommunityModalButton>
+        </div>
         {/* 커뮤니티 게시글 리스트 
         width: 820px;
   height: 720px;
@@ -149,6 +166,12 @@ const RecruitTeamList = () => {
           onChange={handlePageChange}
         ></Pagination>
       </Col>
+      {modalOpen ? (
+        <RecruitTeamAddMoadl
+          open={modalOpen}
+          onClose={handleModalCloseOnClick}
+        />
+      ) : null}
     </Row>
   );
 };
