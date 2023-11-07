@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { primaryColor } from '../../styles/CommonStyle';
 import RecruitTeamInfo from './RecruitTeamInfo';
+import RecruitTeamAddMoadl from './RecruitTeamAddModal';
 
 //url 팀원모집 게시판 리스트
 const urlGetRecruitTeamList = '/json/community.json';
@@ -43,6 +44,15 @@ const ITEM_PER_PAGE = 9;
 const { Title } = Typography;
 
 const RecruitTeamList = () => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  const handleModalOpenOnClick = () => {
+    setModalOpen(true);
+  };
+  const handleModalCloseOnClick = () => {
+    setModalOpen(false);
+  };
+
   const navigate = useNavigate();
 
   const [rowDataList, setRowDataList] = useState<ICommunityRowData[]>([]); //팀원 모집글 데이터
@@ -120,7 +130,7 @@ const RecruitTeamList = () => {
           }}
         >
           <Title level={4}>커뮤니티 게시판</Title>
-          <CommunityModalButton onClick={NavigateCommunityDetail}>
+          <CommunityModalButton onClick={handleModalOpenOnClick}>
             글쓰기
           </CommunityModalButton>
         </div>
@@ -152,6 +162,12 @@ const RecruitTeamList = () => {
           onChange={handlePageChange}
         ></Pagination>
       </Col>
+      {modalOpen ? (
+        <RecruitTeamAddMoadl
+          open={modalOpen}
+          onClose={handleModalCloseOnClick}
+        />
+      ) : null}
     </Row>
   );
 };
