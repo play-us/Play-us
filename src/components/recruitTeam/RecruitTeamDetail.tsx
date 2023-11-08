@@ -1,10 +1,11 @@
-import { Button, Col, Row } from 'antd';
+import { Button, Col, Popconfirm, Row } from 'antd';
 import { Typography } from 'antd';
 import Axios from 'axios';
 import { ArrowLeft, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ICommunityItem, ICommunityRowData } from './RecruitTeamList';
+import RecruitTeamAddMoadl from './RecruitTeamAddModal';
 
 const urlGetCommentList = '/json/comment.json';
 const urlGetRecruitTeamList = '/json/communityDetail.json';
@@ -146,6 +147,20 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
 const RecruitTeamDetail = () => {
   const [rowDataList, setRowDataList] = useState<ICommunityRowData[]>([]);
   const [commentDataList, setCommentDataList] = useState<any>([]);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const confirmTitle = () => {
+    return '작성하신 글을 삭제 하시겠어요?';
+  };
+
+  const handleDeleteOnClick = () => {
+    return;
+  };
+  const handleModalOpenOnClick = () => {
+    setModalOpen(true);
+  };
+  const handleModalCloseOnClick = () => {
+    setModalOpen(false);
+  };
 
   //화면 랜더링시 api
   useEffect(() => {
@@ -221,8 +236,15 @@ const RecruitTeamDetail = () => {
           span={3}
           style={{ display: 'flex', justifyContent: 'space-between' }}
         >
-          <ButtonWrap>수정</ButtonWrap>
-          <ButtonWrap>삭제</ButtonWrap>
+          <ButtonWrap onClick={handleModalOpenOnClick}>수정</ButtonWrap>
+          <Popconfirm
+            title={confirmTitle}
+            onConfirm={handleDeleteOnClick}
+            okText="네"
+            cancelText="아니오"
+          >
+            <ButtonWrap onClick={handleDeleteOnClick}>삭제</ButtonWrap>
+          </Popconfirm>
         </Col>
       </Col>
       {RecruitTeamInfo}
@@ -246,6 +268,12 @@ const RecruitTeamDetail = () => {
       </Col>
       {/* {comment.length >0} */}
       {commentList}
+      {modalOpen ? (
+        <RecruitTeamAddMoadl
+          open={modalOpen}
+          onClose={handleModalCloseOnClick}
+        ></RecruitTeamAddMoadl>
+      ) : null}
     </Row>
   );
 };

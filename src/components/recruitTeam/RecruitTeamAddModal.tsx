@@ -55,7 +55,54 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
       <>
         <Col span={24}>
           <Container>
-            <ColumnName>종목</ColumnName>
+            <ColumnName>
+              <Title level={5}>종목</Title>
+            </ColumnName>
+            <Col span={24}>
+              <Row align="middle" style={{ height: '100%' }}>
+                <Select
+                  placeholder={'종목을 선택해주세요'}
+                  value={groundType}
+                  onChange={handleSelectChange}
+                  // value={}
+                  style={{ width: '100%' }}
+                >
+                  <Option value={0}>선택</Option>
+                  {/* {reckoningList.map((item: IReckoningList, index) => (
+                      <Option key={index} value={item.reckoningId}>
+                        <em>{item.reckoningName}</em>
+                      </Option>
+                    ))} */}
+                </Select>
+              </Row>
+            </Col>
+          </Container>
+          <Container>
+            <ColumnName>
+              <Title level={5}>모집 인원</Title>
+            </ColumnName>
+            <Col span={24}>
+              <Row align="middle" style={{ height: '100%' }}>
+                <Select
+                  placeholder={'인원을 선택하세욤'}
+                  // value={recruitCountType}
+                  onChange={handleSelectChange}
+                  style={{ width: '100%' }}
+                >
+                  <Option value={0}>선택</Option>
+                  {/* {reckoningList.map((item: IReckoningList, index) => (
+                      <Option key={index} value={item.reckoningId}>
+                        <em>{item.reckoningName}</em>
+                      </Option>
+                    ))} */}
+                </Select>
+              </Row>
+            </Col>
+          </Container>
+          <Container>
+            <ColumnName>
+              <Title level={5}>지역</Title>
+            </ColumnName>
             <Col span={24}>
               <Row align="middle" style={{ height: '100%' }}>
                 <Select
@@ -75,26 +122,9 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
             </Col>
           </Container>
           <Container>
-            <ColumnName>모집 인원</ColumnName>
-            <Col span={24}>
-              <Row align="middle" style={{ height: '100%' }}>
-                <Select
-                  // value={recruitCountType}
-                  onChange={handleSelectChange}
-                  style={{ width: '100%' }}
-                >
-                  <Option value={0}>선택</Option>
-                  {/* {reckoningList.map((item: IReckoningList, index) => (
-                      <Option key={index} value={item.reckoningId}>
-                        <em>{item.reckoningName}</em>
-                      </Option>
-                    ))} */}
-                </Select>
-              </Row>
-            </Col>
-          </Container>
-          <Container>
-            <ColumnName style={{ height: '100%' }}>모집 마감일</ColumnName>
+            <ColumnName style={{ height: '100%' }}>
+              <Title level={5}>모집 마감일</Title>
+            </ColumnName>
             <Col span={24}>
               <DatePicker
                 style={{ width: '100%' }}
@@ -107,7 +137,9 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
           </Container>
 
           <Container>
-            <ColumnName>제목</ColumnName>
+            <ColumnName>
+              <Title level={5}>제목</Title>
+            </ColumnName>
             <Col span={24}>
               <Input
                 value={recruitTitle}
@@ -115,31 +147,30 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
               />
             </Col>
           </Container>
-          <Container>
-            <Col span={24}>
-              <TextArea
-                style={{ height: 200 }}
-                value={recruitText}
-                onChange={handleRecruitTextOnChange}
-                rows={4}
-              />
-            </Col>
-          </Container>
+          <Col span={24}>
+            <TextArea
+              style={{ height: 170 }}
+              value={recruitText}
+              onChange={handleRecruitTextOnChange}
+              rows={4}
+            />
+          </Col>
         </Col>
       </>
     );
   };
   return (
     <>
-      <Modal
-        width={'50%'}
-        bodyStyle={{ height: '550px' }}
+      <CustomModal
+        width={'35%'}
+        bodyStyle={{ height: '620px' }}
         title={
           <Row style={{ height: '100%', marginBottom: '10px' }}>
             <Title level={2}>함께 할 때 더 즐거운 순간</Title>
-            <Col span={24}>
-              {' '}
-              "이름" play-us에서 다양한 사람들을 만나고 즐겁게 운동하세요
+            <Col style={{ marginTop: '10px', marginBottom: '10px' }} span={24}>
+              <Title style={{ color: 'BBBBBB' }} level={5}>
+                {'선희'}님 play-us에서 다양한 사람들을 만나고 즐겁게 운동하세요
+              </Title>
             </Col>
           </Row>
         }
@@ -151,17 +182,27 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
         cancelText="취소"
       >
         {ModalContent()}
-      </Modal>
+      </CustomModal>
     </>
   );
 };
 
 const Container = styled.div`
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   margin-top: 10px;
 `;
 
 const ColumnName = styled.div`
   margin-bottom: 5px;
+`;
+const CustomModal = styled(Modal)`
+  .ant-modal-footer {
+    display: flex;
+    justify-content: space-between;
+  }
+`;
+const CustomTitle = styled(Title)`
+  /* color: 'cfcfcf'; */
+  color: red;
 `;
 export default RecruitTeamAddMoadl;
