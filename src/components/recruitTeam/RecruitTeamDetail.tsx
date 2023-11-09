@@ -1,4 +1,4 @@
-import { Button, Col, Popconfirm, Row } from 'antd';
+import { Button, Col, Input, Popconfirm, Row } from 'antd';
 import { Typography } from 'antd';
 import Axios from 'axios';
 import { ArrowLeft, User } from 'lucide-react';
@@ -22,9 +22,26 @@ interface ICommentData {
   pImg: null;
 }
 const { Title } = Typography;
+const confirmTitle = () => {
+  return '작성하신 글을 삭제 하시겠어요?';
+};
 
 // 댓글 리스트 컴포넌트
 const CommentData = (props: { data: ICommentData }) => {
+  const [edit, setEdit] = useState<boolean>(false);
+  const [editButton, setEditButton] = useState<boolean>(false);
+  const handleDeleteOnClick = () => {
+    return;
+  };
+  const handleEditOpenOnClick = () => {
+    setEditButton(true);
+  };
+  //댓글수정 api
+  const handleCommentEditOnclick = () => {
+    // setEdit(true);
+    //완료되면
+    return;
+  };
   const { data } = props;
   console.log(data, '데이터');
   const { commentDate, name, commentText, pImg } = data;
@@ -33,13 +50,34 @@ const CommentData = (props: { data: ICommentData }) => {
       <Col span={24} style={{ minHeight: '70px', paddingBottom: '18px' }}>
         <Row>
           <Col span={2}>{!pImg ? <User /> : pImg}</Col>
-          <Col span={22} className="commnent_info_title">
+          <Col span={18} className="commnent_info_title">
             <CommentInfoName>{name}</CommentInfoName>
             <CommentInfoDate>{commentDate}</CommentInfoDate>
           </Col>
+          <Col span={3}>
+            <ButtonWrap onClick={handleEditOpenOnClick}>수정</ButtonWrap>
+            <Popconfirm
+              title={confirmTitle}
+              onConfirm={handleDeleteOnClick}
+              okText="네"
+              cancelText="아니오"
+            >
+              <ButtonWrap onClick={handleDeleteOnClick}>삭제</ButtonWrap>
+            </Popconfirm>
+          </Col>
         </Row>
       </Col>
-      <Comment className="comment">{commentText}</Comment>
+      <Comment>
+        {editButton ? <Input value={commentText}></Input> : commentText}
+      </Comment>
+      <div>
+        {editButton ? (
+          <>
+            <Button onClick={handleCommentEditOnclick}>수정</Button>{' '}
+            <Button onClick={() => setEditButton(false)}> 취소</Button>
+          </>
+        ) : null}
+      </div>
     </>
   );
 };
@@ -51,6 +89,18 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
   // const { likeCnt } = data;
   // const commentCnt = data.commentCnt;
   // const views = data.views;
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  const handleDeleteOnClick = () => {
+    return;
+  };
+  const handleModalOpenOnClick = () => {
+    setModalOpen(true);
+  };
+  const handleModalCloseOnClick = () => {
+    setModalOpen(false);
+  };
+
   const {
     commuTitle,
     stadium,
@@ -63,69 +113,83 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
 
   return (
     <>
-      <>
-        <Col span={24} className="recruit_detail_title">
-          <Title>{commuTitle}</Title>
-        </Col>
-        <Col
-          span={24}
-          // style={{ display: 'flex', justifyContent: 'space-between' }}
-          style={{ borderBottom: '3px solid #f2f2f2' }}
-        >
-          <Row style={{ paddingBottom: '24px' }}>
-            <Col span={20} style={{ display: 'flex', alignItems: 'center' }}>
-              <ButtonWrap marginRight="10px" backgroundColor="EFEFEF">
-                {stadium}
-              </ButtonWrap>
-              <ButtonWrap color="rgb(62, 133, 244)" backgroundColor="EFEFEF">
-                {memberCount}명
-              </ButtonWrap>
-            </Col>
-            <Col span={4}>
-              <UserInfo>
-                {/* <Col> {itemData.userImg === null ? <User /> : itemData.userImg}</Col> */}
-                <Col>
-                  <User />
-                </Col>
-                {/* <Col>{commnnityName}</Col> */}
-                <Col className="recruit_detail_name"> {name}</Col>
-              </UserInfo>
-            </Col>
-          </Row>
-        </Col>
-        <Col span={24} style={{ marginTop: '60px', marginBottom: '10px' }}>
-          <Row>
-            <Col span={4} className="commnent_info_title">
-              마감일
-            </Col>
-            <Col span={8} className="comment_info_content">
-              {deadLine}
-            </Col>
-            <Col className="commnent_info_title" span={4}>
-              구장유형
-            </Col>
-            <Col span={8} className="comment_info_content">
-              {stadium}
-            </Col>
-          </Row>
-        </Col>
-        <Col span={24} style={{ marginBottom: '10px' }}>
-          <Row>
-            <Col span={4} className="commnent_info_title">
-              모집인원
-            </Col>
-            <Col span={8} className="comment_info_content">
-              {memberCount}
-            </Col>
-            <Col span={4} className="commnent_info_title">
-              참여인원
-            </Col>
-            <Col span={8} className="comment_info_content">
+      <Col span={24} className="recruit_detail_title">
+        <Title>{commuTitle}</Title>
+      </Col>
+      <Col
+        span={24}
+        // style={{ display: 'flex', justifyContent: 'space-between' }}
+        style={{ borderBottom: '3px solid #f2f2f2' }}
+      >
+        <Row style={{ paddingBottom: '12px' }}>
+          <Col span={20} style={{ display: 'flex', alignItems: 'center' }}>
+            <ButtonWrap marginRight="10px" backgroundColor="EFEFEF">
+              ⚽ {stadium}
+            </ButtonWrap>
+            <ButtonWrap color="rgb(62, 133, 244)" backgroundColor="EFEFEF">
               {memberCount}명
-            </Col>
-          </Row>
-        </Col>
-        <Col span={24}>
+            </ButtonWrap>
+          </Col>
+          <Col span={4}>
+            <UserInfo>
+              {/* <Col> {itemData.userImg === null ? <User /> : itemData.userImg}</Col> */}
+              <Col>
+                <User />
+              </Col>
+              {/* <Col>{commnnityName}</Col> */}
+              <Col className="recruit_detail_name"> {name}</Col>
+            </UserInfo>
+          </Col>
+        </Row>
+      </Col>
+      <Col span={24}>
+        <Row>
+          <DetailButtonWrap>
+            <ButtonWrap onClick={handleModalOpenOnClick}>수정</ButtonWrap>
+            <Popconfirm
+              title={confirmTitle}
+              onConfirm={handleDeleteOnClick}
+              okText="네"
+              cancelText="아니오"
+            >
+              <ButtonWrap onClick={handleDeleteOnClick}>삭제</ButtonWrap>
+            </Popconfirm>
+          </DetailButtonWrap>
+          <Col
+            style={{ marginBottom: '10px' }}
+            span={4}
+            className="commnent_info_title"
+          >
+            마감일
+          </Col>
+          <Col span={8} className="comment_info_content">
+            {deadLine}
+          </Col>
+          <Col className="commnent_info_title" span={4}>
+            구장유형
+          </Col>
+          <Col span={8} className="comment_info_content">
+            {stadium}
+          </Col>
+        </Row>
+      </Col>
+      <Col span={24}>
+        <Row>
+          <Col span={4} className="commnent_info_title">
+            모집인원
+          </Col>
+          <Col span={8} className="comment_info_content">
+            {memberCount}
+          </Col>
+          <Col span={4} className="commnent_info_title">
+            지역
+          </Col>
+          <Col span={8} className="comment_info_content">
+            {location}
+          </Col>
+        </Row>
+      </Col>
+      {/* <Col span={24}>
           <Row>
             <Col span={4} className="commnent_info_title">
               지역
@@ -134,11 +198,16 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
               {location}
             </Col>
           </Row>
-        </Col>
-        <Col span={24} style={{ marginTop: '60px', marginBottom: '60px' }}>
-          <Contents>{content}</Contents>
-        </Col>
-      </>
+        </Col> */}
+      <Col span={24} style={{ marginTop: '40px', marginBottom: '60px' }}>
+        <Contents>{content}</Contents>
+      </Col>
+      {modalOpen ? (
+        <RecruitTeamAddMoadl
+          open={modalOpen}
+          onClose={handleModalCloseOnClick}
+        ></RecruitTeamAddMoadl>
+      ) : null}
     </>
   );
 };
@@ -147,20 +216,6 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
 const RecruitTeamDetail = () => {
   const [rowDataList, setRowDataList] = useState<ICommunityRowData[]>([]);
   const [commentDataList, setCommentDataList] = useState<any>([]);
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const confirmTitle = () => {
-    return '작성하신 글을 삭제 하시겠어요?';
-  };
-
-  const handleDeleteOnClick = () => {
-    return;
-  };
-  const handleModalOpenOnClick = () => {
-    setModalOpen(true);
-  };
-  const handleModalCloseOnClick = () => {
-    setModalOpen(false);
-  };
 
   //화면 랜더링시 api
   useEffect(() => {
@@ -232,20 +287,6 @@ const RecruitTeamDetail = () => {
           <ArrowLeft />
         </Col>
         {/* 작성자일때 노출 */}
-        <Col
-          span={3}
-          style={{ display: 'flex', justifyContent: 'space-between' }}
-        >
-          <ButtonWrap onClick={handleModalOpenOnClick}>수정</ButtonWrap>
-          <Popconfirm
-            title={confirmTitle}
-            onConfirm={handleDeleteOnClick}
-            okText="네"
-            cancelText="아니오"
-          >
-            <ButtonWrap onClick={handleDeleteOnClick}>삭제</ButtonWrap>
-          </Popconfirm>
-        </Col>
       </Col>
       {RecruitTeamInfo}
       <CommentHeaderWrap>
@@ -268,12 +309,6 @@ const RecruitTeamDetail = () => {
       </Col>
       {/* {comment.length >0} */}
       {commentList}
-      {modalOpen ? (
-        <RecruitTeamAddMoadl
-          open={modalOpen}
-          onClose={handleModalCloseOnClick}
-        ></RecruitTeamAddMoadl>
-      ) : null}
     </Row>
   );
 };
@@ -297,7 +332,8 @@ const Contents = styled.pre`
 `;
 const Comment = styled.pre`
   color: #333;
-  font-size: 1.125rem;
+  font-weight: 400;
+  font-size: 16px;
   line-height: 1.7;
   letter-spacing: -0.004em;
   white-space: pre-line;
@@ -338,7 +374,9 @@ const ButtonWrap = styled.button<ButtonProps>`
     props.backgroundColor ? props.backgroundColor : 'transparent'};
   max-height: 24px;
   color: ${(props) =>
-    props.color || '#717171'}; /* marginRight 프롭 값 또는 기본값 0 */
+    props.color || '#444'}; /* marginRight 프롭 값 또는 기본값 0 */
+  font-size: 15px;
+  font-weight: 600;
 `;
 
 const CommentHeaderWrap = styled.div`
@@ -382,4 +420,12 @@ const CommentInput = styled.textarea`
   min-height: 70px;
   margin-bottom: 10px;
   resize: none;
+`;
+const DetailButtonWrap = styled.div`
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 16px;
 `;
