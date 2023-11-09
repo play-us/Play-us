@@ -72,10 +72,16 @@ const CommentData = (props: { data: ICommentData }) => {
       </Comment>
       <div>
         {editButton ? (
-          <>
-            <Button onClick={handleCommentEditOnclick}>수정</Button>{' '}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'start',
+              paddingTop: '10px',
+            }}
+          >
+            <Button onClick={handleCommentEditOnclick}>수정</Button>
             <Button onClick={() => setEditButton(false)}> 취소</Button>
-          </>
+          </div>
         ) : null}
       </div>
     </>
