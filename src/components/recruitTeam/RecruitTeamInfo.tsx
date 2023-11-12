@@ -69,6 +69,7 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
           </LikeCommentWrap>
         </InfoFooterWrap>
       </Inwrap>
+      <div style={{ color: 'white' }}>{1}</div>
     </Wrap>
   );
 };

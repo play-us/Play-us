@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import TextArea from 'antd/es/input/TextArea';
 import Axios from 'axios';
 import { useState } from 'react';
+import axios from 'axios';
 const { Title } = Typography;
 
 const { Option } = Select;
@@ -36,7 +37,7 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
   const handleAddOnClick = () => {
     // 등록 api
     console.log('OkAdd:::');
-    const param = {
+    const data = {
       commuTitle: recruitTitle,
       commuTxt: recruitText,
       fieldTp: groundType,
@@ -44,18 +45,9 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
       deadLine: endDate,
       area: groundType,
     };
-    console.log(param, ' params');
+    // console.log(param, ' params');
 
-    Axios.post(urlAddCommun, {
-      params: {
-        commuTitle: recruitTitle,
-        commuTxt: recruitText,
-        fieldTp: groundType,
-        memberCnt: recruitCountType,
-        deadLine: endDate,
-        area: groundType,
-      },
-    }).then((response) => {
+    axios.post(urlAddCommun, data).then((response) => {
       console.log(response, '응답');
 
       // if(response === '성공'){

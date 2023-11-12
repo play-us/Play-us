@@ -6,9 +6,18 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ICommunityItem, ICommunityRowData } from './RecruitTeamList';
 import RecruitTeamAddMoadl from './RecruitTeamAddModal';
+import axios from 'axios';
 
-const urlGetCommentList = '/json/comment.json';
+const urlGetCommentListt = '/json/comment.json';
 const urlGetRecruitTeamList = '/json/communityDetail.json';
+const uwrDeleteCommu = 'http://localhost:8080/community/deleteCommunity';
+const uwrDeleteComment =
+  'http://localhost:8080/community/deleteCommunityComment';
+
+const urlGetCommentList =
+  'http://localhost:8080/community/getCommunityCommentList';
+
+const urlPostComment = 'http://localhost:8080/community/insertCommunityComment';
 interface ICommentResponse {
   name: string;
   p_img: null;
@@ -38,9 +47,20 @@ const CommentData = (props: { data: ICommentData }) => {
   };
   //댓글수정 api
   const handleCommentEditOnclick = () => {
-    // setEdit(true);
-    //완료되면
-    return;
+    const handleDeleteCommu = () => {
+      axios
+        .delete(uwrDeleteComment, {
+          params: {
+            // 여기에 쿼리 매개변수를 추가합니다.
+            commuId: '6',
+            // ... 다른 쿼리 매개변수
+          },
+        })
+        .then((response) => {
+          // 성공적인 응답을 처리합니다.
+          console.log(response.data);
+        });
+    };
   };
   const { data } = props;
   console.log(data, '데이터');
@@ -106,7 +126,20 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
   const handleModalCloseOnClick = () => {
     setModalOpen(false);
   };
-
+  const handleDeleteCommu = () => {
+    axios
+      .delete(uwrDeleteCommu, {
+        params: {
+          // 여기에 쿼리 매개변수를 추가합니다.
+          commuId: '4',
+          // ... 다른 쿼리 매개변수
+        },
+      })
+      .then((response) => {
+        // 성공적인 응답을 처리합니다.
+        console.log(response.data);
+      });
+  };
   const {
     commuTitle,
     stadium,
@@ -154,11 +187,11 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
             <ButtonWrap onClick={handleModalOpenOnClick}>수정</ButtonWrap>
             <Popconfirm
               title={confirmTitle}
-              onConfirm={handleDeleteOnClick}
+              onConfirm={handleDeleteCommu}
               okText="네"
               cancelText="아니오"
             >
-              <ButtonWrap onClick={handleDeleteOnClick}>삭제</ButtonWrap>
+              <ButtonWrap>삭제</ButtonWrap>
             </Popconfirm>
           </DetailButtonWrap>
           <Col
@@ -225,26 +258,52 @@ const RecruitTeamDetail = () => {
 
   //화면 랜더링시 api
   useEffect(() => {
-    const commentListApi = Axios.get<[]>(urlGetCommentList).then((response) => {
-      const data = response.data;
+    const commentListApiR = Axios.get<[]>(urlGetCommentList).then(
+      (response) => {
+        const data = response.data;
+        console.log(data, 'real');
 
-      if (data.length > 0) {
-        const rows: ICommentData[] = [];
-        data.forEach((element: ICommentResponse) => {
-          const row = {
-            // createdDate: element.created_date,
-            // commuTitle: element.commu_title,
-            commentDate: element.comment_date,
-            commentText: element.comment_text,
-            name: element.name,
-            pImg: element.p_img,
-          };
-          rows.push(row);
-        });
+        // if (data.length > 0) {
+        //   const rows: ICommentData[] = [];
+        //   data.forEach((element: ICommentResponse) => {
+        //     const row = {
+        //       // createdDate: element.created_date,
+        //       // commuTitle: element.commu_title,
+        //       commentDate: element.comment_date,
+        //       commentText: element.comment_text,
+        //       name: element.name,
+        //       pImg: element.p_img,
+        //     };
+        //     rows.push(row);
+        //   });
 
-        setCommentDataList(rows);
-      }
-    });
+        //   setCommentDataList(rows);
+        // }
+      },
+    );
+
+    const commentListApi = Axios.get<[]>(urlGetCommentListt).then(
+      (response) => {
+        const data = response.data;
+
+        if (data.length > 0) {
+          const rows: ICommentData[] = [];
+          data.forEach((element: ICommentResponse) => {
+            const row = {
+              // createdDate: element.created_date,
+              // commuTitle: element.commu_title,
+              commentDate: element.comment_date,
+              commentText: element.comment_text,
+              name: element.name,
+              pImg: element.p_img,
+            };
+            rows.push(row);
+          });
+
+          setCommentDataList(rows);
+        }
+      },
+    );
     const recruitDetail = Axios.get<ICommunityItem[]>(
       urlGetRecruitTeamList,
     ).then((response) => {
@@ -274,6 +333,31 @@ const RecruitTeamDetail = () => {
       }
     });
   }, []);
+  const handleCommentAddOnClick = () => {
+    // 등록 api
+    console.log('OkAdd:::');
+    const data = {
+      commuId: '1',
+
+      commentTxt: 'hello',
+
+      email: 'chu',
+    };
+    // console.log(param, ' params');
+
+    axios.post(urlPostComment, data).then((response) => {
+      console.log(response, '응답');
+
+      // if(response === '성공'){
+      // // '성공알럿'
+      //   onClose()
+      // }
+      // else{
+      //  //실패 앐럿
+      //  //창 유지
+      // }
+    });
+  };
 
   //팀원모집 상세 정보 데이터 주입
   const RecruitTeamInfo = rowDataList.map((data: ICommunityRowData) => (
@@ -311,7 +395,9 @@ const RecruitTeamDetail = () => {
       </Col>
 
       <Col span={24} style={{ textAlign: 'right' }}>
-        <CommentAddButton>댓글등록</CommentAddButton>
+        <CommentAddButton onClick={handleCommentAddOnClick}>
+          댓글등록
+        </CommentAddButton>
       </Col>
       {/* {comment.length >0} */}
       {commentList}

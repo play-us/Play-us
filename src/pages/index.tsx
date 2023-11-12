@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
@@ -18,10 +18,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
+import axios from 'axios';
 
 const urlGetRecruitTeamList = '/json/community.json';
 const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
-
+const urlGetCommuDetail = 'http://localhost:8080/community/getCommunityDetail';
 interface IFieldItem {
   field_id: string;
   field_name: string;
@@ -53,6 +54,7 @@ interface IRowData {
 }
 
 const Home = () => {
+  const ref = useRef<any>(null);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [rowDataList, setRowDataList] = useState<IRowData[]>([]);
@@ -73,7 +75,35 @@ const Home = () => {
       name: '신규등록 순',
     },
   ];
+  //삭제
+  const handleDeleteOnClick = async () => {
+    const ret = ref.current?.getInstance().getCheckedRows();
+    if (ret === undefined) return;
+    let successCnt = 0,
+      failCnt = 0;
+    for await (const item of ret) {
+      const params = {
+        ip: item.ip,
+        memo: item.solution,
+        custCode: item.custCode,
+      };
+      console.log(ret);
 
+      // await deleteRequest(urldeleteCustApi, params).then((result) => {
+      //   const { msg } = result;
+      //   const { code } = result;
+      //   if (code === EnResponseType.success) {
+      //     successCnt = successCnt + 1;
+      //   } else if (code === EnResponseType.error) {
+      //     failCnt = failCnt + 1;
+      //     store.PushAlarm(EnAlarmType.error, '실패', msg, false);
+      //   }
+      //   if (successCnt + failCnt === checkedLen)
+      //     message.info('성공 : ' + successCnt + '건, 실패 : ' + failCnt + '건');
+      // });
+    }
+    // if (failCnt === 0) handleSearchBtnOnClick(); //재검색
+  };
   /* 데이터 조회 */
   useEffect(() => {
     setIsLoading(true);
@@ -145,10 +175,20 @@ const Home = () => {
     });
   };
   useEffect(() => {
+    //상세 정보
+    axios
+      .get(urlGetCommuDetail, {
+        params: {
+          commuId: '1',
+        },
+      })
+      .then(function (response) {
+        console.log(response, '디테일');
+      });
     // 메인 페이지 데이터 init
     Axios.get<any[]>(urlGetMainDataList).then((response) => {
       const data = response.data;
-      console.log(data, ' data');
+      console.log(data, ' data!!!');
 
       if (data.length > 0) {
         const rows: any[] = [];
@@ -171,6 +211,7 @@ const Home = () => {
         setRecruitData(rows);
       }
     });
+
     // 기존 목데이터 연결
     Axios.get<ICommunityItem[]>(urlGetRecruitTeamList).then((response) => {
       const data = response.data;
@@ -255,10 +296,12 @@ const Home = () => {
           // pagination
           modules={[Navigation]}
           className="mySwiper"
+          ref={useRef}
+          onClick={handleDeleteOnClick}
         >
           {recruitData.map((item, idx) => {
             return (
-              <SwiperSlide key={idx}>
+              <SwiperSlide key={idx} onClick={handleDeleteOnClick}>
                 <RecruitTeamInfo item={item}></RecruitTeamInfo>
               </SwiperSlide>
             );
