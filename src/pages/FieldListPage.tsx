@@ -7,33 +7,33 @@ import FieldSearchbar from '../components/field/FieldSearchbar';
 import { PageStyle } from '../styles/CommonStyle';
 
 interface IFieldItem {
-  field_id: string;
-  field_name: string;
+  fieldId: string;
+  fieldNm: string;
   area: string;
   addr: string;
-  opening_hours: string;
-  closing_hours: string;
+  openingHours: string;
+  closingHours: string;
   price: number;
   hours: number;
-  note: string;
-  swrm_co: string;
-  light: string;
-  views: number;
-  like_cnt: number;
-  img_url: string;
-  create_date: any;
+  note?: string | undefined;
+  swrmYn?: string | undefined;
+  reviewCnt?: number | undefined;
+  likeCnt?: any;
+  size?: string | undefined;
+  imgUrl?: string | undefined;
+  insertDatetime: Date;
 }
 
 interface IRowData {
-  field_id: string;
-  field_name: string;
+  fieldId: string;
+  fieldNm: string;
   area: string;
   addr: string;
   price: number;
   hours: number;
-  views: number;
-  like_cnt: number;
-  img_url: string;
+  reviewCnt?: number | undefined;
+  likeCnt?: number | undefined;
+  imgUrl?: string | undefined;
 }
 
 const FieldListPage = () => {
@@ -56,15 +56,15 @@ const FieldListPage = () => {
         const rows: IRowData[] = [];
         data.forEach((d: IFieldItem) => {
           const row = {
-            field_id: d.field_id,
-            field_name: d.field_name,
+            fieldId: d.fieldId,
+            fieldNm: d.fieldNm,
             area: d.area,
             addr: d.addr,
             price: d.price,
             hours: d.hours,
-            views: d.views,
-            like_cnt: d.like_cnt,
-            img_url: d.img_url,
+            reviewCnt: d.reviewCnt,
+            likeCnt: d.likeCnt,
+            imgUrl: d.imgUrl,
           };
           rows.push(row);
         });
@@ -84,9 +84,7 @@ const FieldListPage = () => {
         <FieldSearchbar />
         <FieldItemWrap>
           {!isLoading &&
-            rowDataList.map((data: IRowData) => (
-              <FieldListItem data={data} key={data.field_id} />
-            ))}
+            rowDataList.map((data: IRowData) => <FieldListItem data={data} />)}
         </FieldItemWrap>
         <Pagination defaultCurrent={1} total={50} />
       </Col>

@@ -3,34 +3,34 @@ import { Link } from 'react-router-dom';
 import { MessageSquare, Heart } from 'lucide-react';
 
 interface IRowData {
-  field_id: string;
-  field_name: string;
+  fieldId: string;
+  fieldNm: string;
   area: string;
   addr: string;
   price: number;
   hours: number;
-  views: number;
-  like_cnt: number;
-  img_url: string;
+  reviewCnt?: number | undefined;
+  likeCnt?: number | undefined;
+  imgUrl?: string | undefined;
 }
 
 const FieldListItem = (props: { data: IRowData }) => {
   const data = props.data;
 
   return (
-    <Wrap key={data.field_id}>
-      <Link to={`/fieldDetail?id=${data.field_id}`}>
+    <Wrap>
+      <Link to={`/fieldDetail?id=${data.fieldId}`}>
         <ThumbImg>
-          <img src={data.img_url} alt="썸네일 이미지" />
+          <img src={data.imgUrl} alt="썸네일 이미지" />
         </ThumbImg>
         <InfoWrap>
-          <Addr>경기도 부천시 주소주소</Addr>
-          <FieldName>{data.field_name}</FieldName>
+          <Addr>{data.addr}</Addr>
+          <FieldName>{data.fieldNm}</FieldName>
           <Interest>
             <MessageSquare />
-            {data.views}
+            {data.reviewCnt ? data.reviewCnt : 0}
             <Heart />
-            {data.like_cnt}
+            {data.likeCnt ? data.likeCnt : 0}
           </Interest>
           <Contour />
           <UseInfo>

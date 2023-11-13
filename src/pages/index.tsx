@@ -23,33 +23,33 @@ const urlGetRecruitTeamList = '/json/community.json';
 const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
 
 interface IFieldItem {
-  field_id: string;
-  field_name: string;
+  fieldId: string;
+  fieldNm: string;
   area: string;
   addr: string;
-  opening_hours: string;
-  closing_hours: string;
+  openingHours: string;
+  closingHours: string;
   price: number;
   hours: number;
-  note: string;
-  swrm_co: string;
-  light: string;
-  views: number;
-  like_cnt: number;
-  img_url: string;
-  create_date: any;
+  note?: string | undefined;
+  swrmYn?: string | undefined;
+  reviewCnt?: number | undefined;
+  likeCnt?: any;
+  size?: string | undefined;
+  imgUrl?: string | undefined;
+  insertDatetime: Date;
 }
 
 interface IRowData {
-  field_id: string;
-  field_name: string;
+  fieldId: string;
+  fieldNm: string;
   area: string;
   addr: string;
   price: number;
   hours: number;
-  views: number;
-  like_cnt: number;
-  img_url: string;
+  reviewCnt?: number | undefined;
+  likeCnt?: number | undefined;
+  imgUrl?: string | undefined;
 }
 
 const Home = () => {
@@ -93,15 +93,15 @@ const Home = () => {
         const rows: IRowData[] = [];
         data.slice(0, 6).forEach((d: IFieldItem) => {
           const row = {
-            field_id: d.field_id,
-            field_name: d.field_name,
+            fieldId: d.fieldId,
+            fieldNm: d.fieldNm,
             area: d.area,
             addr: d.addr,
             price: d.price,
             hours: d.hours,
-            views: d.views,
-            like_cnt: d.like_cnt,
-            img_url: d.img_url,
+            reviewCnt: d.reviewCnt,
+            likeCnt: d.likeCnt,
+            imgUrl: d.imgUrl,
           };
           rows.push(row);
         });
@@ -119,22 +119,22 @@ const Home = () => {
 
       const orderedData = data.sort(
         (a: IFieldItem, b: IFieldItem): number =>
-          +new Date(b.create_date) - +new Date(a.create_date),
+          +new Date(b.insertDatetime) - +new Date(a.insertDatetime),
       );
 
       if (orderedData.length > 0) {
         const rows: IRowData[] = [];
         orderedData.slice(0, 6).forEach((d: IFieldItem) => {
           const row = {
-            field_id: d.field_id,
-            field_name: d.field_name,
+            fieldId: d.fieldId,
+            fieldNm: d.fieldNm,
             area: d.area,
             addr: d.addr,
             price: d.price,
             hours: d.hours,
-            views: d.views,
-            like_cnt: d.like_cnt,
-            img_url: d.img_url,
+            reviewCnt: d.reviewCnt,
+            likeCnt: d.likeCnt,
+            imgUrl: d.imgUrl,
           };
           rows.push(row);
         });
@@ -215,7 +215,7 @@ const Home = () => {
         <FieldItemWrap>
           {!isLoading &&
             rowDataList.map((data: IRowData) => (
-              <FieldListItem data={data} key={data.field_id} />
+              <FieldListItem data={data} key={data.fieldId} />
             ))}
         </FieldItemWrap>
         <FieldItemMoreBtn onClick={() => navigate('/fieldList')}>
