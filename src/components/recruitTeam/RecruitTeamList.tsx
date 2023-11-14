@@ -41,21 +41,28 @@ export interface ICommunityItem {
   stadium: string;
   content?: string;
   location?: string;
+  wishCnt: number;
+  commuId: string;
+  wishYn: string;
 }
 
 export interface ICommunityRowData {
   createdDate: string;
   commuTitle: string;
   likeCnt: number;
-  commentCnt: number;
-  views: number;
+  commentCnt?: number;
+  views?: number;
   name: string;
-  userImg: null | string;
+  userImg?: null | string;
   deadLine: string;
   memberCount: number;
   stadium: string;
   content?: string;
   location?: string;
+  wishCnt: number;
+  commuId: string;
+  wishYn?: string;
+  area?: string;
 }
 
 interface CommunityHeaderWrapProps {

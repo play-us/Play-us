@@ -19,11 +19,10 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import axios from 'axios';
-import ConvertDate8 from '../components/common/date/dateFormat';
+import ConvertDate from '../components/common/date/dateFormat';
 
 const urlGetRecruitTeamList = '/json/community.json';
 const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
-const urlGetCommuDetail = 'http://localhost:8080/community/getCommunityDetail';
 interface IFieldItem {
   field_id: string;
   field_name: string;
@@ -66,6 +65,7 @@ export interface ICommuDetailProps {
   memberCnt: number;
   updateDatetime: string;
   wishCnt: number;
+  wishYn: string;
 }
 
 const Home = () => {
@@ -177,15 +177,6 @@ const Home = () => {
   };
   useEffect(() => {
     //상세 정보
-    axios
-      .get(urlGetCommuDetail, {
-        params: {
-          commuId: '3',
-        },
-      })
-      .then(function (response) {
-        console.log(response, '디테일');
-      });
 
     // 메인 페이지 커뮤니티 데이터 init
     axios.get(urlGetMainDataList).then((response) => {
@@ -200,15 +191,18 @@ const Home = () => {
         console.log(element, 'dd');
 
         const row = {
-          deadline: ConvertDate8(element.insertDatetime),
+          deadline: ConvertDate(element.insertDatetime),
           commuTitle: element.commuTitle,
           likeCnt: element.wishCnt,
           commentCnt: element.commentCnt,
           name: '황창민',
           userImg: null, //이미지 추후작업
-          deadLine: ConvertDate8(element.deadLine),
+          deadLine: ConvertDate(element.deadLine),
           memberCount: element.memberCnt,
           stadium: element.fieldTp,
+          wishCnt: element.wishCnt,
+          commuId: element.commuId,
+          wishYn: element.wishYn,
         };
         rows.push(row);
       });

@@ -8,9 +8,13 @@ import { ICommunityItem, ICommunityRowData } from './RecruitTeamList';
 import RecruitTeamAddMoadl from './RecruitTeamAddModal';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
+import dateFormat from '../common/date/dateFormat';
+import ConvertDate from '../common/date/dateFormat';
+const urlGetCommuDetail = 'http://localhost:8080/community/getCommunityDetail';
 
 // const urlGetCommentListt = '/json/comment.json';
-const urlGetRecruitTeamList = '/json/communityDetail.json';
+// const urlGetRecruitTeamList = '/json/communityDetail.json';
 const uwrDeleteCommu = 'http://localhost:8080/community/deleteCommunity';
 const uwrDeleteComment =
   'http://localhost:8080/community/deleteCommunityComment';
@@ -19,7 +23,7 @@ const urlGetCommentList =
   'http://localhost:8080/community/getCommunityCommentList';
 const urlPostComment = 'http://localhost:8080/community/updateCommunityComment';
 
-const urlAddComment = 'http://localhost:8080/communityinsertCommunityComment';
+const urlAddComment = 'http://localhost:8080/community/insertCommunityComment';
 
 interface ICommentResponse {
   name: string;
@@ -37,6 +41,21 @@ interface ICommentData {
   name: string;
   pImg: null;
 }
+interface IDetailRowData {
+  area: string;
+  commuId: string;
+  commuTitle: string;
+  commuTxt: string;
+  deadLine: string;
+  email: string;
+  fieldTp: string;
+  insertDatetime: string;
+  memberCnt: number;
+  remarkTxt?: null;
+  updateDatetime?: '2023-11-13T16:50:38.000Z';
+  wishCnt: number;
+  wishYn?: string;
+}
 const { Title } = Typography;
 const confirmTitle = () => {
   return '작성하신 글을 삭제 하시겠어요?';
@@ -45,6 +64,10 @@ const confirmTitle = () => {
 // 댓글 리스트 컴포넌트
 const CommentData = (props: { data: ICommentData }) => {
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
   const { data } = props;
   // console.log(data, '데이터');
   // 이름 추가
@@ -60,9 +83,9 @@ const CommentData = (props: { data: ICommentData }) => {
     const { value } = e.target;
     setDefaultValue(value);
   };
-  const NavigateCommunityList = () => {
-    navigate('/recruitTeamDetail');
-  };
+  // const NavigateCommunityList = () => {
+  //   navigate('/recruitTeamDetail');
+  // };
   const handleUpdateCommunityOnClick = () => {
     return;
   };
@@ -110,7 +133,7 @@ const CommentData = (props: { data: ICommentData }) => {
         console.log(response);
         console.log('hi');
         if (response.statusText === 'OK') {
-          NavigateCommunityList();
+          // NavigateCommunityList();
         }
       });
   };
@@ -167,8 +190,12 @@ const CommentData = (props: { data: ICommentData }) => {
 };
 //팀원모집상세 컴포넌트
 const RecruitInfoData = (props: { data: ICommunityRowData }) => {
-  const navigate = useNavigate();
   const { data } = props;
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const param1Value = queryParams.get('commId');
+  const [detailData, setDetailData] = useState<any>();
   // const createdDate = `${data.createdDate}`;
   // const stadiumValue = `${data.stadium} | ${data.memberCount}명 | ~${data.deadLine}`;
   // const { likeCnt } = data;
@@ -185,33 +212,28 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
   const handleModalCloseOnClick = () => {
     setModalOpen(false);
   };
-  const NavigateCommunityList = () => {
-    navigate('/recruitTeamDetail');
-  };
+  // const NavigateCommunityList = () => {
+  //   navigate('/recruitTeamDetail');
+  // };
   const handleDeleteCommu = () => {
     axios
       .delete(uwrDeleteCommu, {
         params: {
           // 여기에 쿼리 매개변수를 추가합니다.
-          commuId: '9',
+          commuId: param1Value,
           // ... 다른 쿼리 매개변수
         },
       })
       .then((response) => {
         // 성공적인 응답을 처리합니다.
         console.log(response.data);
-        NavigateCommunityList();
+        // NavigateCommunityList();
       });
   };
-  const {
-    commuTitle,
-    stadium,
-    name,
-    memberCount,
-    deadLine,
-    location,
-    content,
-  } = data;
+  const { commuTitle, stadium, name, memberCount, deadLine, area, content } =
+    data;
+
+  console.log(data);
 
   return (
     <>
@@ -287,20 +309,11 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
             지역
           </Col>
           <Col span={8} className="comment_info_content">
-            {location}
+            {area}
           </Col>
         </Row>
       </Col>
-      {/* <Col span={24}>
-          <Row>
-            <Col span={4} className="commnent_info_title">
-              지역
-            </Col>
-            <Col span={8} className="comment_info_content">
-              {location}
-            </Col>
-          </Row>
-        </Col> */}
+
       <Col span={24} style={{ marginTop: '40px', marginBottom: '60px' }}>
         <Contents>{content}</Contents>
       </Col>
@@ -318,99 +331,109 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
 const RecruitTeamDetail = () => {
   const [rowDataList, setRowDataList] = useState<ICommunityRowData[]>([]);
   const [commentDataList, setCommentDataList] = useState<any>([]);
+  const location = useLocation();
 
   //화면 랜더링시 api
   useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const param1Value = queryParams.get('commId');
+    console.log(param1Value);
+
     // 댓글 조회 정보
-    const commentListApiR = Axios.get<any>(urlGetCommentList).then(
-      (response) => {
-        const { result } = response.data;
-        console.log(result);
-
-        // if (result.length < 0) {
-        console.log('hi');
-
-        const rows: ICommentData[] = [];
-        result.forEach((element: any) => {
-          console.log(element);
-
-          const row = {
-            // createdDate: element.created_date,
-            // commuTitle: element.commu_title,
-            commentId: element.commentId,
-            commentSeq: element.commentSeq,
-            commentText: element.commentTxt,
-            name: element.name,
-            pImg: element.p_img,
-            commentDate: element.insertDatetime,
-          };
-          console.log(row);
-
-          rows.push(row);
-        });
-
-        setCommentDataList(rows);
-        // }
+    const commentListApiR = Axios.get<any>(urlGetCommentList, {
+      params: {
+        commuId: param1Value,
       },
-    );
+    }).then((response) => {
+      const { result } = response.data;
+      console.log(result, 'rest');
 
-    // const commentListApi = Axios.get<[]>(urlGetCommentListt).then(
-    //   (response) => {
-    //     const data = response.data;
+      // if (result.length < 0) {
+      console.log('hi');
 
-    //     if (data.length > 0) {
-    //       const rows: ICommentData[] = [];
-    //       data.forEach((element: ICommentResponse) => {
-    //         const row = {
-    //           // createdDate: element.created_date,
-    //           // commuTitle: element.commu_title,
-    //           // commentDate: element.comment_date,
-    //           // commentText: element.comment_text,
-    //           // name: element.name,
-    //           // pImg: element.p_img,
-    //         };
-    //         rows.push(row);
-    //       });
+      const rows: ICommentData[] = [];
+      result.forEach((element: any) => {
+        console.log(element);
 
-    //       setCommentDataList(rows);
-    //     }
-    //   },
-    // );
-    // 커뮤니티 상세정보
-    const recruitDetail = Axios.get<ICommunityItem[]>(
-      urlGetRecruitTeamList,
-    ).then((response) => {
-      const data = response.data;
+        const row = {
+          // createdDate: element.created_date,
+          // commuTitle: element.commu_title,
+          commentId: element.commentId,
+          commentSeq: element.commentSeq,
+          commentText: element.commentTxt,
+          name: element.name,
+          pImg: element.p_img,
+          commentDate: element.insertDatetime,
+        };
+        console.log(row);
 
-      if (data.length > 0) {
-        const rows: ICommunityRowData[] = [];
-        data.forEach((element: ICommunityItem) => {
-          const row = {
-            createdDate: element.created_date,
-            commuTitle: element.commu_title,
-            likeCnt: element.like_cnt,
-            commentCnt: element.comment_cnt,
-            views: element.views,
-            name: element.name,
-            userImg: element.p_img,
-            deadLine: element.deadLine,
-            memberCount: element.member_count,
-            stadium: element.stadium,
-            content: element.content,
-            location: element.location,
-          };
-          rows.push(row);
-        });
+        rows.push(row);
+      });
 
-        setRowDataList(rows);
-      }
+      setCommentDataList(rows);
+      // }
     });
+    axios
+      .get(urlGetCommuDetail, {
+        params: {
+          commuId: param1Value,
+        },
+      })
+      .then(function (response) {
+        console.log(response, '디테일');
+        const list = response.data.result['communityDetail'][0];
+        console.log(list);
+
+        // re
+      });
+    // 커뮤니티 상세정보
+    const recruitDetail = axios
+      .get(urlGetCommuDetail, {
+        params: {
+          commuId: param1Value,
+        },
+      })
+      .then((response) => {
+        const data = response.data.result['communityDetail'];
+        console.log(data);
+
+        if (data) {
+          const rows: any[] = [];
+          data.forEach((element: IDetailRowData) => {
+            console.log(element);
+
+            const row = {
+              createdDate: ConvertDate(element.insertDatetime),
+              commuTitle: element.commuTitle,
+              likeCnt: element.wishCnt,
+              // commentCnt: element.comment_cnt ? 0 : element.comment_cnt,
+              // views: element.views,
+              name: '황창민',
+              // userImg: element.p_img,
+              deadLine: ConvertDate(element.deadLine),
+              memberCount: element.memberCnt,
+              stadium: element.fieldTp,
+              content: element.commuTxt,
+              area: element.area,
+              wishCnt: element.wishCnt,
+              commuId: element.commuId,
+              // wishYn: element.wishYn,
+            };
+
+            console.log(row);
+
+            rows.push(row);
+          });
+
+          setRowDataList(rows);
+        }
+      });
   }, []);
   const handleCommentAddOnClick = () => {
     // 등록 api
     console.log('OkAdd:::');
     const data = {
-      // commuId: ,
+      commuId: '10',
 
       commentTxt: 'hello',
 

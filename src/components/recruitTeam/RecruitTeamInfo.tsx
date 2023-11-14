@@ -4,6 +4,8 @@ import { Hand, MessageSquare, User } from 'lucide-react';
 import { Col } from 'antd';
 import React from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 interface ButtonProps {
   backgroundColor?: string;
   marginRight?: string;
@@ -19,19 +21,36 @@ enum groundType {
 
 const urlUpdateCommuLike = 'http://localhost:8080/community/communityWish'; //API 엔드포인트
 const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
+  const navigate = useNavigate();
+  const {
+    memberCount,
+    stadium,
+    deadLine,
+    likeCnt,
+    commuTitle,
+    name,
+    commentCnt,
+    wishCnt,
+    commuId,
+    wishYn,
+  } = props.item;
+
   const LikeButton = () => {
     const [liked, setLiked] = React.useState(false);
 
     // 좋아요 버튼 클릭 시 API 호출을 트리거하기 위한 useEffect를 사용합니다.
     React.useEffect(() => {
       // API 호출을 수행하는 함수
+      if (wishYn === '1') {
+        setLiked(true);
+      }
       const sendLikeToServer = async () => {
         try {
           // 좋아요 버튼이 클릭된 경우에만 API 호출
           if (liked) {
             // /community/communityWish
             const data = {
-              commuId: '9',
+              commuId: commuId,
 
               email: 'chu',
 
@@ -42,6 +61,9 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
 
             axios.post(urlUpdateCommuLike, data).then((response) => {
               console.log(response, '응답');
+              if (response.statusText === 'OK') {
+              }
+              setLiked(true);
               // 새로고침
               // if(response === '성공'){
               // // '성공알럿'
@@ -78,19 +100,11 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
       </LikeBtn>
     );
   };
-  const {
-    memberCount,
-    stadium,
-    deadLine,
-    likeCnt,
-    commuTitle,
-    name,
-    commentCnt,
-  } = props.item;
+
   // console.log(props, 'realProps');
 
   return (
-    <Wrap>
+    <Wrap onClick={() => navigate(`/recruitTeamDetail?commId=${commuId}`)}>
       <Inwrap>
         <InfoHeaderWrap>
           <InfoHeader>
@@ -137,6 +151,7 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
                 src="https://lh3.googleusercontent.com/-LNDcyoUZV3U/AAAAAAAAAAI/AAAAAAAAAAA/AML38-szSEwtVxDGrb8lU9truJxdb9pwWQ/photo.jpg?sz=46"
                 alt="프로필이미지"
               />
+              {/* tjddn */}
               {/* <Col>{commnnityName}</Col> */}
               <Col className="recruit_detail_name"> {name}</Col>
             </InfoUser>
