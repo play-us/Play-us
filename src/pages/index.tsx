@@ -1,37 +1,35 @@
-import { useEffect, useState } from 'react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import { Navigation } from 'swiper/modules';
 import Axios from 'axios';
-import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Col, Row, Space, Select, Input, Button } from 'antd';
+import styled from 'styled-components';
+import { MoveRight } from 'lucide-react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { Col, Row } from 'antd';
 import FieldListItem from '../components/field/FieldListItem';
 import RecruitTeamInfo from '../components/recruitTeam/RecruitTeamInfo';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { getMainData } from '../service/Common';
+import { IFieldType } from '../utils/Common';
+import { IFieldItem, IRowData, IFieldTypeData } from '../utils/FieldType';
 import {
   ICommunityItem,
   ICommunityRowData,
 } from '../components/recruitTeam/RecruitTeamList';
-import { MoveRight } from 'lucide-react';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import { Navigation } from 'swiper/modules';
-import { IFieldItem, IRowData, IFieldTypeData } from '../utils/FieldType';
-
-const urlGetRecruitTeamList = '/json/community.json';
-const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
+// const urlGetRecruitTeamList = '/json/community.json';
+// const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
 
 const Home = () => {
   const navigate = useNavigate();
+  const { register, handleSubmit } = useForm<IFieldTypeData>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [rowDataList, setRowDataList] = useState<IRowData[]>([]);
+  const [fieldDataList, setFieldDataList] = useState<IRowData[]>([]);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [recruitData, setRecruitData] = useState<ICommunityRowData[]>([]);
-  const [schCondition, setSchCondition] = useState<IFieldTypeData>({
-    area: '',
-    fieldTp: '',
-    searchTxt: '',
-  });
+  const [fieldType, setFieldType] = useState<IFieldType[]>([]);
   /* 탭메뉴 리스트 */
   const tabList = [
     {
@@ -57,35 +55,21 @@ const Home = () => {
     if (activeTab === 2) getDataSortCreateDate();
   }, [activeTab]);
 
-  /* 전체로 조회 */
-  const getDataAll = () => {
+  async function getDataAll() {
+    console.log('전체 조회');
+
     setIsLoading(true);
-    Axios.get<IFieldItem[]>('/json/field.json').then((response) => {
-      const data = response.data;
+    const res: any = await getMainData('', '', '', '', 1, 20);
+    console.log('res.result.fieldList', res.result.fieldList);
 
-      if (data && data.length > 0) {
-        const rows: IRowData[] = [];
-        data.slice(0, 6).forEach((d: IFieldItem) => {
-          const row = {
-            fieldId: d.fieldId,
-            fieldNm: d.fieldNm,
-            area: d.area,
-            addr: d.addr,
-            price: d.price,
-            hours: d.hours,
-            reviewCnt: d.reviewCnt,
-            likeCnt: d.likeCnt,
-            imgUrl: d.imgUrl,
-          };
-          rows.push(row);
-        });
+    setFieldType(res.result.fieldTpList);
+    setFieldDataList(res.result.fieldList);
+    setRecruitData(res.result.commuList);
 
-        setRowDataList(rows);
-        setIsLoading(false);
-      }
-    });
-  };
-
+    // res.result.areaList
+    // res.result.cityList
+    setIsLoading(false);
+  }
   /* 신규등록순 조회 */
   const getDataSortCreateDate = () => {
     Axios.get<IFieldItem[]>('/json/field.json').then((response) => {
@@ -113,100 +97,18 @@ const Home = () => {
           rows.push(row);
         });
 
-        setRowDataList(rows);
+        //setRowDataList(rows);
         setIsLoading(false);
       }
     });
   };
   useEffect(() => {
-    // 메인 페이지 데이터 init
-    Axios.get<any[]>(urlGetMainDataList).then((response) => {
-      const data = response.data;
-      console.log(data, ' data');
-
-      if (data.length > 0) {
-        const rows: any[] = [];
-        data.forEach((element: any) => {
-          const row = {
-            // createdDate: element.created_date,
-            // commuTitle: element.commu_title,
-            // likeCnt: element.like_cnt,
-            // commentCnt: element.comment_cnt,
-            // name: element.name,
-            // userImg: element.p_img,
-            // deadLine: element.deadLine,
-            // memberCount: element.member_count,
-            // stadium: element.stadium,
-            // views: element.views,
-          };
-          rows.push(row);
-        });
-
-        setRecruitData(rows);
-      }
-    });
-    // 기존 목데이터 연결
-    Axios.get<ICommunityItem[]>(urlGetRecruitTeamList).then((response) => {
-      const data = response.data;
-
-      if (data.length > 0) {
-        const rows: ICommunityRowData[] = [];
-        data.forEach((element: ICommunityItem) => {
-          const row = {
-            createdDate: element.created_date,
-            commuTitle: element.commu_title,
-            likeCnt: element.like_cnt,
-            commentCnt: element.comment_cnt,
-            name: element.name,
-            userImg: element.p_img,
-            deadLine: element.deadLine,
-            memberCount: element.member_count,
-            stadium: element.stadium,
-            views: element.views,
-          };
-          rows.push(row);
-        });
-
-        setRecruitData(rows);
-      }
-    });
+    getDataAll();
   }, []);
 
-  /* 지역 리스트 */
-  const areas = [
-    { value: '', label: '지역 전체' },
-    { value: '서울', label: '서울시' },
-    { value: '부산', label: '부산시' },
-  ];
+  /* 검색 */
+  const onSubmit: SubmitHandler<IFieldTypeData> = (data) => console.log(data);
 
-  /* 구장유형 리스트 */
-  const fieldTypeList = [
-    { value: '', label: '구장유형 전체' },
-    { value: 'f', label: '풋살장' },
-    { value: 's', label: '축구장' },
-  ];
-
-  /* 구장유형 선택 */
-  const handleChangeArea = (value: string) => {
-    setSchCondition({ ...schCondition, area: value });
-  };
-
-  /* 구장유형 선택 */
-  const handleChangeFieldType = (value: string) => {
-    setSchCondition({ ...schCondition, fieldTp: value });
-  };
-
-  /* 검색어 입력 */
-  const handleChangeKeyword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSchCondition({ ...schCondition, searchTxt: e.target.value });
-  };
-
-  /* 검색 submit */
-  const handleSearch = () => {
-    navigate('/fieldList', {
-      state: schCondition,
-    });
-  };
   return (
     <Row>
       <Col span={24} style={{ marginBottom: '20px' }}>
@@ -221,32 +123,59 @@ const Home = () => {
             </Tab>
           ))}
         </TabMenu>
-        <SpaceWrap>
-          <Select
-            defaultValue={areas[0].label}
-            style={{ width: 120 }}
-            onChange={(e) => handleChangeArea(e)}
-            options={areas}
+        <SearchForm onSubmit={handleSubmit(onSubmit)}>
+          <SelectBox>
+            <Select {...register('area', { required: true })}>
+              <option selected>지역 전체</option>
+              <option value="apple">apple</option>
+              <option value="orange">orange</option>
+              <option value="grape">grape</option>
+              <option value="melon">melon</option>
+            </Select>
+            <Dropdown>
+              <svg
+                height="20"
+                width="20"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+                focusable="false"
+                className="css-8mmkcg"
+              >
+                <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
+              </svg>
+            </Dropdown>
+          </SelectBox>
+          <SelectBox>
+            <Select {...register('fieldTp', { required: true })}>
+              <option selected>구장유형 전체</option>
+              <option value="apple">apple</option>
+              <option value="orange">orange</option>
+              <option value="grape">grape</option>
+              <option value="melon">melon</option>
+            </Select>
+            <Dropdown>
+              <svg
+                height="20"
+                width="20"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+                focusable="false"
+                className="css-8mmkcg"
+              >
+                <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
+              </svg>
+            </Dropdown>
+          </SelectBox>
+          <TextInput
+            type="text"
+            {...register('searchTxt')}
+            placeholder="구장이름으로 찾기"
           />
-          <Select
-            defaultValue={fieldTypeList[0].label}
-            style={{ width: 120 }}
-            onChange={(e) => handleChangeFieldType(e)}
-            options={fieldTypeList}
-          />
-          <Space.Compact block>
-            <Input
-              placeholder="구장이름으로 찾기"
-              onChange={(e) => handleChangeKeyword(e)}
-            />
-            <Button type="primary" onClick={handleSearch}>
-              검색
-            </Button>
-          </Space.Compact>
-        </SpaceWrap>
+          <SubmitButton type="submit" value="검색" />
+        </SearchForm>
         <FieldItemWrap>
           {!isLoading &&
-            rowDataList.map((data: IRowData) => (
+            fieldDataList.map((data: IRowData) => (
               <FieldListItem data={data} key={data.fieldId} />
             ))}
         </FieldItemWrap>
@@ -320,10 +249,96 @@ const Tab = styled.div<{ active: boolean }>`
   color: ${(props) => (props.active ? '#444' : '#868e96')};
 `;
 
-const SpaceWrap = styled(Space)`
-  align-items: flex-start;
-  width: 100%;
-  margin-bottom: 20px;
+const SearchForm = styled.form`
+  display: grid;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 14px;
+  column-gap: 10px;
+  grid-template-columns: 150px 150px 1fr 80px;
+`;
+
+const SelectBox = styled.div`
+  position: relative;
+  width: 150px;
+  height: 35px;
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 36px;
+  padding: 0px 12px;
+  box-sizing: border-box;
+`;
+const Select = styled.select`
+  width: inherit;
+  height: inherit;
+  background: transparent;
+  border: 0 none;
+  outline: 0 none;
+  padding: 0 5px;
+  position: relative;
+  z-index: 3;
+  -webkit-appearance: none; /* for chrome */
+  -moz-appearance: none; /*for firefox*/
+  appearance: none;
+
+  &::-ms-expand {
+    display: none; /*for IE10,11*/
+  }
+
+  & option {
+    position: relative;
+    background: #fff;
+    color: #333;
+    padding: 4px 0;
+    font-size: 16px;
+  }
+`;
+
+const Dropdown = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: rgb(204, 204, 204);
+  display: flex;
+  padding: 8px;
+  transition: color 150ms ease 0s;
+  box-sizing: border-box;
+
+  &svg {
+    display: inline-block;
+    fill: currentcolor;
+    line-height: 1;
+    stroke: currentcolor;
+    stroke-width: 0;
+  }
+`;
+
+const TextInput = styled.input`
+  height: 35px;
+  min-height: 35px;
+  line-height: 30px;
+  box-shadow: none;
+  padding-left: 16px;
+  padding-right: 52px;
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 36px;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+`;
+
+const SubmitButton = styled.input`
+  height: 35px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: #232323;
+  border: none;
+  border-radius: 36px;
+  box-sizing: border-box;
+  cursor: pointer;
 `;
 
 const FieldItemWrap = styled.div`

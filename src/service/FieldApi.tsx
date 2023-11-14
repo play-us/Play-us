@@ -50,12 +50,10 @@ export const postFieldLike = (
 ) => {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${process.env.REACT_APP_SERVER_IP}/field/getFieldLike`, {
-        params: {
-          fieldId: fieldId,
-          email: email,
-          state: state,
-        },
+      .post(`${process.env.REACT_APP_SERVER_IP}/field/fieldLike`, {
+        fieldId: fieldId,
+        email: email,
+        state: state,
       })
       .then((e: any) => {
         resolve(e);

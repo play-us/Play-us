@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
-import { Col, Row, Pagination } from 'antd';
-import FieldListItem from '../components/field/FieldListItem';
-import { PageStyle } from '../styles/CommonStyle';
-import { IFieldItem, IRowData, IFieldTypeData } from '../utils/FieldType';
-import { useNavigate } from 'react-router';
-import { Space, Input, Button } from 'antd';
+import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { Col, Row, Pagination } from 'antd';
+import { PageStyle } from '../styles/CommonStyle';
+import FieldListItem from '../components/field/FieldListItem';
+import { IFieldItem, IRowData, IFieldTypeData } from '../utils/FieldType';
 
 const FieldListPage = () => {
   const { register, handleSubmit } = useForm<IFieldTypeData>();
@@ -49,6 +47,7 @@ const FieldListPage = () => {
     });
   };
 
+  /* 검색 */
   const onSubmit: SubmitHandler<IFieldTypeData> = (data) => console.log(data);
   return (
     <Row>
