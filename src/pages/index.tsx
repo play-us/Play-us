@@ -2,15 +2,13 @@ import { useEffect, useState } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
-import { Col, Row } from 'antd';
+import { Col, Row, Space, Select, Input, Button } from 'antd';
 import FieldListItem from '../components/field/FieldListItem';
-import FieldSearchbar from '../components/field/FieldSearchbar';
 import RecruitTeamInfo from '../components/recruitTeam/RecruitTeamInfo';
 import {
   ICommunityItem,
   ICommunityRowData,
 } from '../components/recruitTeam/RecruitTeamList';
-import { boolean } from 'yargs';
 import { MoveRight } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -18,7 +16,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
-import { IFieldItem, IRowData } from '../utils/FieldType';
+import { IFieldItem, IRowData, IFieldTypeData } from '../utils/FieldType';
 
 const urlGetRecruitTeamList = '/json/community.json';
 const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
@@ -29,6 +27,11 @@ const Home = () => {
   const [rowDataList, setRowDataList] = useState<IRowData[]>([]);
   const [activeTab, setActiveTab] = useState<number>(0);
   const [recruitData, setRecruitData] = useState<ICommunityRowData[]>([]);
+  const [schCondition, setSchCondition] = useState<IFieldTypeData>({
+    area: '',
+    fieldTp: '',
+    searchTxt: '',
+  });
   /* 탭메뉴 리스트 */
   const tabList = [
     {
@@ -168,6 +171,42 @@ const Home = () => {
       }
     });
   }, []);
+
+  /* 지역 리스트 */
+  const areas = [
+    { value: '', label: '지역 전체' },
+    { value: '서울', label: '서울시' },
+    { value: '부산', label: '부산시' },
+  ];
+
+  /* 구장유형 리스트 */
+  const fieldTypeList = [
+    { value: '', label: '구장유형 전체' },
+    { value: 'f', label: '풋살장' },
+    { value: 's', label: '축구장' },
+  ];
+
+  /* 구장유형 선택 */
+  const handleChangeArea = (value: string) => {
+    setSchCondition({ ...schCondition, area: value });
+  };
+
+  /* 구장유형 선택 */
+  const handleChangeFieldType = (value: string) => {
+    setSchCondition({ ...schCondition, fieldTp: value });
+  };
+
+  /* 검색어 입력 */
+  const handleChangeKeyword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSchCondition({ ...schCondition, searchTxt: e.target.value });
+  };
+
+  /* 검색 submit */
+  const handleSearch = () => {
+    navigate('/fieldList', {
+      state: schCondition,
+    });
+  };
   return (
     <Row>
       <Col span={24} style={{ marginBottom: '20px' }}>
@@ -182,7 +221,29 @@ const Home = () => {
             </Tab>
           ))}
         </TabMenu>
-        <FieldSearchbar />
+        <SpaceWrap>
+          <Select
+            defaultValue={areas[0].label}
+            style={{ width: 120 }}
+            onChange={(e) => handleChangeArea(e)}
+            options={areas}
+          />
+          <Select
+            defaultValue={fieldTypeList[0].label}
+            style={{ width: 120 }}
+            onChange={(e) => handleChangeFieldType(e)}
+            options={fieldTypeList}
+          />
+          <Space.Compact block>
+            <Input
+              placeholder="구장이름으로 찾기"
+              onChange={(e) => handleChangeKeyword(e)}
+            />
+            <Button type="primary" onClick={handleSearch}>
+              검색
+            </Button>
+          </Space.Compact>
+        </SpaceWrap>
         <FieldItemWrap>
           {!isLoading &&
             rowDataList.map((data: IRowData) => (
@@ -257,6 +318,12 @@ const Tab = styled.div<{ active: boolean }>`
   margin-right: 1.5rem;
   font-size: 20px;
   color: ${(props) => (props.active ? '#444' : '#868e96')};
+`;
+
+const SpaceWrap = styled(Space)`
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 20px;
 `;
 
 const FieldItemWrap = styled.div`

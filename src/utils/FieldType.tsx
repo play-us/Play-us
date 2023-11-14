@@ -36,3 +36,9 @@ export interface IRowData {
   imgUrl?: string | undefined;
   likeYn?: string | undefined;
 }
+
+export interface IFieldTypeData {
+  area: string;
+  fieldTp: string;
+  searchTxt: string;
+}
