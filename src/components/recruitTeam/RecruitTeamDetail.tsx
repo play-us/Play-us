@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { ICommunityItem, ICommunityRowData } from './RecruitTeamList';
 import RecruitTeamAddMoadl from './RecruitTeamAddModal';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 // const urlGetCommentListt = '/json/comment.json';
 const urlGetRecruitTeamList = '/json/communityDetail.json';
@@ -17,6 +18,9 @@ const uwrDeleteComment =
 const urlGetCommentList =
   'http://localhost:8080/community/getCommunityCommentList';
 const urlPostComment = 'http://localhost:8080/community/updateCommunityComment';
+
+const urlAddComment = 'http://localhost:8080/communityinsertCommunityComment';
+
 interface ICommentResponse {
   name: string;
   p_img: null;
@@ -40,6 +44,7 @@ const confirmTitle = () => {
 
 // 댓글 리스트 컴포넌트
 const CommentData = (props: { data: ICommentData }) => {
+  const navigate = useNavigate();
   const { data } = props;
   // console.log(data, '데이터');
   // 이름 추가
@@ -53,18 +58,20 @@ const CommentData = (props: { data: ICommentData }) => {
 
   const handleEditOnchange = (e: any) => {
     const { value } = e.target;
-    setEdit(value);
+    setDefaultValue(value);
   };
-
+  const NavigateCommunityList = () => {
+    navigate('/recruitTeamDetail');
+  };
   const handleUpdateCommunityOnClick = () => {
     return;
   };
   //댓글수정
-  const handleCommentEditOnclick = (commentText: string, commentId: string) => {
+  const handleCommentEditOnclick = (text: string, commentId: string) => {
     const data = {
-      commuId: commentId,
+      commentId: commentId,
 
-      commentTxt: edit,
+      commentTxt: text,
     };
     console.log(data);
 
@@ -100,7 +107,11 @@ const CommentData = (props: { data: ICommentData }) => {
       })
       .then((response) => {
         // 성공적인 응답을 처리합니다.
-        console.log(response.data);
+        console.log(response);
+        console.log('hi');
+        if (response.statusText === 'OK') {
+          NavigateCommunityList();
+        }
       });
   };
   return (
@@ -117,22 +128,18 @@ const CommentData = (props: { data: ICommentData }) => {
             <ButtonWrap onClick={handleEditOpenOnClick}>수정</ButtonWrap>
             <Popconfirm
               title={confirmTitle}
-              onConfirm={handleUpdateCommunityOnClick}
+              onConfirm={handleDeleteOnClick}
               okText="네"
               cancelText="아니오"
             >
-              <ButtonWrap onClick={handleDeleteOnClick}>삭제</ButtonWrap>
+              <Button>삭제</Button>
             </Popconfirm>
           </Col>
         </Row>
       </Col>
       <Comment>
         {editButton ? (
-          <Input
-            onChange={handleEditOnchange}
-            defaultValue={defaultValue}
-            value={edit}
-          ></Input>
+          <Input onChange={handleEditOnchange} value={defaultValue}></Input>
         ) : (
           commentText
         )}
@@ -147,7 +154,7 @@ const CommentData = (props: { data: ICommentData }) => {
             }}
           >
             <Button
-              onClick={() => handleCommentEditOnclick(commentText, commentId)}
+              onClick={() => handleCommentEditOnclick(defaultValue, commentId)}
             >
               수정
             </Button>
@@ -160,6 +167,7 @@ const CommentData = (props: { data: ICommentData }) => {
 };
 //팀원모집상세 컴포넌트
 const RecruitInfoData = (props: { data: ICommunityRowData }) => {
+  const navigate = useNavigate();
   const { data } = props;
   // const createdDate = `${data.createdDate}`;
   // const stadiumValue = `${data.stadium} | ${data.memberCount}명 | ~${data.deadLine}`;
@@ -177,18 +185,22 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
   const handleModalCloseOnClick = () => {
     setModalOpen(false);
   };
+  const NavigateCommunityList = () => {
+    navigate('/recruitTeamDetail');
+  };
   const handleDeleteCommu = () => {
     axios
       .delete(uwrDeleteCommu, {
         params: {
           // 여기에 쿼리 매개변수를 추가합니다.
-          commuId: '4',
+          commuId: '9',
           // ... 다른 쿼리 매개변수
         },
       })
       .then((response) => {
         // 성공적인 응답을 처리합니다.
         console.log(response.data);
+        NavigateCommunityList();
       });
   };
   const {
@@ -309,6 +321,7 @@ const RecruitTeamDetail = () => {
 
   //화면 랜더링시 api
   useEffect(() => {
+    // 댓글 조회 정보
     const commentListApiR = Axios.get<any>(urlGetCommentList).then(
       (response) => {
         const { result } = response.data;
@@ -363,6 +376,7 @@ const RecruitTeamDetail = () => {
     //     }
     //   },
     // );
+    // 커뮤니티 상세정보
     const recruitDetail = Axios.get<ICommunityItem[]>(
       urlGetRecruitTeamList,
     ).then((response) => {
@@ -396,7 +410,7 @@ const RecruitTeamDetail = () => {
     // 등록 api
     console.log('OkAdd:::');
     const data = {
-      commuId: '1',
+      // commuId: ,
 
       commentTxt: 'hello',
 
@@ -404,7 +418,7 @@ const RecruitTeamDetail = () => {
     };
     // console.log(param, ' params');
 
-    axios.post(urlPostComment, data).then((response) => {
+    axios.post(urlAddComment, data).then((response) => {
       console.log(response, '응답');
 
       // if(response === '성공'){

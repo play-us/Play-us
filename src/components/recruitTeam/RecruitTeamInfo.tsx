@@ -3,6 +3,7 @@ import { ICommunityRowData } from './RecruitTeamList';
 import { Hand, MessageSquare, User } from 'lucide-react';
 import { Col } from 'antd';
 import React from 'react';
+import axios from 'axios';
 interface ButtonProps {
   backgroundColor?: string;
   marginRight?: string;
@@ -15,6 +16,8 @@ enum groundType {
   football = '2',
   basketball = '3',
 }
+
+const urlUpdateCommuLike = 'http://localhost:8080/community/communityWish'; //API 엔드포인트
 const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
   const LikeButton = () => {
     const [liked, setLiked] = React.useState(false);
@@ -26,8 +29,29 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
         try {
           // 좋아요 버튼이 클릭된 경우에만 API 호출
           if (liked) {
-            const apiUrl = 'https://example.com/api/like'; //API 엔드포인트
+            // /community/communityWish
+            const data = {
+              commuId: '9',
 
+              email: 'chu',
+
+              state: '1',
+              // 관심상태 (1 관심, 0 관심취소)
+            };
+            console.log(data);
+
+            axios.post(urlUpdateCommuLike, data).then((response) => {
+              console.log(response, '응답');
+              // 새로고침
+              // if(response === '성공'){
+              // // '성공알럿'
+              //   onClose()
+              // }
+              // else{
+              //  //실패 앐럿
+              //  //창 유지
+              // }
+            });
             // API 호출 (POST 요청)
             // const response = await (apiUrl, {
             // });
@@ -63,7 +87,7 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
     name,
     commentCnt,
   } = props.item;
-  console.log(props, 'realProps');
+  // console.log(props, 'realProps');
 
   return (
     <Wrap>

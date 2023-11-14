@@ -92,7 +92,7 @@ const Home = () => {
   ];
   //삭제
   const handleDeleteOnClick = async () => {
-    console.log('hi');
+    // console.log('hi');
 
     const ret = ref.current?.textContent;
     console.log(ret);
@@ -180,7 +180,7 @@ const Home = () => {
     axios
       .get(urlGetCommuDetail, {
         params: {
-          commuId: '1',
+          commuId: '3',
         },
       })
       .then(function (response) {
@@ -189,14 +189,16 @@ const Home = () => {
 
     // 메인 페이지 커뮤니티 데이터 init
     axios.get(urlGetMainDataList).then((response) => {
-      console.log(response);
+      // console.log(response);
 
       const data = response.data.result['commuList'];
-      console.log(data, ' data!!!');
+      // console.log(data, ' data!!!');
 
       // if (data.length > 0) {
       const rows: any[] = [];
       data.forEach((element: ICommuDetailProps) => {
+        console.log(element, 'dd');
+
         const row = {
           deadline: ConvertDate8(element.insertDatetime),
           commuTitle: element.commuTitle,
