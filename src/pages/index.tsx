@@ -12,7 +12,7 @@ import FieldListItem from '../components/field/FieldListItem';
 import RecruitTeamInfo from '../components/recruitTeam/RecruitTeamInfo';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { getMainData } from '../service/Common';
-import { IFieldType } from '../utils/Common';
+import { IFieldType, IAddrType } from '../utils/Common';
 import { IFieldItem, IRowData, IFieldTypeData } from '../utils/FieldType';
 import {
   ICommunityItem,
@@ -25,24 +25,23 @@ import {
 const Home = () => {
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm<IFieldTypeData>();
+  const [sort, setSort] = useState<string>('1'); // 0: 최신 등록순, 1 :예약많은 순
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fieldDataList, setFieldDataList] = useState<IRowData[]>([]);
-  const [activeTab, setActiveTab] = useState<number>(0);
   const [recruitData, setRecruitData] = useState<ICommunityRowData[]>([]);
   const [fieldType, setFieldType] = useState<IFieldType[]>([]);
+  const [city, setCity] = useState<IAddrType[]>([]);
+  const [area, setArea] = useState<IAddrType[]>([]);
+  const [sido, setSido] = useState<string>('');
   /* 탭메뉴 리스트 */
   const tabList = [
     {
-      id: 0,
-      name: '전체',
-    },
-    {
-      id: 1,
-      name: '예약많은 순',
-    },
-    {
-      id: 2,
+      id: '0',
       name: '신규등록 순',
+    },
+    {
+      id: '1',
+      name: '예약많은 순',
     },
   ];
 
@@ -50,24 +49,18 @@ const Home = () => {
   useEffect(() => {
     setIsLoading(true);
     // 목데이터 연결
-    if (activeTab === 0) getDataAll();
-    if (activeTab === 1) getDataAll();
-    if (activeTab === 2) getDataSortCreateDate();
-  }, [activeTab]);
+    if (sort === '0') getDataSortCreateDate();
+    if (sort === '1') getDataAll(sort);
+  }, [sort]);
 
-  async function getDataAll() {
-    console.log('전체 조회');
+  async function getDataAll(sort: string) {
+    const res: any = await getMainData(null, null, null, sort, 1, 20);
 
-    setIsLoading(true);
-    const res: any = await getMainData('', '', '', '', 1, 20);
-    console.log('res.result.fieldList', res.result.fieldList);
-
-    setFieldType(res.result.fieldTpList);
-    setFieldDataList(res.result.fieldList);
-    setRecruitData(res.result.commuList);
-
-    // res.result.areaList
-    // res.result.cityList
+    setFieldType(res.data.result.fieldTpList); // 구장 유형 리스트
+    setFieldDataList(res.data.result.fieldList); // 구장리스트
+    setRecruitData(res.data.result.commuList); // 커뮤니티 게시글 리스트
+    setCity(res.data.result.cityList); // 시도 리스트
+    setArea(res.data.result.areaList); // 시군구 리스트
     setIsLoading(false);
   }
   /* 신규등록순 조회 */
@@ -103,8 +96,13 @@ const Home = () => {
     });
   };
   useEffect(() => {
-    getDataAll();
+    setIsLoading(true);
+    getDataAll(sort);
   }, []);
+
+  useEffect(() => {
+    console.log('sido', sido);
+  }, [sido]);
 
   /* 검색 */
   const onSubmit: SubmitHandler<IFieldTypeData> = (data) => console.log(data);
@@ -116,8 +114,8 @@ const Home = () => {
           {tabList.map((item) => (
             <Tab
               key={item.id}
-              active={activeTab === item.id}
-              onClick={() => setActiveTab(item.id)}
+              active={sort === item.id}
+              onClick={() => setSort(item.id)}
             >
               {item.name}
             </Tab>
@@ -125,12 +123,36 @@ const Home = () => {
         </TabMenu>
         <SearchForm onSubmit={handleSubmit(onSubmit)}>
           <SelectBox>
+            <Select onChange={(e) => setSido(e.target.value)}>
+              <option selected>시도 전체</option>
+              {city.map((c) => (
+                <option value={c.syscdCd} key={c.syscdCd}>
+                  {c.syscdNm}
+                </option>
+              ))}
+            </Select>
+            <Dropdown>
+              <svg
+                height="20"
+                width="20"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+                focusable="false"
+                className="css-8mmkcg"
+              >
+                <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
+              </svg>
+            </Dropdown>
+          </SelectBox>
+          <SelectBox>
             <Select {...register('area', { required: true })}>
-              <option selected>지역 전체</option>
-              <option value="apple">apple</option>
-              <option value="orange">orange</option>
-              <option value="grape">grape</option>
-              <option value="melon">melon</option>
+              <option selected>시군구 전체</option>
+              {area.filter((a) => a.rel01Data === sido) &&
+                area.map((a) => (
+                  <option value={a.syscdCd} key={a.syscdCd}>
+                    {a.syscdNm}
+                  </option>
+                ))}
             </Select>
             <Dropdown>
               <svg
@@ -255,7 +277,7 @@ const SearchForm = styled.form`
   align-items: center;
   margin-bottom: 14px;
   column-gap: 10px;
-  grid-template-columns: 150px 150px 1fr 80px;
+  grid-template-columns: 150px 150px 150px 1fr 80px;
 `;
 
 const SelectBox = styled.div`

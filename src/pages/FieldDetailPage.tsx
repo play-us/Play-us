@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Axios from 'axios';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import {

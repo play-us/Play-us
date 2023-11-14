@@ -10,3 +10,16 @@ export interface IFieldType {
   updateDatetime: string | Date;
   useYn: string;
 }
+
+export interface IAddrType {
+  classCd: string;
+  insertDatetime: string | Date;
+  rel01Data: string;
+  rel02Data: null;
+  remarkTxt: null;
+  sort: number;
+  syscdCd: string;
+  syscdNm: string;
+  updateDatetime: string | Date;
+  useYn: string;
+}

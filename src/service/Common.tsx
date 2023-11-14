@@ -2,10 +2,10 @@ import axios from 'axios';
 
 // 메인페이지 조회
 export const getMainData = (
-  area: string,
-  fieldTp: string,
-  searchTxt: string,
-  sort: string,
+  area: string | null,
+  fieldTp: string | null,
+  searchTxt: string | null,
+  sort: string | null,
   pageStart: number,
   pageEnd: number,
 ) => {
