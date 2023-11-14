@@ -14,7 +14,7 @@ import { Button, Typography, message } from 'antd';
 import { RedColor } from '../styles/CommonStyle';
 import FieldResvModal from '../components/field/FieldResvModal';
 import KakaoMap from '../components/common/KakaoMap';
-import { getFieldDetail } from '../service/FieldApi';
+import { getFieldDetail, postFieldLike } from '../service/FieldApi';
 import { IFieldItem } from '../utils/FieldType';
 
 declare global {
@@ -32,7 +32,7 @@ const FieldDetailPage = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<IFieldItem>();
-  const [liked, setLiked] = useState<boolean>(false);
+  const [liked, setLiked] = useState<string>('0');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -47,17 +47,20 @@ const FieldDetailPage = () => {
     if (fieldId !== null) {
       const d: any = await getFieldDetail(fieldId);
       setData(d.data.result[0]);
+      setLiked(d.data.result[0].likeYb);
+
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    console.log('data', data);
-  }, [data]);
-
   /* 좋아요 기능 */
-  const putLiked = () => {
-    setLiked(!liked);
+  const putLiked = async () => {
+    if (fieldId !== null) {
+      let newLikeState: string = liked === '0' ? '1' : '0';
+      await postFieldLike(fieldId, 'chu', newLikeState);
+
+      setLiked(newLikeState);
+    }
   };
 
   /* 모달 상태 관련 이벤트 핸들러 */
@@ -91,7 +94,7 @@ const FieldDetailPage = () => {
           <BackgroundImg>
             <ActionWrap>
               <WishBtn onClick={() => putLiked()}>
-                <Heart color={data?.likeYn === '0' ? RedColor : '#696969'} />
+                <Heart color={data?.likeYn === '1' ? RedColor : '#696969'} />
               </WishBtn>
             </ActionWrap>
           </BackgroundImg>
