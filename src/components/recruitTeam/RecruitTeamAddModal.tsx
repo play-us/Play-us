@@ -1,18 +1,19 @@
 import { Col, Input, Modal, Row, Select, DatePicker, Typography } from 'antd';
 import styled from 'styled-components';
 import TextArea from 'antd/es/input/TextArea';
-import Axios from 'axios';
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const { Title } = Typography;
 
 const { Option } = Select;
-
 // const url = '';
 const urlAddCommun = 'http://localhost:8080/community/insertCommunity';
 // /community/insertCommunity
 const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
   const { open, onClose } = props;
+
+  const navigate = useNavigate();
   const [recruitCountType, setRecruitCountType] = useState<number>(0);
   const [groundType, setGroundType] = useState<string>('전체');
   const [areaType, setAreaType] = useState<string>('전체');
@@ -33,7 +34,9 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
       setEndDate('');
     }
   };
-
+  const NavigateCommunityList = () => {
+    navigate('/community');
+  };
   const handleAddOnClick = () => {
     // 등록 api
     console.log('OkAdd:::');
@@ -50,14 +53,15 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
     axios.post(urlAddCommun, data).then((response) => {
       console.log(response, '응답');
 
-      // if(response === '성공'){
-      // // '성공알럿'
-      //   onClose()
-      // }
-      // else{
-      //  //실패 앐럿
-      //  //창 유지
-      // }
+      if (response.statusText === 'OK') {
+        // '성공알럿'
+
+        onClose();
+        NavigateCommunityList();
+      } else {
+        //실패 앐럿
+        //창 유지
+      }
     });
   };
   const handleSelectAreaChange = (type: any) => {

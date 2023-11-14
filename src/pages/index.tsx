@@ -19,6 +19,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import axios from 'axios';
+import ConvertDate8 from '../components/common/date/dateFormat';
 
 const urlGetRecruitTeamList = '/json/community.json';
 const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
@@ -52,6 +53,20 @@ interface IRowData {
   like_cnt: number;
   img_url: string;
 }
+export interface ICommuDetailProps {
+  area: string;
+  commentCnt: number;
+  commuId: string;
+  commuTitle: string;
+  commuTxt: string;
+  deadLine: string;
+  email: string;
+  fieldTp: string;
+  insertDatetime: string;
+  memberCnt: number;
+  updateDatetime: string;
+  wishCnt: number;
+}
 
 const Home = () => {
   const ref = useRef<any>(null);
@@ -77,32 +92,18 @@ const Home = () => {
   ];
   //삭제
   const handleDeleteOnClick = async () => {
-    const ret = ref.current?.getInstance().getCheckedRows();
+    console.log('hi');
+
+    const ret = ref.current?.textContent;
+    console.log(ret);
+
     if (ret === undefined) return;
     let successCnt = 0,
       failCnt = 0;
     for await (const item of ret) {
-      const params = {
-        ip: item.ip,
-        memo: item.solution,
-        custCode: item.custCode,
-      };
+      const params = {};
       console.log(ret);
-
-      // await deleteRequest(urldeleteCustApi, params).then((result) => {
-      //   const { msg } = result;
-      //   const { code } = result;
-      //   if (code === EnResponseType.success) {
-      //     successCnt = successCnt + 1;
-      //   } else if (code === EnResponseType.error) {
-      //     failCnt = failCnt + 1;
-      //     store.PushAlarm(EnAlarmType.error, '실패', msg, false);
-      //   }
-      //   if (successCnt + failCnt === checkedLen)
-      //     message.info('성공 : ' + successCnt + '건, 실패 : ' + failCnt + '건');
-      // });
     }
-    // if (failCnt === 0) handleSearchBtnOnClick(); //재검색
   };
   /* 데이터 조회 */
   useEffect(() => {
@@ -185,58 +186,61 @@ const Home = () => {
       .then(function (response) {
         console.log(response, '디테일');
       });
-    // 메인 페이지 데이터 init
-    Axios.get<any[]>(urlGetMainDataList).then((response) => {
-      const data = response.data;
+
+    // 메인 페이지 커뮤니티 데이터 init
+    axios.get(urlGetMainDataList).then((response) => {
+      console.log(response);
+
+      const data = response.data.result['commuList'];
       console.log(data, ' data!!!');
 
-      if (data.length > 0) {
-        const rows: any[] = [];
-        data.forEach((element: any) => {
-          const row = {
-            // createdDate: element.created_date,
-            // commuTitle: element.commu_title,
-            // likeCnt: element.like_cnt,
-            // commentCnt: element.comment_cnt,
-            // name: element.name,
-            // userImg: element.p_img,
-            // deadLine: element.deadLine,
-            // memberCount: element.member_count,
-            // stadium: element.stadium,
-            // views: element.views,
-          };
-          rows.push(row);
-        });
+      // if (data.length > 0) {
+      const rows: any[] = [];
+      data.forEach((element: ICommuDetailProps) => {
+        const row = {
+          deadline: ConvertDate8(element.insertDatetime),
+          commuTitle: element.commuTitle,
+          likeCnt: element.wishCnt,
+          commentCnt: element.commentCnt,
+          name: '황창민',
+          userImg: null, //이미지 추후작업
+          deadLine: ConvertDate8(element.deadLine),
+          memberCount: element.memberCnt,
+          stadium: element.fieldTp,
+        };
+        rows.push(row);
+      });
 
-        setRecruitData(rows);
-      }
+      setRecruitData(rows);
+      console.log(recruitData, 'initdata');
+      // }
     });
 
     // 기존 목데이터 연결
-    Axios.get<ICommunityItem[]>(urlGetRecruitTeamList).then((response) => {
-      const data = response.data;
+    // Axios.get<ICommunityItem[]>(urlGetRecruitTeamList).then((response) => {
+    //   const data = response.data;
 
-      if (data.length > 0) {
-        const rows: ICommunityRowData[] = [];
-        data.forEach((element: ICommunityItem) => {
-          const row = {
-            createdDate: element.created_date,
-            commuTitle: element.commu_title,
-            likeCnt: element.like_cnt,
-            commentCnt: element.comment_cnt,
-            name: element.name,
-            userImg: element.p_img,
-            deadLine: element.deadLine,
-            memberCount: element.member_count,
-            stadium: element.stadium,
-            views: element.views,
-          };
-          rows.push(row);
-        });
+    //   if (data.length > 0) {
+    //     const rows: ICommunityRowData[] = [];
+    //     data.forEach((element: ICommunityItem) => {
+    //       const row = {
+    //         createdDate: element.created_date,
+    //         commuTitle: element.commu_title,
+    //         likeCnt: element.like_cnt,
+    //         commentCnt: element.comment_cnt,
+    //         name: element.name,
+    //         userImg: element.p_img,
+    //         deadLine: element.deadLine,
+    //         memberCount: element.member_count,
+    //         stadium: element.stadium,
+    //         views: element.views,
+    //       };
+    //       rows.push(row);
+    //     });
 
-        setRecruitData(rows);
-      }
-    });
+    //     setRecruitData(rows);
+    //   }
+    // });
   }, []);
   return (
     <Row>
@@ -297,7 +301,6 @@ const Home = () => {
           modules={[Navigation]}
           className="mySwiper"
           ref={useRef}
-          onClick={handleDeleteOnClick}
         >
           {recruitData.map((item, idx) => {
             return (

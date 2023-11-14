@@ -8,7 +8,7 @@ import { ICommunityItem, ICommunityRowData } from './RecruitTeamList';
 import RecruitTeamAddMoadl from './RecruitTeamAddModal';
 import axios from 'axios';
 
-const urlGetCommentListt = '/json/comment.json';
+// const urlGetCommentListt = '/json/comment.json';
 const urlGetRecruitTeamList = '/json/communityDetail.json';
 const uwrDeleteCommu = 'http://localhost:8080/community/deleteCommunity';
 const uwrDeleteComment =
@@ -16,17 +16,20 @@ const uwrDeleteComment =
 
 const urlGetCommentList =
   'http://localhost:8080/community/getCommunityCommentList';
-
-const urlPostComment = 'http://localhost:8080/community/insertCommunityComment';
+const urlPostComment = 'http://localhost:8080/community/updateCommunityComment';
 interface ICommentResponse {
   name: string;
   p_img: null;
-  comment_text: string;
-  comment_date: string;
+  commentTxt: string;
+  insertDatetime: any;
+  commentId: string;
+  commentSeq: string;
 }
 interface ICommentData {
   commentDate: string;
   commentText: string;
+  commentId: string;
+  commentSeq: string;
   name: string;
   pImg: null;
 }
@@ -37,48 +40,84 @@ const confirmTitle = () => {
 
 // 댓글 리스트 컴포넌트
 const CommentData = (props: { data: ICommentData }) => {
-  const [edit, setEdit] = useState<boolean>(false);
+  const { data } = props;
+  // console.log(data, '데이터');
+  // 이름 추가
+  const { commentDate, name, commentText, pImg, commentId } = data;
+  const [defaultValue, setDefaultValue] = useState<string>('');
+  const [edit, setEdit] = useState<string>('');
   const [editButton, setEditButton] = useState<boolean>(false);
-  const handleDeleteOnClick = () => {
+  useEffect(() => {
+    setDefaultValue(commentText);
+  }, []);
+
+  const handleEditOnchange = (e: any) => {
+    const { value } = e.target;
+    setEdit(value);
+  };
+
+  const handleUpdateCommunityOnClick = () => {
     return;
   };
+  //댓글수정
+  const handleCommentEditOnclick = (commentText: string, commentId: string) => {
+    const data = {
+      commuId: commentId,
+
+      commentTxt: edit,
+    };
+    console.log(data);
+
+    axios.post(urlPostComment, data).then((response) => {
+      console.log(response, '응답');
+      // 새로고침
+      setEditButton(false);
+      // if(response === '성공'){
+      // // '성공알럿'
+      //   onClose()
+      // }
+      // else{
+      //  //실패 앐럿
+      //  //창 유지
+      // }
+    });
+    return;
+  };
+
   const handleEditOpenOnClick = () => {
     setEditButton(true);
   };
-  //댓글수정 api
-  const handleCommentEditOnclick = () => {
-    const handleDeleteCommu = () => {
-      axios
-        .delete(uwrDeleteComment, {
-          params: {
-            // 여기에 쿼리 매개변수를 추가합니다.
-            commuId: '6',
-            // ... 다른 쿼리 매개변수
-          },
-        })
-        .then((response) => {
-          // 성공적인 응답을 처리합니다.
-          console.log(response.data);
-        });
-    };
+
+  //댓글삭제
+  const handleDeleteOnClick = () => {
+    axios
+      .delete(uwrDeleteComment, {
+        params: {
+          // 여기에 쿼리 매개변수를 추가합니다.
+          commentId: commentId,
+          // ... 다른 쿼리 매개변수
+        },
+      })
+      .then((response) => {
+        // 성공적인 응답을 처리합니다.
+        console.log(response.data);
+      });
   };
-  const { data } = props;
-  console.log(data, '데이터');
-  const { commentDate, name, commentText, pImg } = data;
   return (
     <>
       <Col span={24} style={{ minHeight: '70px', paddingBottom: '18px' }}>
         <Row>
           <Col span={2}>{!pImg ? <User /> : pImg}</Col>
           <Col span={18} className="commnent_info_title">
-            <CommentInfoName>{name}</CommentInfoName>
+            {/* <CommentInfoName>{name}</CommentInfoName> */}
+            <CommentInfoName>{'황창민'}</CommentInfoName>
             <CommentInfoDate>{commentDate}</CommentInfoDate>
           </Col>
           <Col span={3}>
             <ButtonWrap onClick={handleEditOpenOnClick}>수정</ButtonWrap>
             <Popconfirm
               title={confirmTitle}
-              onConfirm={handleDeleteOnClick}
+              onConfirm={handleUpdateCommunityOnClick}
               okText="네"
               cancelText="아니오"
             >
@@ -88,7 +127,15 @@ const CommentData = (props: { data: ICommentData }) => {
         </Row>
       </Col>
       <Comment>
-        {editButton ? <Input value={commentText}></Input> : commentText}
+        {editButton ? (
+          <Input
+            onChange={handleEditOnchange}
+            defaultValue={defaultValue}
+            value={edit}
+          ></Input>
+        ) : (
+          commentText
+        )}
       </Comment>
       <div>
         {editButton ? (
@@ -99,7 +146,11 @@ const CommentData = (props: { data: ICommentData }) => {
               paddingTop: '10px',
             }}
           >
-            <Button onClick={handleCommentEditOnclick}>수정</Button>
+            <Button
+              onClick={() => handleCommentEditOnclick(commentText, commentId)}
+            >
+              수정
+            </Button>
             <Button onClick={() => setEditButton(false)}> 취소</Button>
           </div>
         ) : null}
@@ -258,52 +309,60 @@ const RecruitTeamDetail = () => {
 
   //화면 랜더링시 api
   useEffect(() => {
-    const commentListApiR = Axios.get<[]>(urlGetCommentList).then(
+    const commentListApiR = Axios.get<any>(urlGetCommentList).then(
       (response) => {
-        const data = response.data;
-        console.log(data, 'real');
+        const { result } = response.data;
+        console.log(result);
 
-        // if (data.length > 0) {
-        //   const rows: ICommentData[] = [];
-        //   data.forEach((element: ICommentResponse) => {
-        //     const row = {
-        //       // createdDate: element.created_date,
-        //       // commuTitle: element.commu_title,
-        //       commentDate: element.comment_date,
-        //       commentText: element.comment_text,
-        //       name: element.name,
-        //       pImg: element.p_img,
-        //     };
-        //     rows.push(row);
-        //   });
+        // if (result.length < 0) {
+        console.log('hi');
 
-        //   setCommentDataList(rows);
+        const rows: ICommentData[] = [];
+        result.forEach((element: any) => {
+          console.log(element);
+
+          const row = {
+            // createdDate: element.created_date,
+            // commuTitle: element.commu_title,
+            commentId: element.commentId,
+            commentSeq: element.commentSeq,
+            commentText: element.commentTxt,
+            name: element.name,
+            pImg: element.p_img,
+            commentDate: element.insertDatetime,
+          };
+          console.log(row);
+
+          rows.push(row);
+        });
+
+        setCommentDataList(rows);
         // }
       },
     );
 
-    const commentListApi = Axios.get<[]>(urlGetCommentListt).then(
-      (response) => {
-        const data = response.data;
+    // const commentListApi = Axios.get<[]>(urlGetCommentListt).then(
+    //   (response) => {
+    //     const data = response.data;
 
-        if (data.length > 0) {
-          const rows: ICommentData[] = [];
-          data.forEach((element: ICommentResponse) => {
-            const row = {
-              // createdDate: element.created_date,
-              // commuTitle: element.commu_title,
-              commentDate: element.comment_date,
-              commentText: element.comment_text,
-              name: element.name,
-              pImg: element.p_img,
-            };
-            rows.push(row);
-          });
+    //     if (data.length > 0) {
+    //       const rows: ICommentData[] = [];
+    //       data.forEach((element: ICommentResponse) => {
+    //         const row = {
+    //           // createdDate: element.created_date,
+    //           // commuTitle: element.commu_title,
+    //           // commentDate: element.comment_date,
+    //           // commentText: element.comment_text,
+    //           // name: element.name,
+    //           // pImg: element.p_img,
+    //         };
+    //         rows.push(row);
+    //       });
 
-          setCommentDataList(rows);
-        }
-      },
-    );
+    //       setCommentDataList(rows);
+    //     }
+    //   },
+    // );
     const recruitDetail = Axios.get<ICommunityItem[]>(
       urlGetRecruitTeamList,
     ).then((response) => {
@@ -364,6 +423,8 @@ const RecruitTeamDetail = () => {
     <RecruitInfoData data={data} />
   ));
   // 댓글 리스트 데이터 주입
+  console.log(commentDataList, 'list');
+
   const commentList = commentDataList.map((data: ICommentData) => (
     <CommentListWrap>
       <CommentData data={data} />
