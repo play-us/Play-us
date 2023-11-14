@@ -5,36 +5,7 @@ import { Col, Row, Pagination } from 'antd';
 import FieldListItem from '../components/field/FieldListItem';
 import FieldSearchbar from '../components/field/FieldSearchbar';
 import { PageStyle } from '../styles/CommonStyle';
-
-interface IFieldItem {
-  fieldId: string;
-  fieldNm: string;
-  area: string;
-  addr: string;
-  openingHours: string;
-  closingHours: string;
-  price: number;
-  hours: number;
-  note?: string | undefined;
-  swrmYn?: string | undefined;
-  reviewCnt?: number | undefined;
-  likeCnt?: any;
-  size?: string | undefined;
-  imgUrl?: string | undefined;
-  insertDatetime: Date;
-}
-
-interface IRowData {
-  fieldId: string;
-  fieldNm: string;
-  area: string;
-  addr: string;
-  price: number;
-  hours: number;
-  reviewCnt?: number | undefined;
-  likeCnt?: number | undefined;
-  imgUrl?: string | undefined;
-}
+import { IFieldItem, IRowData } from '../utils/FieldType';
 
 const FieldListPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);

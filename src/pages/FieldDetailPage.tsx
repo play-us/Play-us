@@ -15,44 +15,7 @@ import { RedColor } from '../styles/CommonStyle';
 import FieldResvModal from '../components/field/FieldResvModal';
 import KakaoMap from '../components/common/KakaoMap';
 import { getFieldDetail } from '../service/FieldApi';
-
-interface IFieldItem {
-  addr: string;
-  area: string | null;
-  closingHours: Date;
-  fieldId: string;
-  fieldNm: string;
-  fieldTp: string | null;
-  hours: number;
-  insertDatetime: Date;
-  lat: string;
-  reviewCnt: number | undefined | null;
-  likeCnt: number;
-  likeYn: string;
-  lng: string;
-  note: string;
-  openingHours: Date;
-  parkingTp: string;
-  price: number;
-  remarkTxt: string | null;
-  rentalSup: string | null;
-  size: string;
-  swrmYn: string | null;
-  useYn: string;
-}
-
-interface IRowData {
-  fieldId: string;
-  fieldNm: string;
-  area: string;
-  addr: string;
-  price: number;
-  hours: number;
-  reviewCnt?: number | undefined;
-  likeCnt?: number | undefined;
-  imgUrl?: string | undefined;
-  likeYn?: string | undefined;
-}
+import { IFieldItem } from '../utils/FieldType';
 
 declare global {
   interface Window {

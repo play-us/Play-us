@@ -1,18 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { MessageSquare, Heart } from 'lucide-react';
-
-interface IRowData {
-  fieldId: string;
-  fieldNm: string;
-  area: string;
-  addr: string;
-  price: number;
-  hours: number;
-  reviewCnt?: number | undefined;
-  likeCnt?: number | undefined;
-  imgUrl?: string | undefined;
-}
+import { IRowData } from '../../utils/FieldType';
 
 const FieldListItem = (props: { data: IRowData }) => {
   const data = props.data;

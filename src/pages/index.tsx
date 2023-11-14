@@ -18,39 +18,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
+import { IFieldItem, IRowData } from '../utils/FieldType';
 
 const urlGetRecruitTeamList = '/json/community.json';
 const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
-
-interface IFieldItem {
-  fieldId: string;
-  fieldNm: string;
-  area: string;
-  addr: string;
-  openingHours: string;
-  closingHours: string;
-  price: number;
-  hours: number;
-  note?: string | undefined;
-  swrmYn?: string | undefined;
-  reviewCnt?: number | undefined;
-  likeCnt?: any;
-  size?: string | undefined;
-  imgUrl?: string | undefined;
-  insertDatetime: Date;
-}
-
-interface IRowData {
-  fieldId: string;
-  fieldNm: string;
-  area: string;
-  addr: string;
-  price: number;
-  hours: number;
-  reviewCnt?: number | undefined;
-  likeCnt?: number | undefined;
-  imgUrl?: string | undefined;
-}
 
 const Home = () => {
   const navigate = useNavigate();
