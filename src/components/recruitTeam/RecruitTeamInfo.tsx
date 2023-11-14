@@ -8,8 +8,13 @@ interface ButtonProps {
   marginRight?: string;
   fontWeight?: string;
   color?: string;
+  onClick?: any;
 }
-
+enum groundType {
+  futsal = '1',
+  football = '2',
+  basketball = '3',
+}
 const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
   const LikeButton = () => {
     const [liked, setLiked] = React.useState(false);
@@ -58,6 +63,7 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
     name,
     commentCnt,
   } = props.item;
+  console.log(props, 'realProps');
 
   return (
     <Wrap>
@@ -68,7 +74,22 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
               style={{ marginRight: '5px' }}
               backgroundColor="#EFEFEF"
             >
-              ⚽ {stadium}
+              {/* 풋살 1 축구 2 농구 3 */}
+              {stadium === groundType.futsal && (
+                <span role="img" aria-label="Futsal">
+                  👟
+                </span>
+              )}
+              {stadium === groundType.football && (
+                <span role="img" aria-label="Football">
+                  ⚽
+                </span>
+              )}
+              {stadium === groundType.basketball && (
+                <span role="img" aria-label="Basketball">
+                  🏀
+                </span>
+              )}
             </RecruitTeam>
             <RecruitTeam
               color="#3E85F4"
@@ -99,15 +120,16 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
           <LikeCommentWrap>
             <LikeComment>
               <Hand color="#9C9C9C" />
-              {1}
+              {likeCnt}
             </LikeComment>
             <LikeComment>
               <MessageSquare color="#9C9C9C" />
-              {2}
+              {commentCnt}
             </LikeComment>
           </LikeCommentWrap>
         </InfoFooterWrap>
       </Inwrap>
+      <div style={{ color: 'white' }}>{1}</div>
     </Wrap>
   );
 };

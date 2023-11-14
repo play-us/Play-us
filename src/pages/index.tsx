@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router';
@@ -18,10 +18,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
+import axios from 'axios';
+import ConvertDate8 from '../components/common/date/dateFormat';
 
 const urlGetRecruitTeamList = '/json/community.json';
 const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
-
+const urlGetCommuDetail = 'http://localhost:8080/community/getCommunityDetail';
 interface IFieldItem {
   field_id: string;
   field_name: string;
@@ -51,8 +53,23 @@ interface IRowData {
   like_cnt: number;
   img_url: string;
 }
+export interface ICommuDetailProps {
+  area: string;
+  commentCnt: number;
+  commuId: string;
+  commuTitle: string;
+  commuTxt: string;
+  deadLine: string;
+  email: string;
+  fieldTp: string;
+  insertDatetime: string;
+  memberCnt: number;
+  updateDatetime: string;
+  wishCnt: number;
+}
 
 const Home = () => {
+  const ref = useRef<any>(null);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [rowDataList, setRowDataList] = useState<IRowData[]>([]);
@@ -73,7 +90,21 @@ const Home = () => {
       name: '신규등록 순',
     },
   ];
+  //삭제
+  const handleDeleteOnClick = async () => {
+    console.log('hi');
 
+    const ret = ref.current?.textContent;
+    console.log(ret);
+
+    if (ret === undefined) return;
+    let successCnt = 0,
+      failCnt = 0;
+    for await (const item of ret) {
+      const params = {};
+      console.log(ret);
+    }
+  };
   /* 데이터 조회 */
   useEffect(() => {
     setIsLoading(true);
@@ -145,57 +176,71 @@ const Home = () => {
     });
   };
   useEffect(() => {
-    // 메인 페이지 데이터 init
-    Axios.get<any[]>(urlGetMainDataList).then((response) => {
-      const data = response.data;
-      console.log(data, ' data');
+    //상세 정보
+    axios
+      .get(urlGetCommuDetail, {
+        params: {
+          commuId: '1',
+        },
+      })
+      .then(function (response) {
+        console.log(response, '디테일');
+      });
 
-      if (data.length > 0) {
-        const rows: any[] = [];
-        data.forEach((element: any) => {
-          const row = {
-            // createdDate: element.created_date,
-            // commuTitle: element.commu_title,
-            // likeCnt: element.like_cnt,
-            // commentCnt: element.comment_cnt,
-            // name: element.name,
-            // userImg: element.p_img,
-            // deadLine: element.deadLine,
-            // memberCount: element.member_count,
-            // stadium: element.stadium,
-            // views: element.views,
-          };
-          rows.push(row);
-        });
+    // 메인 페이지 커뮤니티 데이터 init
+    axios.get(urlGetMainDataList).then((response) => {
+      console.log(response);
 
-        setRecruitData(rows);
-      }
+      const data = response.data.result['commuList'];
+      console.log(data, ' data!!!');
+
+      // if (data.length > 0) {
+      const rows: any[] = [];
+      data.forEach((element: ICommuDetailProps) => {
+        const row = {
+          deadline: ConvertDate8(element.insertDatetime),
+          commuTitle: element.commuTitle,
+          likeCnt: element.wishCnt,
+          commentCnt: element.commentCnt,
+          name: '황창민',
+          userImg: null, //이미지 추후작업
+          deadLine: ConvertDate8(element.deadLine),
+          memberCount: element.memberCnt,
+          stadium: element.fieldTp,
+        };
+        rows.push(row);
+      });
+
+      setRecruitData(rows);
+      console.log(recruitData, 'initdata');
+      // }
     });
+
     // 기존 목데이터 연결
-    Axios.get<ICommunityItem[]>(urlGetRecruitTeamList).then((response) => {
-      const data = response.data;
+    // Axios.get<ICommunityItem[]>(urlGetRecruitTeamList).then((response) => {
+    //   const data = response.data;
 
-      if (data.length > 0) {
-        const rows: ICommunityRowData[] = [];
-        data.forEach((element: ICommunityItem) => {
-          const row = {
-            createdDate: element.created_date,
-            commuTitle: element.commu_title,
-            likeCnt: element.like_cnt,
-            commentCnt: element.comment_cnt,
-            name: element.name,
-            userImg: element.p_img,
-            deadLine: element.deadLine,
-            memberCount: element.member_count,
-            stadium: element.stadium,
-            views: element.views,
-          };
-          rows.push(row);
-        });
+    //   if (data.length > 0) {
+    //     const rows: ICommunityRowData[] = [];
+    //     data.forEach((element: ICommunityItem) => {
+    //       const row = {
+    //         createdDate: element.created_date,
+    //         commuTitle: element.commu_title,
+    //         likeCnt: element.like_cnt,
+    //         commentCnt: element.comment_cnt,
+    //         name: element.name,
+    //         userImg: element.p_img,
+    //         deadLine: element.deadLine,
+    //         memberCount: element.member_count,
+    //         stadium: element.stadium,
+    //         views: element.views,
+    //       };
+    //       rows.push(row);
+    //     });
 
-        setRecruitData(rows);
-      }
-    });
+    //     setRecruitData(rows);
+    //   }
+    // });
   }, []);
   return (
     <Row>
@@ -255,10 +300,11 @@ const Home = () => {
           // pagination
           modules={[Navigation]}
           className="mySwiper"
+          ref={useRef}
         >
           {recruitData.map((item, idx) => {
             return (
-              <SwiperSlide key={idx}>
+              <SwiperSlide key={idx} onClick={handleDeleteOnClick}>
                 <RecruitTeamInfo item={item}></RecruitTeamInfo>
               </SwiperSlide>
             );

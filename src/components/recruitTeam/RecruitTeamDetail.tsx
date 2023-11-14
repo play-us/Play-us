@@ -1,44 +1,160 @@
-import { Button, Col, Row } from 'antd';
+import { Button, Col, Input, Popconfirm, Row } from 'antd';
 import { Typography } from 'antd';
 import Axios from 'axios';
 import { ArrowLeft, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ICommunityItem, ICommunityRowData } from './RecruitTeamList';
+import RecruitTeamAddMoadl from './RecruitTeamAddModal';
+import axios from 'axios';
 
-const urlGetCommentList = '/json/comment.json';
+// const urlGetCommentListt = '/json/comment.json';
 const urlGetRecruitTeamList = '/json/communityDetail.json';
+const uwrDeleteCommu = 'http://localhost:8080/community/deleteCommunity';
+const uwrDeleteComment =
+  'http://localhost:8080/community/deleteCommunityComment';
+
+const urlGetCommentList =
+  'http://localhost:8080/community/getCommunityCommentList';
+const urlPostComment = 'http://localhost:8080/community/updateCommunityComment';
 interface ICommentResponse {
   name: string;
   p_img: null;
-  comment_text: string;
-  comment_date: string;
+  commentTxt: string;
+  insertDatetime: any;
+  commentId: string;
+  commentSeq: string;
 }
 interface ICommentData {
   commentDate: string;
   commentText: string;
+  commentId: string;
+  commentSeq: string;
   name: string;
   pImg: null;
 }
 const { Title } = Typography;
+const confirmTitle = () => {
+  return '작성하신 글을 삭제 하시겠어요?';
+};
 
 // 댓글 리스트 컴포넌트
 const CommentData = (props: { data: ICommentData }) => {
   const { data } = props;
-  console.log(data, '데이터');
-  const { commentDate, name, commentText, pImg } = data;
+  // console.log(data, '데이터');
+  // 이름 추가
+  const { commentDate, name, commentText, pImg, commentId } = data;
+  const [defaultValue, setDefaultValue] = useState<string>('');
+  const [edit, setEdit] = useState<string>('');
+  const [editButton, setEditButton] = useState<boolean>(false);
+  useEffect(() => {
+    setDefaultValue(commentText);
+  }, []);
+
+  const handleEditOnchange = (e: any) => {
+    const { value } = e.target;
+    setEdit(value);
+  };
+
+  const handleUpdateCommunityOnClick = () => {
+    return;
+  };
+  //댓글수정
+  const handleCommentEditOnclick = (commentText: string, commentId: string) => {
+    const data = {
+      commuId: commentId,
+
+      commentTxt: edit,
+    };
+    console.log(data);
+
+    axios.post(urlPostComment, data).then((response) => {
+      console.log(response, '응답');
+      // 새로고침
+      setEditButton(false);
+      // if(response === '성공'){
+      // // '성공알럿'
+      //   onClose()
+      // }
+      // else{
+      //  //실패 앐럿
+      //  //창 유지
+      // }
+    });
+    return;
+  };
+
+  const handleEditOpenOnClick = () => {
+    setEditButton(true);
+  };
+
+  //댓글삭제
+  const handleDeleteOnClick = () => {
+    axios
+      .delete(uwrDeleteComment, {
+        params: {
+          // 여기에 쿼리 매개변수를 추가합니다.
+          commentId: commentId,
+          // ... 다른 쿼리 매개변수
+        },
+      })
+      .then((response) => {
+        // 성공적인 응답을 처리합니다.
+        console.log(response.data);
+      });
+  };
   return (
     <>
       <Col span={24} style={{ minHeight: '70px', paddingBottom: '18px' }}>
         <Row>
           <Col span={2}>{!pImg ? <User /> : pImg}</Col>
-          <Col span={22} className="commnent_info_title">
-            <CommentInfoName>{name}</CommentInfoName>
+          <Col span={18} className="commnent_info_title">
+            {/* <CommentInfoName>{name}</CommentInfoName> */}
+            <CommentInfoName>{'황창민'}</CommentInfoName>
             <CommentInfoDate>{commentDate}</CommentInfoDate>
+          </Col>
+          <Col span={3}>
+            <ButtonWrap onClick={handleEditOpenOnClick}>수정</ButtonWrap>
+            <Popconfirm
+              title={confirmTitle}
+              onConfirm={handleUpdateCommunityOnClick}
+              okText="네"
+              cancelText="아니오"
+            >
+              <ButtonWrap onClick={handleDeleteOnClick}>삭제</ButtonWrap>
+            </Popconfirm>
           </Col>
         </Row>
       </Col>
-      <Comment className="comment">{commentText}</Comment>
+      <Comment>
+        {editButton ? (
+          <Input
+            onChange={handleEditOnchange}
+            defaultValue={defaultValue}
+            value={edit}
+          ></Input>
+        ) : (
+          commentText
+        )}
+      </Comment>
+      <div>
+        {editButton ? (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'start',
+              paddingTop: '10px',
+            }}
+          >
+            <Button
+              onClick={() => handleCommentEditOnclick(commentText, commentId)}
+            >
+              수정
+            </Button>
+            <Button onClick={() => setEditButton(false)}> 취소</Button>
+          </div>
+        ) : null}
+      </div>
     </>
   );
 };
@@ -50,6 +166,31 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
   // const { likeCnt } = data;
   // const commentCnt = data.commentCnt;
   // const views = data.views;
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  const handleDeleteOnClick = () => {
+    return;
+  };
+  const handleModalOpenOnClick = () => {
+    setModalOpen(true);
+  };
+  const handleModalCloseOnClick = () => {
+    setModalOpen(false);
+  };
+  const handleDeleteCommu = () => {
+    axios
+      .delete(uwrDeleteCommu, {
+        params: {
+          // 여기에 쿼리 매개변수를 추가합니다.
+          commuId: '4',
+          // ... 다른 쿼리 매개변수
+        },
+      })
+      .then((response) => {
+        // 성공적인 응답을 처리합니다.
+        console.log(response.data);
+      });
+  };
   const {
     commuTitle,
     stadium,
@@ -62,69 +203,83 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
 
   return (
     <>
-      <>
-        <Col span={24} className="recruit_detail_title">
-          <Title>{commuTitle}</Title>
-        </Col>
-        <Col
-          span={24}
-          // style={{ display: 'flex', justifyContent: 'space-between' }}
-          style={{ borderBottom: '3px solid #f2f2f2' }}
-        >
-          <Row style={{ paddingBottom: '24px' }}>
-            <Col span={20} style={{ display: 'flex', alignItems: 'center' }}>
-              <ButtonWrap marginRight="10px" backgroundColor="EFEFEF">
-                {stadium}
-              </ButtonWrap>
-              <ButtonWrap color="rgb(62, 133, 244)" backgroundColor="EFEFEF">
-                {memberCount}명
-              </ButtonWrap>
-            </Col>
-            <Col span={4}>
-              <UserInfo>
-                {/* <Col> {itemData.userImg === null ? <User /> : itemData.userImg}</Col> */}
-                <Col>
-                  <User />
-                </Col>
-                {/* <Col>{commnnityName}</Col> */}
-                <Col className="recruit_detail_name"> {name}</Col>
-              </UserInfo>
-            </Col>
-          </Row>
-        </Col>
-        <Col span={24} style={{ marginTop: '60px', marginBottom: '10px' }}>
-          <Row>
-            <Col span={4} className="commnent_info_title">
-              마감일
-            </Col>
-            <Col span={8} className="comment_info_content">
-              {deadLine}
-            </Col>
-            <Col className="commnent_info_title" span={4}>
-              구장유형
-            </Col>
-            <Col span={8} className="comment_info_content">
-              {stadium}
-            </Col>
-          </Row>
-        </Col>
-        <Col span={24} style={{ marginBottom: '10px' }}>
-          <Row>
-            <Col span={4} className="commnent_info_title">
-              모집인원
-            </Col>
-            <Col span={8} className="comment_info_content">
-              {memberCount}
-            </Col>
-            <Col span={4} className="commnent_info_title">
-              참여인원
-            </Col>
-            <Col span={8} className="comment_info_content">
+      <Col span={24} className="recruit_detail_title">
+        <Title>{commuTitle}</Title>
+      </Col>
+      <Col
+        span={24}
+        // style={{ display: 'flex', justifyContent: 'space-between' }}
+        style={{ borderBottom: '3px solid #f2f2f2' }}
+      >
+        <Row style={{ paddingBottom: '12px' }}>
+          <Col span={20} style={{ display: 'flex', alignItems: 'center' }}>
+            <ButtonWrap marginRight="10px" backgroundColor="EFEFEF">
+              ⚽ {stadium}
+            </ButtonWrap>
+            <ButtonWrap color="rgb(62, 133, 244)" backgroundColor="EFEFEF">
               {memberCount}명
-            </Col>
-          </Row>
-        </Col>
-        <Col span={24}>
+            </ButtonWrap>
+          </Col>
+          <Col span={4}>
+            <UserInfo>
+              {/* <Col> {itemData.userImg === null ? <User /> : itemData.userImg}</Col> */}
+              <Col>
+                <User />
+              </Col>
+              {/* <Col>{commnnityName}</Col> */}
+              <Col className="recruit_detail_name"> {name}</Col>
+            </UserInfo>
+          </Col>
+        </Row>
+      </Col>
+      <Col span={24}>
+        <Row>
+          <DetailButtonWrap>
+            <ButtonWrap onClick={handleModalOpenOnClick}>수정</ButtonWrap>
+            <Popconfirm
+              title={confirmTitle}
+              onConfirm={handleDeleteCommu}
+              okText="네"
+              cancelText="아니오"
+            >
+              <ButtonWrap>삭제</ButtonWrap>
+            </Popconfirm>
+          </DetailButtonWrap>
+          <Col
+            style={{ marginBottom: '10px' }}
+            span={4}
+            className="commnent_info_title"
+          >
+            마감일
+          </Col>
+          <Col span={8} className="comment_info_content">
+            {deadLine}
+          </Col>
+          <Col className="commnent_info_title" span={4}>
+            구장유형
+          </Col>
+          <Col span={8} className="comment_info_content">
+            {stadium}
+          </Col>
+        </Row>
+      </Col>
+      <Col span={24}>
+        <Row>
+          <Col span={4} className="commnent_info_title">
+            모집인원
+          </Col>
+          <Col span={8} className="comment_info_content">
+            {memberCount}
+          </Col>
+          <Col span={4} className="commnent_info_title">
+            지역
+          </Col>
+          <Col span={8} className="comment_info_content">
+            {location}
+          </Col>
+        </Row>
+      </Col>
+      {/* <Col span={24}>
           <Row>
             <Col span={4} className="commnent_info_title">
               지역
@@ -133,11 +288,16 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
               {location}
             </Col>
           </Row>
-        </Col>
-        <Col span={24} style={{ marginTop: '60px', marginBottom: '60px' }}>
-          <Contents>{content}</Contents>
-        </Col>
-      </>
+        </Col> */}
+      <Col span={24} style={{ marginTop: '40px', marginBottom: '60px' }}>
+        <Contents>{content}</Contents>
+      </Col>
+      {modalOpen ? (
+        <RecruitTeamAddMoadl
+          open={modalOpen}
+          onClose={handleModalCloseOnClick}
+        ></RecruitTeamAddMoadl>
+      ) : null}
     </>
   );
 };
@@ -149,26 +309,60 @@ const RecruitTeamDetail = () => {
 
   //화면 랜더링시 api
   useEffect(() => {
-    const commentListApi = Axios.get<[]>(urlGetCommentList).then((response) => {
-      const data = response.data;
+    const commentListApiR = Axios.get<any>(urlGetCommentList).then(
+      (response) => {
+        const { result } = response.data;
+        console.log(result);
 
-      if (data.length > 0) {
+        // if (result.length < 0) {
+        console.log('hi');
+
         const rows: ICommentData[] = [];
-        data.forEach((element: ICommentResponse) => {
+        result.forEach((element: any) => {
+          console.log(element);
+
           const row = {
             // createdDate: element.created_date,
             // commuTitle: element.commu_title,
-            commentDate: element.comment_date,
-            commentText: element.comment_text,
+            commentId: element.commentId,
+            commentSeq: element.commentSeq,
+            commentText: element.commentTxt,
             name: element.name,
             pImg: element.p_img,
+            commentDate: element.insertDatetime,
           };
+          console.log(row);
+
           rows.push(row);
         });
 
         setCommentDataList(rows);
-      }
-    });
+        // }
+      },
+    );
+
+    // const commentListApi = Axios.get<[]>(urlGetCommentListt).then(
+    //   (response) => {
+    //     const data = response.data;
+
+    //     if (data.length > 0) {
+    //       const rows: ICommentData[] = [];
+    //       data.forEach((element: ICommentResponse) => {
+    //         const row = {
+    //           // createdDate: element.created_date,
+    //           // commuTitle: element.commu_title,
+    //           // commentDate: element.comment_date,
+    //           // commentText: element.comment_text,
+    //           // name: element.name,
+    //           // pImg: element.p_img,
+    //         };
+    //         rows.push(row);
+    //       });
+
+    //       setCommentDataList(rows);
+    //     }
+    //   },
+    // );
     const recruitDetail = Axios.get<ICommunityItem[]>(
       urlGetRecruitTeamList,
     ).then((response) => {
@@ -198,12 +392,39 @@ const RecruitTeamDetail = () => {
       }
     });
   }, []);
+  const handleCommentAddOnClick = () => {
+    // 등록 api
+    console.log('OkAdd:::');
+    const data = {
+      commuId: '1',
+
+      commentTxt: 'hello',
+
+      email: 'chu',
+    };
+    // console.log(param, ' params');
+
+    axios.post(urlPostComment, data).then((response) => {
+      console.log(response, '응답');
+
+      // if(response === '성공'){
+      // // '성공알럿'
+      //   onClose()
+      // }
+      // else{
+      //  //실패 앐럿
+      //  //창 유지
+      // }
+    });
+  };
 
   //팀원모집 상세 정보 데이터 주입
   const RecruitTeamInfo = rowDataList.map((data: ICommunityRowData) => (
     <RecruitInfoData data={data} />
   ));
   // 댓글 리스트 데이터 주입
+  console.log(commentDataList, 'list');
+
   const commentList = commentDataList.map((data: ICommentData) => (
     <CommentListWrap>
       <CommentData data={data} />
@@ -217,13 +438,6 @@ const RecruitTeamDetail = () => {
           <ArrowLeft />
         </Col>
         {/* 작성자일때 노출 */}
-        <Col
-          span={3}
-          style={{ display: 'flex', justifyContent: 'space-between' }}
-        >
-          <ButtonWrap>수정</ButtonWrap>
-          <ButtonWrap>삭제</ButtonWrap>
-        </Col>
       </Col>
       {RecruitTeamInfo}
       <CommentHeaderWrap>
@@ -242,7 +456,9 @@ const RecruitTeamDetail = () => {
       </Col>
 
       <Col span={24} style={{ textAlign: 'right' }}>
-        <CommentAddButton>댓글등록</CommentAddButton>
+        <CommentAddButton onClick={handleCommentAddOnClick}>
+          댓글등록
+        </CommentAddButton>
       </Col>
       {/* {comment.length >0} */}
       {commentList}
@@ -269,7 +485,8 @@ const Contents = styled.pre`
 `;
 const Comment = styled.pre`
   color: #333;
-  font-size: 1.125rem;
+  font-weight: 400;
+  font-size: 16px;
   line-height: 1.7;
   letter-spacing: -0.004em;
   white-space: pre-line;
@@ -310,7 +527,9 @@ const ButtonWrap = styled.button<ButtonProps>`
     props.backgroundColor ? props.backgroundColor : 'transparent'};
   max-height: 24px;
   color: ${(props) =>
-    props.color || '#717171'}; /* marginRight 프롭 값 또는 기본값 0 */
+    props.color || '#444'}; /* marginRight 프롭 값 또는 기본값 0 */
+  font-size: 15px;
+  font-weight: 600;
 `;
 
 const CommentHeaderWrap = styled.div`
@@ -354,4 +573,12 @@ const CommentInput = styled.textarea`
   min-height: 70px;
   margin-bottom: 10px;
   resize: none;
+`;
+const DetailButtonWrap = styled.div`
+  width: 100%;
+  margin-top: 15px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 16px;
 `;
