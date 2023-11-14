@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { IFieldItem } from '../utils/FieldType';
 
 // 구장목록 전체조회
 export const getFieldList = (
@@ -25,12 +26,13 @@ export const getFieldList = (
 };
 
 // 구장 단건 조회(성새패아자)
-export const getFieldDetail = (fieldId: string) => {
-  return new Promise((resolve, reject) => {
+export const getFieldDetail = (fieldId: string, email?: string) => {
+  return new Promise<IFieldItem[]>((resolve, reject) => {
     axios
       .get(`${process.env.REACT_APP_SERVER_IP}/field/getFieldDetail`, {
         params: {
           fieldId: fieldId,
+          email: email,
         },
       })
       .then((e: any) => {
@@ -46,7 +48,7 @@ export const getFieldDetail = (fieldId: string) => {
 export const postFieldLike = (
   fieldId: string,
   email: string,
-  state: string,
+  state: boolean,
 ) => {
   return new Promise((resolve, reject) => {
     axios

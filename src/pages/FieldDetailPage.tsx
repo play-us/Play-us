@@ -31,10 +31,11 @@ const FieldDetailPage = () => {
   const fieldId = searchParams.get('id');
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [data, setData] = useState<IFieldItem>();
-  const [liked, setLiked] = useState<string>('0');
+  const [data, setData] = useState<IFieldItem | null | undefined>();
+  const [liked, setLiked] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const email = 'chu';
 
   /* 데이터 조회 */
   useEffect(() => {
@@ -44,11 +45,11 @@ const FieldDetailPage = () => {
 
   /* 전체로 조회 */
   const getDataAll = async () => {
+    setIsLoading(true);
     if (fieldId !== null) {
-      const d: any = await getFieldDetail(fieldId);
+      const d: any = await getFieldDetail(fieldId, email);
       setData(d.data.result[0]);
-      setLiked(d.data.result[0].likeYb);
-
+      setLiked(d.data.result[0].likeYn);
       setIsLoading(false);
     }
   };
@@ -56,10 +57,8 @@ const FieldDetailPage = () => {
   /* 좋아요 기능 */
   const putLiked = async () => {
     if (fieldId !== null) {
-      let newLikeState: string = liked === '0' ? '1' : '0';
-      await postFieldLike(fieldId, 'chu', newLikeState);
-
-      setLiked(newLikeState);
+      await postFieldLike(fieldId, email, !liked);
+      setLiked(!liked);
     }
   };
 
@@ -89,25 +88,25 @@ const FieldDetailPage = () => {
 
   return (
     <Wrap>
-      {!isLoading && (
+      {!isLoading && data !== null && data !== undefined ? (
         <>
           <BackgroundImg>
             <ActionWrap>
               <WishBtn onClick={() => putLiked()}>
-                <Heart color={data?.likeYn === '1' ? RedColor : '#696969'} />
+                <Heart color={liked ? RedColor : '#696969'} />
               </WishBtn>
             </ActionWrap>
           </BackgroundImg>
           <SectionWrap>
             <Interest>
               <MessageSquare />
-              {data?.reviewCnt}
+              {data.reviewCnt}
               <Heart />
-              {data?.likeCnt}
+              {data.likeCnt}
             </Interest>
-            <Title level={2}>{data?.fieldNm}</Title>
+            <Title level={2}>{data.fieldNm}</Title>
             <FlexWrap type="secondary">
-              {data?.addr}
+              {data.addr}
               <Button
                 type="link"
                 onClick={() => handleCopyclipBoard('주소를 복사했습니다')}
@@ -118,8 +117,8 @@ const FieldDetailPage = () => {
             <Contour />
             <FlexWrap>
               <div>
-                <Price>{data?.price}원</Price>
-                <Hours>/ {data?.hours}시간</Hours>
+                <Price>{data.price}원</Price>
+                <Hours>/ {data.hours}시간</Hours>
               </div>
               <Button type="primary" size="large" onClick={showModal}>
                 예약신청
@@ -149,13 +148,13 @@ const FieldDetailPage = () => {
               </FieldInfo>
               <Contour />
               <Title level={5}>구장 특이사항</Title>
-              <Contents>{data?.note}</Contents>
+              <Contents>{data.note}</Contents>
             </SectionHeader>
           </SectionWrap>
           <SectionWrap>
             <SectionHeader>
               <Title level={4}>지도</Title>
-              {/* <KakaoMap mapX={data?.lat} mapY={data?.lng} /> */}
+              <KakaoMap mapX={Number(data.lat)} mapY={Number(data.lng)} />
             </SectionHeader>
           </SectionWrap>
           <SectionWrap>
@@ -198,6 +197,8 @@ const FieldDetailPage = () => {
             confirmLoading={confirmLoading}
           />
         </>
+      ) : (
+        <div>데이터를 조회중입니다.</div>
       )}
     </Wrap>
   );
