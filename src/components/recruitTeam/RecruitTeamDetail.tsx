@@ -195,7 +195,6 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
 
   const queryParams = new URLSearchParams(location.search);
   const param1Value = queryParams.get('commId');
-  const [detailData, setDetailData] = useState<any>();
   // const createdDate = `${data.createdDate}`;
   // const stadiumValue = `${data.stadium} | ${data.memberCount}명 | ~${data.deadLine}`;
   // const { likeCnt } = data;
@@ -321,6 +320,8 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
         <RecruitTeamAddMoadl
           open={modalOpen}
           onClose={handleModalCloseOnClick}
+          commuid={String(param1Value)}
+          edit={1}
         ></RecruitTeamAddMoadl>
       ) : null}
     </>
@@ -331,12 +332,12 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
 const RecruitTeamDetail = () => {
   const [rowDataList, setRowDataList] = useState<ICommunityRowData[]>([]);
   const [commentDataList, setCommentDataList] = useState<any>([]);
+  const [commentValue, setCommentValue] = useState<string>('');
   const location = useLocation();
-
+  const queryParams = new URLSearchParams(location.search);
+  const param1Value = queryParams.get('commId');
   //화면 랜더링시 api
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const param1Value = queryParams.get('commId');
     console.log(param1Value);
 
     // 댓글 조회 정보
@@ -345,6 +346,8 @@ const RecruitTeamDetail = () => {
         commuId: param1Value,
       },
     }).then((response) => {
+      console.log(response, 'wow');
+
       const { result } = response.data;
       console.log(result, 'rest');
 
@@ -373,19 +376,19 @@ const RecruitTeamDetail = () => {
       setCommentDataList(rows);
       // }
     });
-    axios
-      .get(urlGetCommuDetail, {
-        params: {
-          commuId: param1Value,
-        },
-      })
-      .then(function (response) {
-        console.log(response, '디테일');
-        const list = response.data.result['communityDetail'][0];
-        console.log(list);
+    // axios
+    //   .get(urlGetCommuDetail, {
+    //     params: {
+    //       commuId: param1Value,
+    //     },
+    //   })
+    //   .then(function (response) {
+    //     console.log(response, '디테일');
+    //     const list = response.data.result['communityDetail'][0];
+    //     console.log(list);
 
-        // re
-      });
+    //     // re
+    //   });
     // 커뮤니티 상세정보
     const recruitDetail = axios
       .get(urlGetCommuDetail, {
@@ -433,13 +436,13 @@ const RecruitTeamDetail = () => {
     // 등록 api
     console.log('OkAdd:::');
     const data = {
-      commuId: '10',
+      commuId: param1Value,
 
-      commentTxt: 'hello',
+      commentTxt: commentValue,
 
       email: 'chu',
     };
-    // console.log(param, ' params');
+    console.log(data, ' params');
 
     axios.post(urlAddComment, data).then((response) => {
       console.log(response, '응답');
@@ -454,7 +457,10 @@ const RecruitTeamDetail = () => {
       // }
     });
   };
-
+  const handleCommentOnchange = (e: any) => {
+    const { value } = e.target;
+    setCommentValue(value);
+  };
   //팀원모집 상세 정보 데이터 주입
   const RecruitTeamInfo = rowDataList.map((data: ICommunityRowData) => (
     <RecruitInfoData data={data} />
@@ -487,7 +493,11 @@ const RecruitTeamDetail = () => {
             <User />
           </Col>
           <Col span={22}>
-            <CommentInput placeholder="댓글을 입력하세요"></CommentInput>
+            <CommentInput
+              value={commentValue}
+              onChange={handleCommentOnchange}
+              placeholder="댓글을 입력하세요"
+            ></CommentInput>
           </Col>
         </Row>
       </Col>

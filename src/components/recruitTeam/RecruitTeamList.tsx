@@ -220,6 +220,7 @@ const RecruitTeamList = () => {
         <RecruitTeamAddMoadl
           open={modalOpen}
           onClose={handleModalCloseOnClick}
+          edit={0}
         />
       ) : null}
     </Row>

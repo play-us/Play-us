@@ -1,21 +1,30 @@
 import { Col, Input, Modal, Row, Select, DatePicker, Typography } from 'antd';
 import styled from 'styled-components';
 import TextArea from 'antd/es/input/TextArea';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import ConvertDate from '../common/date/dateFormat';
+import moment from 'moment';
+import dayjs from 'dayjs';
 const { Title } = Typography;
 
 const { Option } = Select;
 // const url = '';
 const urlAddCommun = 'http://localhost:8080/community/insertCommunity';
+const urlGetCommuDetail = 'http://localhost:8080/community/getCommunityDetail';
 // /community/insertCommunity
-const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
-  const { open, onClose } = props;
+const RecruitTeamAddMoadl = (props: {
+  open: boolean;
+  onClose: Function;
+  commuid?: string;
+  edit: number;
+}) => {
+  const { open, onClose, commuid, edit } = props;
 
   const navigate = useNavigate();
   const [recruitCountType, setRecruitCountType] = useState<number>(0);
-  const [groundType, setGroundType] = useState<string>('전체');
+  const [groundType, setGroundType] = useState<any>('전체');
   const [areaType, setAreaType] = useState<string>('전체');
   const [recruitTitle, setRecruitTitle] = useState<string>('');
   const [recruitText, setRecruitText] = useState<string>('');
@@ -57,7 +66,8 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
         // '성공알럿'
 
         onClose();
-        NavigateCommunityList();
+        // NavigateCommunityList();
+        navigate(`/recruitTeamDetail?commId=${commuid}`);
       } else {
         //실패 앐럿
         //창 유지
@@ -92,7 +102,29 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
     const { value } = e.target;
     setRecruitText(value);
   };
-
+  useEffect(() => {
+    if (edit === 1) {
+      axios
+        .get(urlGetCommuDetail, {
+          params: {
+            commuId: commuid,
+          },
+        })
+        .then((response) => {
+          console.log(response, '디테일');
+          const list = response.data.result['communityDetail'][0];
+          console.log(list.memberCnt);
+          var field_type = 'soccer field';
+          const value =
+            list.fieldTp === '축구장' ? 2 : field_type === '농구장' ? 3 : 1;
+          setRecruitTitle(list.commuTitle);
+          setRecruitText(list.commuTxt);
+          setGroundType(value);
+          setRecruitCountType(list.memberCnt);
+          setEndDate(moment(list.deadLine).format('YYYY-MM-DD'));
+        });
+    }
+  }, []);
   const ModalContent = () => {
     return (
       <>
@@ -130,7 +162,7 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
               <Row align="middle" style={{ height: '100%' }}>
                 <Select
                   placeholder={'인원을 선택하세욤'}
-                  // value={recruitCountType}
+                  value={recruitCountType}
                   onChange={handleSelectMenberChange}
                   style={{ width: '100%' }}
                 >
@@ -178,9 +210,9 @@ const RecruitTeamAddMoadl = (props: { open: boolean; onClose: Function }) => {
             </ColumnName>
             <Col span={24}>
               <DatePicker
+                format={'YYYY-MM-DD'}
                 style={{ width: '100%' }}
-                // defaultValue={moment()}
-                // value={}
+                value={dayjs(endDate)}
                 onChange={handleProcessRangeDate}
                 // format={enDateFormatType.Picker}
               />

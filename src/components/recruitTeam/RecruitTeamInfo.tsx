@@ -104,7 +104,7 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
   // console.log(props, 'realProps');
 
   return (
-    <Wrap onClick={() => navigate(`/recruitTeamDetail?commId=${commuId}`)}>
+    <Wrap>
       <Inwrap>
         <InfoHeaderWrap>
           <InfoHeader>
@@ -141,32 +141,34 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
             <LikeButton />
           </div>
         </InfoHeaderWrap>
-        <InfoDeadLine>마감일 | {deadLine}</InfoDeadLine>
-        <InfoTitle>{commuTitle}</InfoTitle>
-        <InfoFooterWrap>
-          <div>
-            <InfoUser>
-              {/* <Col> {itemData.userImg === null ? <User /> : itemData.userImg}</Col> */}
-              <ThumbImg
-                src="https://lh3.googleusercontent.com/-LNDcyoUZV3U/AAAAAAAAAAI/AAAAAAAAAAA/AML38-szSEwtVxDGrb8lU9truJxdb9pwWQ/photo.jpg?sz=46"
-                alt="프로필이미지"
-              />
-              {/* tjddn */}
-              {/* <Col>{commnnityName}</Col> */}
-              <Col className="recruit_detail_name"> {name}</Col>
-            </InfoUser>
-          </div>
-          <LikeCommentWrap>
-            <LikeComment>
-              <Hand color="#9C9C9C" />
-              {likeCnt}
-            </LikeComment>
-            <LikeComment>
-              <MessageSquare color="#9C9C9C" />
-              {commentCnt}
-            </LikeComment>
-          </LikeCommentWrap>
-        </InfoFooterWrap>
+        <div onClick={() => navigate(`/recruitTeamDetail?commId=${commuId}`)}>
+          <InfoDeadLine>마감일 | {deadLine}</InfoDeadLine>
+          <InfoTitle>{commuTitle}</InfoTitle>
+          <InfoFooterWrap>
+            <div>
+              <InfoUser>
+                {/* <Col> {itemData.userImg === null ? <User /> : itemData.userImg}</Col> */}
+                <ThumbImg
+                  src="https://lh3.googleusercontent.com/-LNDcyoUZV3U/AAAAAAAAAAI/AAAAAAAAAAA/AML38-szSEwtVxDGrb8lU9truJxdb9pwWQ/photo.jpg?sz=46"
+                  alt="프로필이미지"
+                />
+                {/* tjddn */}
+                {/* <Col>{commnnityName}</Col> */}
+                <Col className="recruit_detail_name"> {name}</Col>
+              </InfoUser>
+            </div>
+            <LikeCommentWrap>
+              <LikeComment>
+                <Hand color="#9C9C9C" />
+                {likeCnt}
+              </LikeComment>
+              <LikeComment>
+                <MessageSquare color="#9C9C9C" />
+                {commentCnt}
+              </LikeComment>
+            </LikeCommentWrap>
+          </InfoFooterWrap>
+        </div>
       </Inwrap>
       <div style={{ color: 'white' }}>{1}</div>
     </Wrap>
@@ -177,6 +179,7 @@ export default RecruitTeamInfo;
 
 const Wrap = styled.div`
   over-flow: hidden;
+  cursor: pointer;
 `;
 
 const Inwrap = styled.div`
@@ -266,6 +269,7 @@ const InfoFooterWrap = styled.div`
   align-items: center;
   border-top: 1px solid rgba(23, 23, 23, 0.08);
   padding-top: 16px;
+  cursor: pointer;
 `;
 const InfoDeadLine = styled.div`
   text-align: left;

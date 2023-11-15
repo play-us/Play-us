@@ -91,20 +91,20 @@ const Home = () => {
     },
   ];
   //삭제
-  const handleDeleteOnClick = async () => {
-    // console.log('hi');
+  // const handleDeleteOnClick = async () => {
+  //   // console.log('hi');
 
-    const ret = ref.current?.textContent;
-    console.log(ret);
+  //   const ret = ref.current?.textContent;
+  //   console.log(ret);
 
-    if (ret === undefined) return;
-    let successCnt = 0,
-      failCnt = 0;
-    for await (const item of ret) {
-      const params = {};
-      console.log(ret);
-    }
-  };
+  //   if (ret === undefined) return;
+  //   let successCnt = 0,
+  //     failCnt = 0;
+  //   for await (const item of ret) {
+  //     const params = {};
+  //     console.log(ret);
+  //   }
+  // };
   /* 데이터 조회 */
   useEffect(() => {
     setIsLoading(true);
@@ -179,38 +179,44 @@ const Home = () => {
     //상세 정보
 
     // 메인 페이지 커뮤니티 데이터 init
-    axios.get(urlGetMainDataList).then((response) => {
-      // console.log(response);
+    axios
+      .get(urlGetMainDataList, {
+        params: {
+          email: 'chu',
+        },
+      })
+      .then((response) => {
+        // console.log(response);
 
-      const data = response.data.result['commuList'];
-      // console.log(data, ' data!!!');
+        const data = response.data.result['commuList'];
+        // console.log(data, ' data!!!');
 
-      // if (data.length > 0) {
-      const rows: any[] = [];
-      data.forEach((element: ICommuDetailProps) => {
-        console.log(element, 'dd');
+        // if (data.length > 0) {
+        const rows: any[] = [];
+        data.forEach((element: ICommuDetailProps) => {
+          console.log(element, 'dd');
 
-        const row = {
-          deadline: ConvertDate(element.insertDatetime),
-          commuTitle: element.commuTitle,
-          likeCnt: element.wishCnt,
-          commentCnt: element.commentCnt,
-          name: '황창민',
-          userImg: null, //이미지 추후작업
-          deadLine: ConvertDate(element.deadLine),
-          memberCount: element.memberCnt,
-          stadium: element.fieldTp,
-          wishCnt: element.wishCnt,
-          commuId: element.commuId,
-          wishYn: element.wishYn,
-        };
-        rows.push(row);
+          const row = {
+            deadline: ConvertDate(element.insertDatetime),
+            commuTitle: element.commuTitle,
+            likeCnt: element.wishCnt,
+            commentCnt: element.commentCnt,
+            name: '황창민',
+            userImg: null, //이미지 추후작업
+            deadLine: ConvertDate(element.deadLine),
+            memberCount: element.memberCnt,
+            stadium: element.fieldTp,
+            wishCnt: element.wishCnt,
+            commuId: element.commuId,
+            wishYn: element.wishYn,
+          };
+          rows.push(row);
+        });
+
+        setRecruitData(rows);
+        console.log(recruitData, 'initdata');
+        // }
       });
-
-      setRecruitData(rows);
-      console.log(recruitData, 'initdata');
-      // }
-    });
 
     // 기존 목데이터 연결
     // Axios.get<ICommunityItem[]>(urlGetRecruitTeamList).then((response) => {
@@ -300,7 +306,7 @@ const Home = () => {
         >
           {recruitData.map((item, idx) => {
             return (
-              <SwiperSlide key={idx} onClick={handleDeleteOnClick}>
+              <SwiperSlide key={idx}>
                 <RecruitTeamInfo item={item}></RecruitTeamInfo>
               </SwiperSlide>
             );
