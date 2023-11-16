@@ -55,6 +55,7 @@ interface IDetailRowData {
   updateDatetime?: '2023-11-13T16:50:38.000Z';
   wishCnt: number;
   wishYn?: string;
+  name?: string;
 }
 const { Title } = Typography;
 const confirmTitle = () => {
@@ -411,7 +412,7 @@ const RecruitTeamDetail = () => {
               likeCnt: element.wishCnt,
               // commentCnt: element.comment_cnt ? 0 : element.comment_cnt,
               // views: element.views,
-              name: '황창민',
+              name: element.name,
               // userImg: element.p_img,
               deadLine: ConvertDate(element.deadLine),
               memberCount: element.memberCnt,
