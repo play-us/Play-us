@@ -124,10 +124,11 @@ const RecruitTeamList = () => {
           deadLine: ConvertDate8(element.deadLine),
           memberCount: element.memberCnt,
           stadium: element.fieldTp,
+          commuId: element.commuId,
+          wishYn: element.wishYn,
         };
         rows.push(row);
       });
-
       setRowDataList(rows);
       console.log(rowDataList, 'initdata');
       // }
