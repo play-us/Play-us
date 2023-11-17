@@ -38,7 +38,8 @@ export interface IRowData {
 }
 
 export interface IFieldTypeData {
-  area: string;
-  fieldTp: string;
-  searchTxt: string;
+  area1: string | null;
+  area2: string | null;
+  fieldTp: string | null;
+  searchTxt: string | null;
 }

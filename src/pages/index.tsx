@@ -1,7 +1,6 @@
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
-import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
@@ -13,25 +12,20 @@ import RecruitTeamInfo from '../components/recruitTeam/RecruitTeamInfo';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { getMainData } from '../service/Common';
 import { IFieldType, IAddrType } from '../utils/Common';
-import { IFieldItem, IRowData, IFieldTypeData } from '../utils/FieldType';
-import {
-  ICommunityItem,
-  ICommunityRowData,
-} from '../components/recruitTeam/RecruitTeamList';
-
-// const urlGetRecruitTeamList = '/json/community.json';
-// const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
+import { IRowData, IFieldTypeData } from '../utils/FieldType';
+import { ICommunityRowData } from '../components/recruitTeam/RecruitTeamList';
 
 const Home = () => {
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm<IFieldTypeData>();
-  const [sort, setSort] = useState<string>('1'); // 0: 최신 등록순, 1 :예약많은 순
+  const [sort, setSort] = useState<string>('0'); // 0: 최신 등록순, 1 :예약많은 순
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fieldDataList, setFieldDataList] = useState<IRowData[]>([]);
   const [recruitData, setRecruitData] = useState<ICommunityRowData[]>([]);
   const [fieldType, setFieldType] = useState<IFieldType[]>([]);
-  const [city, setCity] = useState<IAddrType[]>([]);
-  const [area, setArea] = useState<IAddrType[]>([]);
+  const [city, setCity] = useState<IAddrType[]>([]); // 공통 시도 리스트
+  const [area, setArea] = useState<IAddrType[]>([]); // 공통 시군구 리스트
+  const [nowArea, setNowArea] = useState<IAddrType[]>([]); // 선택한 시도에 해당하는 시군구 리스트
   const [sido, setSido] = useState<string>('');
   /* 탭메뉴 리스트 */
   const tabList = [
@@ -45,16 +39,14 @@ const Home = () => {
     },
   ];
 
-  /* 데이터 조회 */
   useEffect(() => {
     setIsLoading(true);
-    // 목데이터 연결
-    if (sort === '0') getDataSortCreateDate();
-    if (sort === '1') getDataAll(sort);
+    getDataAll(sort);
   }, [sort]);
 
+  /* 데이터 조회 */
   async function getDataAll(sort: string) {
-    const res: any = await getMainData(null, null, null, sort, 1, 20);
+    const res: any = await getMainData(null, null, null, null, sort, 1, 20);
 
     setFieldType(res.data.result.fieldTpList); // 구장 유형 리스트
     setFieldDataList(res.data.result.fieldList); // 구장리스트
@@ -63,192 +55,197 @@ const Home = () => {
     setArea(res.data.result.areaList); // 시군구 리스트
     setIsLoading(false);
   }
-  /* 신규등록순 조회 */
-  const getDataSortCreateDate = () => {
-    Axios.get<IFieldItem[]>('/json/field.json').then((response) => {
-      const data = response.data;
 
-      const orderedData = data.sort(
-        (a: IFieldItem, b: IFieldItem): number =>
-          +new Date(b.insertDatetime) - +new Date(a.insertDatetime),
-      );
-
-      if (orderedData.length > 0) {
-        const rows: IRowData[] = [];
-        orderedData.slice(0, 6).forEach((d: IFieldItem) => {
-          const row = {
-            fieldId: d.fieldId,
-            fieldNm: d.fieldNm,
-            area: d.area,
-            addr: d.addr,
-            price: d.price,
-            hours: d.hours,
-            reviewCnt: d.reviewCnt,
-            likeCnt: d.likeCnt,
-            imgUrl: d.imgUrl,
-          };
-          rows.push(row);
-        });
-
-        //setRowDataList(rows);
-        setIsLoading(false);
-      }
-    });
-  };
+  /* 시도 선택 시 시군구 리스트 업데이트 */
   useEffect(() => {
-    setIsLoading(true);
-    getDataAll(sort);
-  }, []);
-
-  useEffect(() => {
-    console.log('sido', sido);
-  }, [sido]);
+    const newAreaList = area.filter((a) => a.rel01Data === sido);
+    setNowArea(newAreaList);
+  }, [area, sido]);
 
   /* 검색 */
-  const onSubmit: SubmitHandler<IFieldTypeData> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<IFieldTypeData> = async (data) => {
+    setIsLoading(true);
+    if (data.area1 === '시도 전체') {
+      data.area1 = null;
+    }
+    if (data.area2 === '시군구 전체') {
+      data.area2 = null;
+    }
+    if (data.fieldTp === '구장유형 전체') {
+      data.fieldTp = null;
+    }
+    if (data.searchTxt === '') {
+      data.searchTxt = null;
+    }
+    const res: any = await getMainData(
+      data.area1,
+      data.area2,
+      data.fieldTp,
+      data.searchTxt,
+      sort,
+      1,
+      20,
+    );
+
+    setFieldDataList(res.data.result.fieldList); // 구장리스트
+    setIsLoading(false);
+  };
 
   return (
-    <Row>
-      <Col span={24} style={{ marginBottom: '20px' }}>
-        <TabMenu>
-          {tabList.map((item) => (
-            <Tab
-              key={item.id}
-              active={sort === item.id}
-              onClick={() => setSort(item.id)}
-            >
-              {item.name}
-            </Tab>
-          ))}
-        </TabMenu>
-        <SearchForm onSubmit={handleSubmit(onSubmit)}>
-          <SelectBox>
-            <Select onChange={(e) => setSido(e.target.value)}>
-              <option selected>시도 전체</option>
-              {city.map((c) => (
-                <option value={c.syscdCd} key={c.syscdCd}>
-                  {c.syscdNm}
-                </option>
+    <div>
+      {isLoading ? (
+        <div>데이터를 조회중입니다..</div>
+      ) : (
+        <Row>
+          <Col span={24} style={{ marginBottom: '20px' }}>
+            <TabMenu>
+              {tabList.map((item) => (
+                <Tab
+                  key={item.id}
+                  active={sort === item.id}
+                  onClick={() => setSort(item.id)}
+                >
+                  {item.name}
+                </Tab>
               ))}
-            </Select>
-            <Dropdown>
-              <svg
-                height="20"
-                width="20"
-                viewBox="0 0 20 20"
-                aria-hidden="true"
-                focusable="false"
-                className="css-8mmkcg"
-              >
-                <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
-              </svg>
-            </Dropdown>
-          </SelectBox>
-          <SelectBox>
-            <Select {...register('area', { required: true })}>
-              <option selected>시군구 전체</option>
-              {area.filter((a) => a.rel01Data === sido) &&
-                area.map((a) => (
-                  <option value={a.syscdCd} key={a.syscdCd}>
-                    {a.syscdNm}
-                  </option>
+            </TabMenu>
+            <SearchForm onSubmit={handleSubmit(onSubmit)}>
+              <SelectBox>
+                <Select
+                  {...register('area1', { required: true })}
+                  onChange={(e) => setSido(e.target.value)}
+                >
+                  <option selected>시도 전체</option>
+                  {city.map((c) => (
+                    <option value={c.syscdCd} key={c.syscdCd}>
+                      {c.syscdNm}
+                    </option>
+                  ))}
+                </Select>
+                <Dropdown>
+                  <svg
+                    height="20"
+                    width="20"
+                    viewBox="0 0 20 20"
+                    aria-hidden="true"
+                    focusable="false"
+                    className="css-8mmkcg"
+                  >
+                    <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
+                  </svg>
+                </Dropdown>
+              </SelectBox>
+              <SelectBox>
+                <Select {...register('area2', { required: true })}>
+                  <option selected>시군구 전체</option>
+                  {nowArea.map((a) => (
+                    <option value={a.syscdCd} key={a.syscdCd}>
+                      {a.syscdNm}
+                    </option>
+                  ))}
+                </Select>
+                <Dropdown>
+                  <svg
+                    height="20"
+                    width="20"
+                    viewBox="0 0 20 20"
+                    aria-hidden="true"
+                    focusable="false"
+                    className="css-8mmkcg"
+                  >
+                    <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
+                  </svg>
+                </Dropdown>
+              </SelectBox>
+              <SelectBox>
+                <Select {...register('fieldTp', { required: true })}>
+                  <option selected>구장유형 전체</option>
+                  {fieldType.map((t) => (
+                    <option value={t.syscdCd} key={t.syscdCd}>
+                      {t.syscdNm}
+                    </option>
+                  ))}
+                </Select>
+                <Dropdown>
+                  <svg
+                    height="20"
+                    width="20"
+                    viewBox="0 0 20 20"
+                    aria-hidden="true"
+                    focusable="false"
+                    className="css-8mmkcg"
+                  >
+                    <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
+                  </svg>
+                </Dropdown>
+              </SelectBox>
+              <TextInput
+                type="text"
+                {...register('searchTxt')}
+                placeholder="구장이름으로 찾기"
+              />
+              <SubmitButton type="submit" value="검색" />
+            </SearchForm>
+            <FieldItemWrap>
+              {!isLoading &&
+                fieldDataList.map((data: IRowData) => (
+                  <FieldListItem data={data} key={data.fieldId} />
                 ))}
-            </Select>
-            <Dropdown>
-              <svg
-                height="20"
-                width="20"
-                viewBox="0 0 20 20"
-                aria-hidden="true"
-                focusable="false"
-                className="css-8mmkcg"
+            </FieldItemWrap>
+            <FieldItemMoreBtn onClick={() => navigate('/fieldList')}>
+              더보기
+            </FieldItemMoreBtn>
+          </Col>
+          <Col span={24}>
+            <RecruitSlideWrap>
+              <RecruitSlideHeader
+                font={true}
+                cursor={false}
+                marginRight={false}
               >
-                <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
-              </svg>
-            </Dropdown>
-          </SelectBox>
-          <SelectBox>
-            <Select {...register('fieldTp', { required: true })}>
-              <option selected>구장유형 전체</option>
-              <option value="apple">apple</option>
-              <option value="orange">orange</option>
-              <option value="grape">grape</option>
-              <option value="melon">melon</option>
-            </Select>
-            <Dropdown>
-              <svg
-                height="20"
-                width="20"
-                viewBox="0 0 20 20"
-                aria-hidden="true"
-                focusable="false"
-                className="css-8mmkcg"
+                플레이어구해요
+              </RecruitSlideHeader>
+              <MoreRecruitButton
+                marginRight={true}
+                font={false}
+                cursor={true}
+                onClick={() => navigate('/community')}
               >
-                <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
-              </svg>
-            </Dropdown>
-          </SelectBox>
-          <TextInput
-            type="text"
-            {...register('searchTxt')}
-            placeholder="구장이름으로 찾기"
-          />
-          <SubmitButton type="submit" value="검색" />
-        </SearchForm>
-        <FieldItemWrap>
-          {!isLoading &&
-            fieldDataList.map((data: IRowData) => (
-              <FieldListItem data={data} key={data.fieldId} />
-            ))}
-        </FieldItemWrap>
-        <FieldItemMoreBtn onClick={() => navigate('/fieldList')}>
-          더보기
-        </FieldItemMoreBtn>
-      </Col>
-      <Col span={24}>
-        <RecruitSlideWrap>
-          <RecruitSlideHeader font={true} cursor={false} marginRight={false}>
-            플레이어구해요
-          </RecruitSlideHeader>
-          <MoreRecruitButton
-            marginRight={true}
-            font={false}
-            cursor={true}
-            onClick={() => navigate('/community')}
-          >
-            더 많은 플랜보기 <MoveRight />
-          </MoreRecruitButton>
-        </RecruitSlideWrap>
-      </Col>
-      {/* <StyledThreeBoxesGrid>
+                더 많은 플랜보기 <MoveRight />
+              </MoreRecruitButton>
+            </RecruitSlideWrap>
+          </Col>
+          {/* <StyledThreeBoxesGrid>
         {/* <RecruitTeamInfo item={recruitData} /> */}
-      {/* {recruitData.map((item, index) => ( */}
-      {/* <RecruitTeamInfo item={item} key={index}></RecruitTeamInfo> */}
-      {/* ))} */}
-      {/* </StyledThreeBoxesGrid> */}
-      <Col span={24} style={{ marginBottom: '20px' }}>
-        <Swiper
-          slidesPerView={3}
-          spaceBetween={20}
-          loop={true}
-          pagination={{
-            clickable: true,
-          }}
-          navigation={true}
-          // pagination
-          modules={[Navigation]}
-          className="mySwiper"
-        >
-          {recruitData.map((item, idx) => {
-            return (
-              <SwiperSlide key={idx}>
-                <RecruitTeamInfo item={item}></RecruitTeamInfo>
-              </SwiperSlide>
-            );
-          })}
-        </Swiper>
-      </Col>
-    </Row>
+          {/* {recruitData.map((item, index) => ( */}
+          {/* <RecruitTeamInfo item={item} key={index}></RecruitTeamInfo> */}
+          {/* ))} */}
+          {/* </StyledThreeBoxesGrid> */}
+          <Col span={24} style={{ marginBottom: '20px' }}>
+            <Swiper
+              slidesPerView={3}
+              spaceBetween={20}
+              loop={true}
+              pagination={{
+                clickable: true,
+              }}
+              navigation={true}
+              // pagination
+              modules={[Navigation]}
+              className="mySwiper"
+            >
+              {recruitData.map((item, idx) => {
+                return (
+                  <SwiperSlide key={idx}>
+                    <RecruitTeamInfo item={item}></RecruitTeamInfo>
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          </Col>
+        </Row>
+      )}
+    </div>
   );
 };
 

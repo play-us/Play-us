@@ -102,3 +102,53 @@ export const getReservation = (email: string, resvId: string) => {
       });
   });
 };
+
+// 구장 예약 불가능 일자 조회
+export const getReservationImpossibleDate = (
+  fieldId: string,
+  resvYm: string,
+) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(
+        `${process.env.REACT_APP_SERVER_IP}/field/getReservationImpossibleDate`,
+        {
+          params: {
+            fieldId: fieldId,
+            resvYm: resvYm,
+          },
+        },
+      )
+      .then((e: any) => {
+        resolve(e);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
+// 구장 예약 가능 시간 조회
+export const getReservationPossibleTime = (
+  fieldId: string,
+  resvDate: string,
+) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(
+        `${process.env.REACT_APP_SERVER_IP}/field/getReservationPossibleTime`,
+        {
+          params: {
+            fieldId: fieldId,
+            resvDate: resvDate,
+          },
+        },
+      )
+      .then((e: any) => {
+        resolve(e);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};

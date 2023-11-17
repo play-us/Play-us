@@ -10,7 +10,6 @@ interface CalendarProps {
 }
 const CalendarComponent = (props: CalendarProps) => {
   const { setDate, date, blackoutDates } = props;
-
   return (
     <motion.div
       transition={{ duration: 1, ease: 'easeInOut', delay: 0.5 }}
@@ -21,7 +20,7 @@ const CalendarComponent = (props: CalendarProps) => {
         value={date}
         locale="ko-KO"
         minDate={new Date()}
-        tileDisabled={({ date }) => blackoutDates.includes(date)}
+        tileDisabled={({ date }) => blackoutDates.includes(date.getDate())}
       />
     </motion.div>
   );

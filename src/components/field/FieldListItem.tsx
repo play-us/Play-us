@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { MessageSquare, Heart } from 'lucide-react';
 import { IRowData } from '../../utils/FieldType';
+import NoImg from '../../assets/images/NoImg.png';
 
 const FieldListItem = (props: { data: IRowData }) => {
   const data = props.data;
@@ -10,7 +11,7 @@ const FieldListItem = (props: { data: IRowData }) => {
     <Wrap>
       <Link to={`/fieldDetail?id=${data.fieldId}`}>
         <ThumbImg>
-          <img src={data.imgUrl} alt="썸네일 이미지" />
+          <img src={data.imgUrl ? data.imgUrl : NoImg} alt="썸네일 이미지" />
         </ThumbImg>
         <InfoWrap>
           <Addr>{data.addr}</Addr>

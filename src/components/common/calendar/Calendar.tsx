@@ -1,4 +1,5 @@
 import './App.css';
+import { useEffect, useState } from 'react';
 import CalendarComponent from './Partials/Calendar';
 
 interface ICalendarProps {

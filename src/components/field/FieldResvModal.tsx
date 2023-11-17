@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Modal } from 'antd';
 import { MouseEventHandler } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { css, styled } from 'styled-components';
 import { primaryColor } from '../../styles/CommonStyle';
 import * as S from '../common/calendar/Calendar.style';
 import CustomCalendar from '../common/calendar/Calendar';
-
+import { getReservationImpossibleDate } from '../../service/FieldApi';
 interface IModalData {
   fieldName: string;
   isModalOpen: boolean;
@@ -24,12 +25,24 @@ const FieldResvModal = ({
 }: IModalData) => {
   const [date, setDate] = useState<any>(new Date());
   const [disabledDates, setDisabledDates] = useState<any>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const fieldId = searchParams.get('id');
 
   const bDate1 = new Date('2023-10-27');
   const bDate2 = new Date('2023-11-02');
   const bDate3 = new Date('2023-11-11');
 
   const blackoutDates = [bDate1, bDate2, bDate3];
+
+  useEffect(() => {
+    getImpossibleDate();
+  }, [searchParams]);
+
+  /* 예약 불가능 일자 조회 */
+  async function getImpossibleDate() {
+    const res: any = await getReservationImpossibleDate('1', '2023-10');
+    console.log('res', res);
+  }
 
   return (
     <Modal
