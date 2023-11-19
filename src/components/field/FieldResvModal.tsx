@@ -33,6 +33,7 @@ const FieldResvModal = ({
   const [disabledDates, setDisabledDates] = useState<any>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [blackoutDates, setBlackoutDates] = useState<any>([]);
+  const [resvPossTime, setResvPossTime] = useState<any>([]);
   const fieldId = searchParams.get('id');
 
   const bDate1 = new Date('2023-10-27');
@@ -62,6 +63,7 @@ const FieldResvModal = ({
   /* 구장 예약 가능 시간 조회 */
   async function getPossibleTime() {
     const res: any = await getReservationPossibleTime(fieldId, date);
+    setResvPossTime(res.data.result[0]);
     console.log('예약 가능 시간:', res.data.result[0]);
   }
 
