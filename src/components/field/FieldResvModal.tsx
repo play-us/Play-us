@@ -7,7 +7,10 @@ import { css, styled } from 'styled-components';
 import { primaryColor } from '../../styles/CommonStyle';
 import * as S from '../common/calendar/Calendar.style';
 import CustomCalendar from '../common/calendar/Calendar';
-import { getReservationImpossibleDate } from '../../service/FieldApi';
+import {
+  getReservationImpossibleDate,
+  getReservationPossibleTime,
+} from '../../service/FieldApi';
 interface IModalData {
   fieldName: string;
   isModalOpen: boolean;
@@ -23,25 +26,43 @@ const FieldResvModal = ({
   handleCancel,
   confirmLoading,
 }: IModalData) => {
-  const [date, setDate] = useState<any>(new Date());
+  const [date, setDate] = useState<any>(
+    moment(new Date()).format('YYYY-MM-DD'),
+  );
+  const [month, setMonth] = useState<any>(moment(new Date()).format('YYYY-MM'));
   const [disabledDates, setDisabledDates] = useState<any>([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [blackoutDates, setBlackoutDates] = useState<any>([]);
   const fieldId = searchParams.get('id');
 
   const bDate1 = new Date('2023-10-27');
   const bDate2 = new Date('2023-11-02');
   const bDate3 = new Date('2023-11-11');
 
-  const blackoutDates = [bDate1, bDate2, bDate3];
+  //const blackoutDates = [bDate1, bDate2, bDate3];
 
   useEffect(() => {
     getImpossibleDate();
-  }, [searchParams]);
+  }, [searchParams, month]);
+
+  useEffect(() => {
+    getPossibleTime();
+  }, [date]);
 
   /* 예약 불가능 일자 조회 */
   async function getImpossibleDate() {
-    const res: any = await getReservationImpossibleDate('1', '2023-10');
-    console.log('res', res);
+    const res: any = await getReservationImpossibleDate(fieldId, month);
+    console.log('fieldId:', fieldId, 'month:', month);
+
+    console.log('예약 불가능 일자', res.data.result[0].resvDate);
+
+    setBlackoutDates(res.data.result[0].resvDate);
+  }
+
+  /* 구장 예약 가능 시간 조회 */
+  async function getPossibleTime() {
+    const res: any = await getReservationPossibleTime(fieldId, date);
+    console.log('예약 가능 시간:', res.data.result[0]);
   }
 
   return (
@@ -58,6 +79,7 @@ const FieldResvModal = ({
           <CustomCalendar
             date={date}
             setDate={setDate}
+            setMonth={setMonth}
             blackoutDates={blackoutDates}
           />
           <SelectDay>{moment(date).format('YYYY년 MM월 DD일')}</SelectDay>

@@ -105,7 +105,7 @@ export const getReservation = (email: string, resvId: string) => {
 
 // 구장 예약 불가능 일자 조회
 export const getReservationImpossibleDate = (
-  fieldId: string,
+  fieldId: string | null,
   resvYm: string,
 ) => {
   return new Promise((resolve, reject) => {
@@ -130,7 +130,7 @@ export const getReservationImpossibleDate = (
 
 // 구장 예약 가능 시간 조회
 export const getReservationPossibleTime = (
-  fieldId: string,
+  fieldId: string | null,
   resvDate: string,
 ) => {
   return new Promise((resolve, reject) => {

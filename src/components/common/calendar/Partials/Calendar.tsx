@@ -5,11 +5,12 @@ import '../App.css';
 
 interface CalendarProps {
   setDate: any;
+  setMonth: any;
   date: any;
   blackoutDates: any;
 }
 const CalendarComponent = (props: CalendarProps) => {
-  const { setDate, date, blackoutDates } = props;
+  const { setDate, setMonth, date, blackoutDates } = props;
   return (
     <motion.div
       transition={{ duration: 1, ease: 'easeInOut', delay: 0.5 }}
@@ -20,7 +21,11 @@ const CalendarComponent = (props: CalendarProps) => {
         value={date}
         locale="ko-KO"
         minDate={new Date()}
-        tileDisabled={({ date }) => blackoutDates.includes(date.getDate())}
+        onActiveStartDateChange={({ activeStartDate }) =>
+          setMonth(moment(activeStartDate).format('YYYY-MM'))
+        } // 조회할 월 선택
+        //onClickDay={(value) => setDate(moment(value).format('YYYY-MM'))} // 조회할 일 선택
+        //tileDisabled={({ date }) => blackoutDates.includes(date.getDate())}
       />
     </motion.div>
   );
