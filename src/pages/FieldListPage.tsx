@@ -17,6 +17,10 @@ const FieldListPage = () => {
   const [area, setArea] = useState<IAddrType[]>([]); // 공통 시군구 리스트
   const [nowArea, setNowArea] = useState<IAddrType[]>([]); // 선택한 시도에 해당하는 시군구 리스트
   const [sido, setSido] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState(1); //페이지네이션 현재페이지
+  const ITEM_PER_PAGE = 10;
+  const startIndex = (currentPage - 1) * ITEM_PER_PAGE;
+  const endIndex = startIndex + ITEM_PER_PAGE;
 
   /* 데이터 조회 */
   useEffect(() => {
@@ -68,6 +72,15 @@ const FieldListPage = () => {
     setRowDataList(res.data.result.fieldList); // 구장리스트
     setIsLoading(false);
   };
+
+  // 페이지네이션 이벤트 함수
+  const handlePageChange = (page: any) => {
+    setCurrentPage(page);
+  };
+
+  const fieldList = rowDataList
+    .slice(startIndex, endIndex)
+    .map((data: IRowData) => <FieldListItem data={data} />);
   return (
     <Row>
       <Col span={24}>
@@ -152,13 +165,16 @@ const FieldListPage = () => {
           <SubmitButton type="submit" value="검색" />
         </SearchForm>
         <FieldItemWrap>
-          {!isLoading ? (
-            rowDataList.map((data: IRowData) => <FieldListItem data={data} />)
-          ) : (
-            <div>데이터를 조회중입니다..</div>
-          )}
+          {!isLoading ? fieldList : <div>데이터를 조회중입니다..</div>}
         </FieldItemWrap>
-        <Pagination defaultCurrent={1} total={50} />
+        <Col span={24}>
+          <Pagination
+            current={currentPage}
+            total={rowDataList.length}
+            pageSize={ITEM_PER_PAGE}
+            onChange={handlePageChange}
+          ></Pagination>
+        </Col>
       </Col>
     </Row>
   );
