@@ -66,7 +66,7 @@ const FieldListPage = () => {
       data.fieldTp,
       data.searchTxt,
       '0',
-      1,
+      0,
       20,
     );
 

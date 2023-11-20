@@ -62,7 +62,10 @@ const FieldResvModal = ({
 
   /* 구장 예약 가능 시간 조회 */
   async function getPossibleTime() {
-    const res: any = await getReservationPossibleTime(fieldId, date);
+    const res: any = await getReservationPossibleTime(
+      fieldId,
+      moment(date).format('YYYY-MM-DD'),
+    );
     setResvPossTime(res.data.result[0]);
     console.log('예약 가능 시간:', res.data.result[0]);
   }
