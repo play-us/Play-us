@@ -53,11 +53,9 @@ const FieldResvModal = ({
   /* 예약 불가능 일자 조회 */
   async function getImpossibleDate() {
     const res: any = await getReservationImpossibleDate(fieldId, month);
-    console.log('fieldId:', fieldId, 'month:', month);
+    const blackoutDates = res.data.result.map((row: any) => row.resvDate);
 
-    console.log('예약 불가능 일자', res.data.result[0].resvDate);
-
-    setBlackoutDates(res.data.result[0].resvDate);
+    setBlackoutDates(blackoutDates);
   }
 
   /* 구장 예약 가능 시간 조회 */
@@ -66,8 +64,8 @@ const FieldResvModal = ({
       fieldId,
       moment(date).format('YYYY-MM-DD'),
     );
-    setResvPossTime(res.data.result[0]);
-    console.log('예약 가능 시간:', res.data.result[0]);
+    setResvPossTime(res.data.result);
+    console.log('예약 가능 시간:', res.data.result);
   }
 
   return (
@@ -89,48 +87,14 @@ const FieldResvModal = ({
           />
           <SelectDay>{moment(date).format('YYYY년 MM월 DD일')}</SelectDay>
           <TimeRange>
-            <Item>
-              <Timetxt>
-                <span>17:00</span>
-              </Timetxt>
-              <TimeBox></TimeBox>
-            </Item>
-            <Item>
-              <Timetxt>
-                <span>18:00</span>
-              </Timetxt>
-              <TimeBox></TimeBox>
-            </Item>
-            <Item>
-              <Timetxt>
-                <span>19:00</span>
-              </Timetxt>
-              <TimeBox></TimeBox>
-            </Item>
-            <Item none>
-              <Timetxt>
-                <span>20:00</span>
-              </Timetxt>
-              <TimeBox none></TimeBox>
-            </Item>
-            <Item>
-              <Timetxt>
-                <span>21:00</span>
-              </Timetxt>
-              <TimeBox></TimeBox>
-            </Item>
-            <Item>
-              <Timetxt>
-                <span>22:00</span>
-              </Timetxt>
-              <TimeBox></TimeBox>
-            </Item>
-            <Item>
-              <Timetxt>
-                <span>23:00</span>
-              </Timetxt>
-              <TimeBox></TimeBox>
-            </Item>
+            {resvPossTime.map((t: any) => (
+              <Item none={t.resvYn}>
+                <Timetxt>
+                  <span>{t.resvTime.slice(0, 5)}</span>
+                </Timetxt>
+                <TimeBox></TimeBox>
+              </Item>
+            ))}
           </TimeRange>
         </>
       )}
@@ -163,13 +127,13 @@ const TimeRange = styled.ul`
   width: fit-content;
 `;
 
-const Item = styled.li<{ none?: boolean }>`
+const Item = styled.li<{ none?: string }>`
   position: relative;
   display: inline-block;
   outline: 0;
 
   ${(props: any) =>
-    props.none &&
+    props.none === '0' &&
     css`
       & > span {
         color: #b8b8b8;

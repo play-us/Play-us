@@ -2,6 +2,7 @@ import moment from 'moment';
 import { motion } from 'framer-motion';
 import Calendar from 'react-calendar';
 import '../App.css';
+import { useState, useEffect } from 'react';
 
 interface CalendarProps {
   setDate: any;
@@ -11,6 +12,8 @@ interface CalendarProps {
 }
 const CalendarComponent = (props: CalendarProps) => {
   const { setDate, setMonth, date, blackoutDates } = props;
+  //console.log('blackoutDates', blackoutDates);
+
   return (
     <motion.div
       transition={{ duration: 1, ease: 'easeInOut', delay: 0.5 }}
@@ -24,8 +27,7 @@ const CalendarComponent = (props: CalendarProps) => {
         onActiveStartDateChange={({ activeStartDate }) =>
           setMonth(moment(activeStartDate).format('YYYY-MM'))
         } // 조회할 월 선택
-        //onClickDay={(value) => setDate(moment(value).format('YYYY-MM'))} // 조회할 일 선택
-        //tileDisabled={({ date }) => blackoutDates.includes(date.getDate())}
+        tileDisabled={({ date }) => blackoutDates.includes(date)}
       />
     </motion.div>
   );
