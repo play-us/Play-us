@@ -1,7 +1,8 @@
 import 'swiper/css';
 import 'swiper/css/navigation';
+import axios from 'axios';
 import { Navigation } from 'swiper/modules';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { MoveRight } from 'lucide-react';
@@ -14,8 +15,28 @@ import { getMainData } from '../service/Common';
 import { IFieldType, IAddrType } from '../utils/Common';
 import { IRowData, IFieldTypeData } from '../utils/FieldType';
 import { ICommunityRowData } from '../components/recruitTeam/RecruitTeamList';
+import ConvertDate from '../components/common/date/dateFormat';
+
+const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
+
+export interface ICommuDetailProps {
+  area: string;
+  commentCnt: number;
+  commuId: string;
+  commuTitle: string;
+  commuTxt: string;
+  deadLine: string;
+  email: string;
+  fieldTp: string;
+  insertDatetime: string;
+  memberCnt: number;
+  updateDatetime: string;
+  wishCnt: number;
+  wishYn: string;
+}
 
 const Home = () => {
+  const ref = useRef<any>(null);
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm<IFieldTypeData>();
   const [sort, setSort] = useState<string>('0'); // 0: 최신 등록순, 1 :예약많은 순
@@ -50,7 +71,7 @@ const Home = () => {
 
     setFieldType(res.data.result.fieldTpList); // 구장 유형 리스트
     setFieldDataList(res.data.result.fieldList); // 구장리스트
-    setRecruitData(res.data.result.commuList); // 커뮤니티 게시글 리스트
+    //setRecruitData(res.data.result.commuList); // 커뮤니티 게시글 리스트
     setCity(res.data.result.cityList); // 시도 리스트
     setArea(res.data.result.areaList); // 시군구 리스트
     setIsLoading(false);
@@ -90,6 +111,51 @@ const Home = () => {
     setFieldDataList(res.data.result.fieldList); // 구장리스트
     setIsLoading(false);
   };
+
+  /* 커뮤니티 리스트 조회 */
+  useEffect(() => {
+    //상세 정보
+
+    // 메인 페이지 커뮤니티 데이터 init
+    axios
+      .get(urlGetMainDataList, {
+        params: {
+          email: 'chu',
+        },
+      })
+      .then((response) => {
+        // console.log(response);
+
+        const data = response.data.result['commuList'];
+        // console.log(data, ' data!!!');
+
+        // if (data.length > 0) {
+        const rows: any[] = [];
+        data.forEach((element: ICommuDetailProps) => {
+          console.log(element, 'dd');
+
+          const row = {
+            deadline: ConvertDate(element.insertDatetime),
+            commuTitle: element.commuTitle,
+            likeCnt: element.wishCnt,
+            commentCnt: element.commentCnt,
+            name: '황창민',
+            userImg: null, //이미지 추후작업
+            deadLine: ConvertDate(element.deadLine),
+            memberCount: element.memberCnt,
+            stadium: element.fieldTp,
+            wishCnt: element.wishCnt,
+            commuId: element.commuId,
+            wishYn: element.wishYn,
+          };
+          rows.push(row);
+        });
+
+        setRecruitData(rows);
+        console.log(recruitData, 'initdata');
+        // }
+      });
+  }, []);
 
   return (
     <div>
@@ -233,6 +299,7 @@ const Home = () => {
               // pagination
               modules={[Navigation]}
               className="mySwiper"
+              ref={useRef}
             >
               {recruitData.map((item, idx) => {
                 return (

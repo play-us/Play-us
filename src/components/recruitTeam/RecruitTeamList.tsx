@@ -1,4 +1,14 @@
-import { Button, Col, Pagination, Row, Typography } from 'antd';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Input,
+  Modal,
+  Pagination,
+  Row,
+  Select,
+  Typography,
+} from 'antd';
 import Axios from 'axios';
 import { Eye, Hand, MessageSquare, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -6,11 +16,18 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { primaryColor, PageStyle, ButtonStyle } from '../../styles/CommonStyle';
 import RecruitTeamInfo from './RecruitTeamInfo';
+// import RecruitTeamAddMoadl from './RecruitTeamAddModal';
+import axios from 'axios';
+import { ICommuDetailProps } from '../../pages';
+import ConvertDate8 from '../common/date/dateFormat';
+import TextArea from 'antd/es/input/TextArea';
 import RecruitTeamAddMoadl from './RecruitTeamAddModal';
+const { Option } = Select;
 
 //url 팀원모집 게시판 리스트
 const urlGetRecruitTeamList = '/json/community.json';
-
+const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
+const urlAddCommun = 'http://localhost:8080/community/insertCommunity';
 export interface ICommunityItem {
   created_date: string;
   commu_title: string;
@@ -24,21 +41,28 @@ export interface ICommunityItem {
   stadium: string;
   content?: string;
   location?: string;
+  wishCnt: number;
+  commuId: string;
+  wishYn: string;
 }
 
 export interface ICommunityRowData {
   createdDate: string;
   commuTitle: string;
   likeCnt: number;
-  commentCnt: number;
-  views: number;
+  commentCnt?: number;
+  views?: number;
   name: string;
-  userImg: null | string;
+  userImg?: null | string;
   deadLine: string;
   memberCount: number;
   stadium: string;
   content?: string;
   location?: string;
+  wishCnt: number;
+  commuId: string;
+  wishYn?: string;
+  area?: string;
 }
 
 interface CommunityHeaderWrapProps {
@@ -81,31 +105,58 @@ const RecruitTeamList = () => {
     //   setRowDataList(res);
     //   console.log(res);
     // });
-    // 목데이터 연결
-    Axios.get<ICommunityItem[]>(urlGetRecruitTeamList).then((response) => {
-      const data = response.data;
+    const searchCommuList = axios.get(urlGetMainDataList).then((response) => {
+      console.log(response);
 
-      if (data.length > 0) {
-        const rows: ICommunityRowData[] = [];
-        data.forEach((element: ICommunityItem) => {
-          const row = {
-            createdDate: element.created_date,
-            commuTitle: element.commu_title,
-            likeCnt: element.like_cnt,
-            commentCnt: element.comment_cnt,
-            views: element.views,
-            name: element.name,
-            userImg: element.p_img,
-            deadLine: element.deadLine,
-            memberCount: element.member_count,
-            stadium: element.stadium,
-          };
-          rows.push(row);
-        });
+      const data = response.data.result['commuList'];
+      console.log(data, ' data!!!');
 
-        setRowDataList(rows);
-      }
+      // if (data.length > 0) {
+      const rows: any[] = [];
+      data.forEach((element: ICommuDetailProps) => {
+        const row = {
+          deadline: ConvertDate8(element.insertDatetime),
+          commuTitle: element.commuTitle,
+          likeCnt: element.wishCnt,
+          commentCnt: element.commentCnt,
+          name: '황창민',
+          userImg: null, //이미지 추후작업
+          deadLine: ConvertDate8(element.deadLine),
+          memberCount: element.memberCnt,
+          stadium: element.fieldTp,
+          commuId: element.commuId,
+          wishYn: element.wishYn,
+        };
+        rows.push(row);
+      });
+      setRowDataList(rows);
+      console.log(rowDataList, 'initdata');
+      // }
     });
+
+    // 목데이터 연결
+    // Axios.get<ICommunityItem[]>(urlGetRecruitTeamList).then((response) => {
+    //   const data = response.data;
+    //   if (data.length > 0) {
+    //     const rows: ICommunityRowData[] = [];
+    //     data.forEach((element: ICommunityItem) => {
+    //       const row = {
+    //         createdDate: element.created_date,
+    //         commuTitle: element.commu_title,
+    //         likeCnt: element.like_cnt,
+    //         commentCnt: element.comment_cnt,
+    //         views: element.views,
+    //         name: element.name,
+    //         userImg: element.p_img,
+    //         deadLine: element.deadLine,
+    //         memberCount: element.member_count,
+    //         stadium: element.stadium,
+    //       };
+    //       rows.push(row);
+    //     });
+    //     setRowDataList(rows);
+    //   }
+    // });
   }, []);
 
   // 팀원 모집 리스트 컴포넌트
@@ -170,6 +221,7 @@ const RecruitTeamList = () => {
         <RecruitTeamAddMoadl
           open={modalOpen}
           onClose={handleModalCloseOnClick}
+          edit={0}
         />
       ) : null}
     </Row>

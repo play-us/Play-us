@@ -3,52 +3,25 @@ import { ICommunityRowData } from './RecruitTeamList';
 import { Hand, MessageSquare, User } from 'lucide-react';
 import { Col } from 'antd';
 import React from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 interface ButtonProps {
   backgroundColor?: string;
   marginRight?: string;
   fontWeight?: string;
   color?: string;
+  onClick?: any;
+}
+enum groundType {
+  futsal = '1',
+  football = '2',
+  basketball = '3',
 }
 
+const urlUpdateCommuLike = 'http://localhost:8080/community/communityWish'; //API 엔드포인트
 const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
-  const LikeButton = () => {
-    const [liked, setLiked] = React.useState(false);
-
-    // 좋아요 버튼 클릭 시 API 호출을 트리거하기 위한 useEffect를 사용합니다.
-    React.useEffect(() => {
-      // API 호출을 수행하는 함수
-      const sendLikeToServer = async () => {
-        try {
-          // 좋아요 버튼이 클릭된 경우에만 API 호출
-          if (liked) {
-            const apiUrl = 'https://example.com/api/like'; //API 엔드포인트
-
-            // API 호출 (POST 요청)
-            // const response = await (apiUrl, {
-            // });
-
-            // console.log('API 응답:', response.data);
-          }
-        } catch (error) {
-          // 오류 처리 (예: 네트워크 문제 또는 API 오류)
-          console.error('API 오류:', error);
-        }
-      };
-
-      // 좋아요 버튼 클릭 상태가 변경될 때마다 API 호출 함수 호출
-      sendLikeToServer();
-    }, [liked]);
-
-    const toggleLike = () => {
-      setLiked((prevState) => !prevState);
-    };
-
-    return (
-      <LikeBtn onClick={toggleLike}>
-        {liked ? <Hand color="#F6E881" /> : <Hand color="#d1d1d1" />}
-      </LikeBtn>
-    );
-  };
+  const navigate = useNavigate();
   const {
     memberCount,
     stadium,
@@ -57,7 +30,56 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
     commuTitle,
     name,
     commentCnt,
+    wishCnt,
+    commuId,
+    wishYn,
   } = props.item;
+
+  const [liked, setLiked] = React.useState(false);
+
+  // 좋아요 버튼 클릭 시 API 호출을 트리거하기 위한 useEffect를 사용합니다.
+  React.useEffect(() => {
+    // API 호출을 수행하는 함수
+    if (wishYn === '1') setLiked(true);
+
+    // 좋아요 버튼 클릭 상태가 변경될 때마다 API 호출 함수 호출
+  }, []);
+
+  const toggleLike = () => {
+    setLiked((prevState) => !prevState);
+    const sendLikeToServer = async () => {
+      try {
+        // 좋아요 버튼이 클릭된 경우에만 API 호출
+        // Construct the data object based on the new liked state
+        const data = {
+          commuId: commuId,
+          email: 'chu',
+          state: liked === true ? '0' : '1', // Toggle the state based on the new liked state
+        };
+        console.log(data);
+
+        // Send the like state to the server
+        axios
+          .post(urlUpdateCommuLike, data)
+          .then((response) => {
+            console.log(response, '응답');
+            if (response.statusText === 'OK') {
+              // Handle success if needed
+            }
+          })
+          .catch((error) => {
+            // Handle errors
+            console.error('API 오류:', error);
+          });
+      } catch (error) {
+        // 오류 처리 (예: 네트워크 문제 또는 API 오류)
+        console.error('API 오류:', error);
+      }
+    };
+    sendLikeToServer();
+  };
+
+  // console.log(props, 'realProps');
 
   return (
     <Wrap>
@@ -68,7 +90,22 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
               style={{ marginRight: '5px' }}
               backgroundColor="#EFEFEF"
             >
-              ⚽ {stadium}
+              {/* 풋살 1 축구 2 농구 3 */}
+              {stadium === groundType.futsal && (
+                <span role="img" aria-label="Futsal">
+                  👟
+                </span>
+              )}
+              {stadium === groundType.football && (
+                <span role="img" aria-label="Football">
+                  ⚽
+                </span>
+              )}
+              {stadium === groundType.basketball && (
+                <span role="img" aria-label="Basketball">
+                  🏀
+                </span>
+              )}
             </RecruitTeam>
             <RecruitTeam
               color="#3E85F4"
@@ -79,35 +116,45 @@ const RecruitTeamInfo = (props: { item: ICommunityRowData }) => {
             </RecruitTeam>
           </InfoHeader>
           <div>
-            <LikeButton />
+            <LikeBtn onClick={toggleLike}>
+              {liked === true ? (
+                <Hand color="#F6E881" />
+              ) : (
+                <Hand color="#d1d1d1" />
+              )}
+            </LikeBtn>
           </div>
         </InfoHeaderWrap>
-        <InfoDeadLine>마감일 | {deadLine}</InfoDeadLine>
-        <InfoTitle>{commuTitle}</InfoTitle>
-        <InfoFooterWrap>
-          <div>
-            <InfoUser>
-              {/* <Col> {itemData.userImg === null ? <User /> : itemData.userImg}</Col> */}
-              <ThumbImg
-                src="https://lh3.googleusercontent.com/-LNDcyoUZV3U/AAAAAAAAAAI/AAAAAAAAAAA/AML38-szSEwtVxDGrb8lU9truJxdb9pwWQ/photo.jpg?sz=46"
-                alt="프로필이미지"
-              />
-              {/* <Col>{commnnityName}</Col> */}
-              <Col className="recruit_detail_name"> {name}</Col>
-            </InfoUser>
-          </div>
-          <LikeCommentWrap>
-            <LikeComment>
-              <Hand color="#9C9C9C" />
-              {1}
-            </LikeComment>
-            <LikeComment>
-              <MessageSquare color="#9C9C9C" />
-              {2}
-            </LikeComment>
-          </LikeCommentWrap>
-        </InfoFooterWrap>
+        <div onClick={() => navigate(`/recruitTeamDetail?commId=${commuId}`)}>
+          <InfoDeadLine>마감일 | {deadLine}</InfoDeadLine>
+          <InfoTitle>{commuTitle}</InfoTitle>
+          <InfoFooterWrap>
+            <div>
+              <InfoUser>
+                {/* <Col> {itemData.userImg === null ? <User /> : itemData.userImg}</Col> */}
+                <ThumbImg
+                  src="https://lh3.googleusercontent.com/-LNDcyoUZV3U/AAAAAAAAAAI/AAAAAAAAAAA/AML38-szSEwtVxDGrb8lU9truJxdb9pwWQ/photo.jpg?sz=46"
+                  alt="프로필이미지"
+                />
+                {/* tjddn */}
+                {/* <Col>{commnnityName}</Col> */}
+                <Col className="recruit_detail_name"> {name}</Col>
+              </InfoUser>
+            </div>
+            <LikeCommentWrap>
+              <LikeComment>
+                <Hand color="#9C9C9C" />
+                {likeCnt}
+              </LikeComment>
+              <LikeComment>
+                <MessageSquare color="#9C9C9C" />
+                {commentCnt}
+              </LikeComment>
+            </LikeCommentWrap>
+          </InfoFooterWrap>
+        </div>
       </Inwrap>
+      <div style={{ color: 'white' }}>{1}</div>
     </Wrap>
   );
 };
@@ -116,6 +163,7 @@ export default RecruitTeamInfo;
 
 const Wrap = styled.div`
   over-flow: hidden;
+  cursor: pointer;
 `;
 
 const Inwrap = styled.div`
@@ -205,6 +253,7 @@ const InfoFooterWrap = styled.div`
   align-items: center;
   border-top: 1px solid rgba(23, 23, 23, 0.08);
   padding-top: 16px;
+  cursor: pointer;
 `;
 const InfoDeadLine = styled.div`
   text-align: left;
