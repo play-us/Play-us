@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IFieldItem } from '../utils/FieldType';
+import { IFieldCommentData, IFieldItem } from '../utils/FieldType';
 
 // 구장목록 전체조회
 export const getFieldList = (
@@ -25,7 +25,7 @@ export const getFieldList = (
   });
 };
 
-// 구장 단건 조회(성새패아자)
+// 구장 단건 조회(상세페이지)
 export const getFieldDetail = (fieldId: string, email?: string) => {
   return new Promise<IFieldItem[]>((resolve, reject) => {
     axios
@@ -33,6 +33,30 @@ export const getFieldDetail = (fieldId: string, email?: string) => {
         params: {
           fieldId: fieldId,
           email: email,
+        },
+      })
+      .then((e: any) => {
+        resolve(e);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
+// 구장 리뷰 조회(상세페이지)
+export const getFieldReview = (
+  fieldId: string,
+  reviewId: string,
+  email?: string,
+) => {
+  return new Promise<IFieldCommentData[]>((resolve, reject) => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_IP}/field/getFieldReview`, {
+        params: {
+          fieldId: fieldId,
+          email: email,
+          reviewId: reviewId,
         },
       })
       .then((e: any) => {

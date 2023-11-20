@@ -43,3 +43,15 @@ export interface IFieldTypeData {
   fieldTp: string | null;
   searchTxt: string | null;
 }
+
+export interface IFieldCommentData {
+  fieldId: string;
+  email: string;
+  reviewId: string;
+  commentDate: string;
+  commentText: string;
+  commentId: string;
+  commentSeq: string;
+  name: string;
+  pImg: null;
+}

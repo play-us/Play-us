@@ -1,6 +1,17 @@
 import { useEffect, useState } from 'react';
+import styled, { css } from 'styled-components';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import styled from 'styled-components';
+import { Button, Typography, message } from 'antd';
+import { RedColor } from '../styles/CommonStyle';
+import KakaoMap from '../components/common/KakaoMap';
+import FieldComment from '../components/field/FieldComment';
+import FieldResvModal from '../components/field/FieldResvModal';
+import { IFieldItem, IFieldCommentData } from '../utils/FieldType';
+import {
+  getFieldDetail,
+  getFieldReview,
+  postFieldLike,
+} from '../service/FieldApi';
 import {
   MessageSquare,
   Heart,
@@ -9,12 +20,6 @@ import {
   CarFront,
   Footprints,
 } from 'lucide-react';
-import { Button, Typography, message } from 'antd';
-import { RedColor } from '../styles/CommonStyle';
-import FieldResvModal from '../components/field/FieldResvModal';
-import KakaoMap from '../components/common/KakaoMap';
-import { getFieldDetail, postFieldLike } from '../service/FieldApi';
-import { IFieldItem } from '../utils/FieldType';
 
 declare global {
   interface Window {
@@ -31,25 +36,31 @@ const FieldDetailPage = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<IFieldItem | null | undefined>();
+  const [commentDataList, setCommentDataList] = useState<
+    IFieldCommentData | null | undefined
+  >();
   const [liked, setLiked] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const email = 'chu';
 
   /* 데이터 조회 */
   useEffect(() => {
     setIsLoading(true);
-    getDataAll();
+    getFieldData();
+    setIsLoading(false);
   }, [searchParams]);
 
-  /* 전체로 조회 */
-  const getDataAll = async () => {
-    setIsLoading(true);
+  /* 구장 상세, 리뷰 조회 */
+  const getFieldData = async () => {
     if (fieldId !== null) {
       const d: any = await getFieldDetail(fieldId, email);
+      console.log('구장 조회', d);
       setData(d.data.result[0]);
       setLiked(d.data.result[0].likeYn);
-      setIsLoading(false);
+
+      const r: any = await getFieldReview(fieldId, email, '1');
+      console.log('구장 리뷰조회', r);
     }
   };
 
@@ -84,6 +95,13 @@ const FieldDetailPage = () => {
     navigator.clipboard.writeText(text);
     message.info(`주소를 복사하였습니다!`);
   };
+
+  /* 댓글 목록 */
+  /* const commentList = commentDataList.map((data: IFieldCommentData) => (
+    <CommentListWrap>
+      <FieldComment data={data} />
+    </CommentListWrap>
+  )); */
 
   return (
     <Wrap>
@@ -187,6 +205,14 @@ const FieldDetailPage = () => {
               경우
               <br />
             </Contents>
+          </SectionWrap>
+          <SectionWrap>
+            <CommentHeaderWrap>
+              <CommentHeader>댓글 </CommentHeader>
+              <CommentLength>0{/* {commentDataList.length} */}</CommentLength>
+            </CommentHeaderWrap>
+            {/* {commentList} */}
+            <FieldComment />
           </SectionWrap>
           <FieldResvModal
             fieldName="구장이름"
@@ -315,4 +341,32 @@ const Contents = styled.pre`
   line-height: 22px;
   overflow: auto;
   margin: 10px 0;
+`;
+
+const CommentHeaderWrap = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+`;
+const CommentHeader = styled.div`
+  font-weight: 700;
+  font-size: 18px;
+  margin-right: 10px;
+  line-height: 24px;
+  align-items: center;
+`;
+const CommentLength = styled.span`
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  color: #939393;
+`;
+
+const CommentListWrap = styled.pre`
+  border-bottom: 2px solid #e1e1e1;
+  width: 850px;
+  /* height: 100px; */
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 `;
