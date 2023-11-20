@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -37,7 +38,7 @@ const FieldDetailPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<IFieldItem | null | undefined>();
   const [commentDataList, setCommentDataList] = useState<
-    IFieldCommentData | null | undefined
+    IFieldCommentData | undefined
   >();
   const [liked, setLiked] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -48,6 +49,7 @@ const FieldDetailPage = () => {
   useEffect(() => {
     setIsLoading(true);
     getFieldData();
+    getReviewData();
     setIsLoading(false);
   }, [searchParams]);
 
@@ -55,12 +57,15 @@ const FieldDetailPage = () => {
   const getFieldData = async () => {
     if (fieldId !== null) {
       const d: any = await getFieldDetail(fieldId, email);
-      console.log('구장 조회', d);
       setData(d.data.result[0]);
       setLiked(d.data.result[0].likeYn);
+    }
+  };
 
-      const r: any = await getFieldReview(fieldId, email, '1');
-      console.log('구장 리뷰조회', r);
+  const getReviewData = async () => {
+    if (fieldId !== null) {
+      const r: any = await getFieldReview(fieldId);
+      setCommentDataList(r.data.result);
     }
   };
 
@@ -97,11 +102,14 @@ const FieldDetailPage = () => {
   };
 
   /* 댓글 목록 */
-  /* const commentList = commentDataList.map((data: IFieldCommentData) => (
-    <CommentListWrap>
+  let commentList;
+  if (commentDataList !== undefined && commentDataList !== null) {
+    commentList = commentDataList.map((data: IFieldCommentData) => (
       <FieldComment data={data} />
-    </CommentListWrap>
-  )); */
+    ));
+  } else {
+    commentList = <div>등록된 리뷰가 없습니다.</div>;
+  }
 
   return (
     <Wrap>
@@ -209,10 +217,11 @@ const FieldDetailPage = () => {
           <SectionWrap>
             <CommentHeaderWrap>
               <CommentHeader>댓글 </CommentHeader>
-              <CommentLength>0{/* {commentDataList.length} */}</CommentLength>
+              <CommentLength>
+                {commentDataList !== undefined ? commentDataList.length : 0}
+              </CommentLength>
             </CommentHeaderWrap>
-            {/* {commentList} */}
-            <FieldComment />
+            {commentList}
           </SectionWrap>
           <FieldResvModal
             fieldName="구장이름"
@@ -361,12 +370,4 @@ const CommentLength = styled.span`
   font-size: 18px;
   line-height: 24px;
   color: #939393;
-`;
-
-const CommentListWrap = styled.pre`
-  border-bottom: 2px solid #e1e1e1;
-  width: 850px;
-  /* height: 100px; */
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
 `;

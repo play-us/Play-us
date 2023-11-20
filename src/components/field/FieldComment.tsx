@@ -2,28 +2,34 @@ import { User } from 'lucide-react';
 import { Rate } from 'antd';
 import styled, { css } from 'styled-components';
 import { Col, Row } from 'antd';
-const FieldComment = () => {
+import { IFieldCommentData } from '../../utils/FieldType';
+import ConvertDate from '../common/date/dateFormat';
+
+const FieldComment = (props: { data: IFieldCommentData }) => {
+  const { data } = props;
+
   return (
-    <CommentList>
+    <CommentList key={data.reviewId}>
       <Col span={24} style={{ minHeight: '70px', paddingBottom: '18px' }}>
         <Row>
           <Col span={2}>
             <User />
-            {/* {!pImg ? <User /> : pImg} */}
           </Col>
           <Col
             span={22}
             style={{ display: 'flex', justifyContent: 'space-between' }}
           >
             <CommentInfoName>
-              dlfma
-              <Rate allowHalf defaultValue={2.5} />
+              {data.name}
+              <Rate allowHalf defaultValue={Number(data.starCnt)} />
             </CommentInfoName>
-            <CommentInfoDate>날짜</CommentInfoDate>
+            <CommentInfoDate>
+              {ConvertDate(data.insertDatetime)}
+            </CommentInfoDate>
           </Col>
         </Row>
-        <Col span={24} style={{ margin: '16px 0 14px' }}>
-          내용
+        <Col span={24} style={{ margin: '20px 0' }}>
+          {data.reviewCon}
         </Col>
         <Col span={24} style={{ fontWeight: '500', color: 'gray' }}>
           사용일시 : 2023.08.08 20:00~22:00
@@ -50,4 +56,11 @@ const CommentInfoName = styled.div`
   color: #333;
   font-weight: 700;
   margin-bottom: 5px;
+
+  & .ant-rate {
+    margin-left: 8px;
+  }
+  & .ant-rate-star {
+    margin-inline-end: 2px !important;
+  }
 `;

@@ -104,7 +104,7 @@ const Home = () => {
       data.fieldTp,
       data.searchTxt,
       sort,
-      1,
+      0,
       20,
     );
 

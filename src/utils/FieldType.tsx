@@ -45,13 +45,19 @@ export interface IFieldTypeData {
 }
 
 export interface IFieldCommentData {
+  length: boolean;
+  map(
+    arg0: (data: IFieldCommentData) => import('react/jsx-runtime').JSX.Element,
+  ): any;
+
+  reviewId: string;
   fieldId: string;
   email: string;
-  reviewId: string;
-  commentDate: string;
-  commentText: string;
-  commentId: string;
-  commentSeq: string;
   name: string;
-  pImg: null;
+  reviewSeq: string;
+  starCnt: string;
+  reviewCon: string;
+  remarkTxt: string;
+  insertDatetime: string;
+  updateDatetime: string;
 }

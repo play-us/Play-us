@@ -45,18 +45,12 @@ export const getFieldDetail = (fieldId: string, email?: string) => {
 };
 
 // 구장 리뷰 조회(상세페이지)
-export const getFieldReview = (
-  fieldId: string,
-  reviewId: string,
-  email?: string,
-) => {
+export const getFieldReview = (fieldId: string) => {
   return new Promise<IFieldCommentData[]>((resolve, reject) => {
     axios
       .get(`${process.env.REACT_APP_SERVER_IP}/field/getFieldReview`, {
         params: {
           fieldId: fieldId,
-          email: email,
-          reviewId: reviewId,
         },
       })
       .then((e: any) => {
