@@ -7,6 +7,7 @@ import { getMainData } from '../service/Common';
 import { IRowData, IFieldTypeData } from '../utils/FieldType';
 import { IFieldType, IAddrType } from '../utils/Common';
 import FieldListItem from '../components/field/FieldListItem';
+import LoadingComponent from '../components/common/Loading';
 
 const FieldListPage = () => {
   const { register, handleSubmit } = useForm<IFieldTypeData>();
@@ -165,7 +166,7 @@ const FieldListPage = () => {
           <SubmitButton type="submit" value="검색" />
         </SearchForm>
         <FieldItemWrap>
-          {!isLoading ? fieldList : <div>데이터를 조회중입니다..</div>}
+          {!isLoading ? fieldList : <LoadingComponent />}
         </FieldItemWrap>
         <Col span={24}>
           <Pagination
