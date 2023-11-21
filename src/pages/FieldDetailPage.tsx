@@ -13,7 +13,6 @@ import {
   getFieldDetail,
   getFieldReview,
   postFieldLike,
-  insertReservation,
 } from '../service/FieldApi';
 import {
   MessageSquare,
@@ -91,22 +90,23 @@ const FieldDetailPage = () => {
   };
 
   /* 예약신청 */
-  const handleOk = async () => {
+  const handleOk = () => {
+    let price = data?.price;
+    let fieldNm = data?.fieldNm;
     setConfirmLoading(true);
-    const d: any = await insertReservation(
-      fieldId,
-      email,
-      date,
-      resvStartTime,
-      resvEndTime,
-      data?.price,
-    );
-
-    if (d.status === 200) {
-      setIsModalOpen(false);
-      setConfirmLoading(false);
-      navigate('/completePayment');
-    }
+    setIsModalOpen(false);
+    setConfirmLoading(false);
+    navigate('/completePayment', {
+      state: {
+        fieldId,
+        email,
+        date,
+        resvStartTime,
+        resvEndTime,
+        price,
+        fieldNm,
+      },
+    });
   };
 
   const handleCancel = () => {

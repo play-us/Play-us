@@ -1,71 +1,85 @@
-import React from 'react';
+import { useState } from 'react';
+import moment from 'moment';
 import styled from 'styled-components';
 import { Button, Typography, Radio, Checkbox, Collapse } from 'antd';
 import type { CollapseProps } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
-import { OpacityPrimaryTextColor } from '../styles/CommonStyle';
+import { useLocation, useNavigate } from 'react-router';
+import { insertReservation } from '../service/FieldApi';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 const CompletePaymentPage = () => {
-  const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const [refund, setRefund] = useState<boolean>(false);
+
   const items: CollapseProps['items'] = [
     {
       key: '1',
-      label: '이것만은 꼭!',
-      children: <p>{text}</p>,
-    },
-    {
-      key: '2',
-      label: '부상과 보험',
-      children: <p>{text}</p>,
-    },
-    {
-      key: '3',
       label: '환불 안내',
-      children: <p>{text}</p>,
+      children: (
+        <p>
+          다음의 경우는 환불이 불가합니다. 구장, 날짜, 시간 등을 실수로 잘못
+          선택한 경우 부상, 취업 등 개인 사정으로 신청된 매치에 참여하지 못하는
+          경우 단체 혹은 지인과의 참가로 매치 취소 혹은 변경을 원하는 경우
+          황사/미세먼지로 인해 취소 혹은 변경을 요청하는 경우 단순 변심으로 취소
+          혹은 변경을 요청하는 경우 유의사항 무단 불참하거나 매치 시작 90분
+          이내에 취소하면 패널티를 받을 수 있습니다. (참여가 어려울 경우, 환불이
+          불가능하더라도 원활한 매치 진행을 위해 나의 플랩에서 미리
+          취소해주세요.) 변경 정책 변경은 취소와 동일한 환불 규정으로
+          적용됩니다. 변경은 상단 환불 정책 기준 100% 환불일 경우에만 가능하며,
+          규정 외 요청은 적용이 불가합니다.
+        </p>
+      ),
     },
   ];
 
-  const onChangeCollapse = (key: string | string[]) => {
-    console.log(key);
-  };
-
   const onChangeCheckBox = (e: CheckboxChangeEvent) => {
-    console.log(`checked = ${e.target.checked}`);
+    setRefund(e.target.checked);
   };
 
   /* 결제완료 */
-  const payment = () => {
-    alert('결제가 완료되었습니다!');
+  const payment = async () => {
+    if (!refund) {
+      alert('환불 약관을 확인 후 체크박스를 선택해주세요.');
+      return;
+    }
+    const d: any = await insertReservation(
+      state.fieldId,
+      state.email,
+      state.date,
+      state.resvStartTime,
+      state.resvEndTime,
+      state.price,
+    );
+
+    if (d.status === 200) {
+      alert('결제가 완료되었습니다!');
+      navigate('/fieldList');
+    }
   };
 
   return (
     <Wrap>
       <SectionWrap>
         <ResvInfo>
-          <div>9월 9일 수요일</div>
-          <div>06:00~08:00</div>
-          <div>노원 R 실내 풋살장 1구장</div>
+          <div>{moment(state.date).format('YYYY-MM-DD')}</div>
+          <div>
+            {state.resvStartTime.slice(0, 5)} ~ {state.resvEndTime.slice(0, 5)}
+          </div>
+          <div>{state.fieldNm}</div>
         </ResvInfo>
         <SectionHeader>결제</SectionHeader>
         <FlexWrap type="secondary">
-          이용 금액<UsageAmount>35,000원</UsageAmount>
+          이용 금액<UsageAmount>{state.price}원</UsageAmount>
         </FlexWrap>
       </SectionWrap>
       <SectionWrap>
         <SectionHeader>결제수단</SectionHeader>
-        <Radio>카카오페이</Radio>
+        <Radio defaultChecked>카카오페이</Radio>
       </SectionWrap>
       <SectionWrap>
-        <Collapse
-          items={items}
-          defaultActiveKey={['1']}
-          onChange={onChangeCollapse}
-        />
+        <Collapse items={items} defaultActiveKey={['1']} />
         <Checkbox onChange={onChangeCheckBox} style={{ marginTop: '10px' }}>
           네, 위 내용을 보고 동의해요.
         </Checkbox>
@@ -76,7 +90,7 @@ const CompletePaymentPage = () => {
         block
         style={{ height: '3rem', fontSize: '1.2rem' }}
       >
-        35,000원 결제하기
+        {state.price}원 결제하기
       </Button>
     </Wrap>
   );
