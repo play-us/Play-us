@@ -103,7 +103,11 @@ const FieldResvModal = ({
           <TimeWrap>
             <TimeRange>
               {resvPossTime.map((t: any) => (
-                <Item none={t.resvYn} onClick={() => onSelectTime(t.resvTime)}>
+                <Item
+                  none={t.resvYn}
+                  onClick={() => onSelectTime(t.resvTime)}
+                  key={t.resvTime}
+                >
                   <Timetxt>
                     <span>{t.resvTime.slice(0, 5)}</span>
                   </Timetxt>
@@ -135,26 +139,30 @@ const SelectDay = styled.div`
   box-sizing: border-box;
   text-align: center;
 `;
-const TimeWrap = styled.div``;
+const TimeWrap = styled.div`
+  overflow-y: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  max-height: 100px;
+`;
 
 const TimeRange = styled.ul`
   display: flex;
+  position: relative;
+  z-index: 10;
+  padding-left: 20px;
   justify-content: start;
   align-items: center;
+  white-space: nowrap;
   transition: transform 0.5s;
-  overflow-x: auto;
-  &::-webkit-scrollbar,
-  ::-webkit-scrollbar-thumb,
-  ::-webkit-scrollbar-track {
-    background-color: transparent;
-    height: 1px;
-  }
 `;
 
 const Item = styled.li<{ none?: string }>`
   position: relative;
-  display: inline-block;
   outline: 0;
+  flex: none;
+  scroll-snap-align: start;
 
   ${(props: any) =>
     props.none === '0' &&

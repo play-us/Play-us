@@ -8,7 +8,7 @@ const FieldListItem = (props: { data: IRowData }) => {
   const data = props.data;
 
   return (
-    <Wrap>
+    <Wrap key={data.fieldId}>
       <Link to={`/fieldDetail?id=${data.fieldId}`}>
         <ThumbImg>
           <img src={data.imgUrl ? data.imgUrl : NoImg} alt="썸네일 이미지" />

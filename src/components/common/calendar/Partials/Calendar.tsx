@@ -27,7 +27,11 @@ const CalendarComponent = (props: CalendarProps) => {
         onActiveStartDateChange={({ activeStartDate }) =>
           setMonth(moment(activeStartDate).format('YYYY-MM'))
         } // 조회할 월 선택
-        tileDisabled={({ date }) => blackoutDates.includes(date)}
+        tileDisabled={({ date }) =>
+          blackoutDates.find(
+            (x: any) => x === moment(date).format('YYYY-MM-DD'),
+          )
+        }
       />
     </motion.div>
   );
