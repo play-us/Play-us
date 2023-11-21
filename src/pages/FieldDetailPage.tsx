@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
-import styled, { css } from 'styled-components';
+import moment from 'moment';
+import styled from 'styled-components';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Typography, message } from 'antd';
 import { RedColor } from '../styles/CommonStyle';
@@ -12,6 +13,7 @@ import {
   getFieldDetail,
   getFieldReview,
   postFieldLike,
+  insertReservation,
 } from '../service/FieldApi';
 import {
   MessageSquare,
@@ -44,6 +46,12 @@ const FieldDetailPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const email = 'chu';
+
+  const [date, setDate] = useState<any>(
+    moment(new Date()).format('YYYY-MM-DD'),
+  );
+  const [resvStartTime, setResvStartTime] = useState<string | null>(null);
+  const [resvEndTime, setResvEndTime] = useState<string | null>(null);
 
   /* 데이터 조회 */
   useEffect(() => {
@@ -82,13 +90,23 @@ const FieldDetailPage = () => {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
+  /* 예약신청 */
+  const handleOk = async () => {
     setConfirmLoading(true);
-    setTimeout(() => {
+    const d: any = await insertReservation(
+      fieldId,
+      email,
+      date,
+      resvStartTime,
+      resvEndTime,
+      data?.price,
+    );
+
+    if (d.status === 200) {
       setIsModalOpen(false);
       setConfirmLoading(false);
       navigate('/completePayment');
-    }, 2000);
+    }
   };
 
   const handleCancel = () => {
@@ -229,6 +247,13 @@ const FieldDetailPage = () => {
             handleOk={handleOk}
             handleCancel={handleCancel}
             confirmLoading={confirmLoading}
+            useTime={data.hours}
+            date={date}
+            setDate={setDate}
+            resvStartTime={resvStartTime}
+            setResvStartTime={setResvStartTime}
+            resvEndTime={resvEndTime}
+            setResvEndTime={setResvEndTime}
           />
         </>
       ) : (

@@ -13,34 +13,39 @@ import {
 } from '../../service/FieldApi';
 interface IModalData {
   fieldName: string;
+  useTime: number;
   isModalOpen: boolean;
   confirmLoading: boolean;
   handleOk: MouseEventHandler;
   handleCancel: MouseEventHandler;
+  date: string;
+  setDate: any;
+  resvStartTime: string | null;
+  setResvStartTime: any;
+  resvEndTime: string | null;
+  setResvEndTime: any;
 }
 
 const FieldResvModal = ({
   fieldName,
+  useTime,
   isModalOpen,
   handleOk,
   handleCancel,
   confirmLoading,
+  date,
+  setDate,
+  resvStartTime,
+  setResvStartTime,
+  resvEndTime,
+  setResvEndTime,
 }: IModalData) => {
-  const [date, setDate] = useState<any>(
-    moment(new Date()).format('YYYY-MM-DD'),
-  );
   const [month, setMonth] = useState<any>(moment(new Date()).format('YYYY-MM'));
-  const [disabledDates, setDisabledDates] = useState<any>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [blackoutDates, setBlackoutDates] = useState<any>([]);
   const [resvPossTime, setResvPossTime] = useState<any>([]);
+
   const fieldId = searchParams.get('id');
-
-  const bDate1 = new Date('2023-10-27');
-  const bDate2 = new Date('2023-11-02');
-  const bDate3 = new Date('2023-11-11');
-
-  //const blackoutDates = [bDate1, bDate2, bDate3];
 
   useEffect(() => {
     getImpossibleDate();
@@ -65,8 +70,13 @@ const FieldResvModal = ({
       moment(date).format('YYYY-MM-DD'),
     );
     setResvPossTime(res.data.result);
-    console.log('예약 가능 시간:', res.data.result);
   }
+
+  const onSelectTime = (resvTime: string) => {
+    let selectHour = resvTime.slice(0, 2);
+    setResvStartTime(`${selectHour}:00:00`);
+    setResvEndTime(`${Number(selectHour) + useTime}:00:00`);
+  };
 
   return (
     <Modal
@@ -85,17 +95,23 @@ const FieldResvModal = ({
             setMonth={setMonth}
             blackoutDates={blackoutDates}
           />
-          <SelectDay>{moment(date).format('YYYY년 MM월 DD일')}</SelectDay>
-          <TimeRange>
-            {resvPossTime.map((t: any) => (
-              <Item none={t.resvYn}>
-                <Timetxt>
-                  <span>{t.resvTime.slice(0, 5)}</span>
-                </Timetxt>
-                <TimeBox></TimeBox>
-              </Item>
-            ))}
-          </TimeRange>
+          <SelectDay>
+            {moment(date).format('YYYY년 MM월 DD일')}&nbsp;
+            {resvStartTime !== null && `${resvStartTime}~`}
+            {resvEndTime !== null && `${resvEndTime}`}
+          </SelectDay>
+          <TimeWrap>
+            <TimeRange>
+              {resvPossTime.map((t: any) => (
+                <Item none={t.resvYn} onClick={() => onSelectTime(t.resvTime)}>
+                  <Timetxt>
+                    <span>{t.resvTime.slice(0, 5)}</span>
+                  </Timetxt>
+                  <TimeBox none={t.resvYn}></TimeBox>
+                </Item>
+              ))}
+            </TimeRange>
+          </TimeWrap>
         </>
       )}
     </Modal>
@@ -119,12 +135,20 @@ const SelectDay = styled.div`
   box-sizing: border-box;
   text-align: center;
 `;
+const TimeWrap = styled.div``;
 
 const TimeRange = styled.ul`
-  transform: translateX(-0px);
-  transition: transform 0.2s ease-out, opacity 0.3s ease-out;
-  margin: 0 auto;
-  width: fit-content;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  transition: transform 0.5s;
+  overflow-x: auto;
+  &::-webkit-scrollbar,
+  ::-webkit-scrollbar-thumb,
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+    height: 1px;
+  }
 `;
 
 const Item = styled.li<{ none?: string }>`
@@ -167,7 +191,7 @@ const TimeBox = styled.a<{ none?: boolean }>`
   cursor: pointer;
 
   ${(props: any) =>
-    props.none
+    props.none === '0'
       ? css`
           background-color: #eaeaea;
         `

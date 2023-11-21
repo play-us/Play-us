@@ -170,3 +170,31 @@ export const getReservationPossibleTime = (
       });
   });
 };
+
+// 구장 예약 등록
+export const insertReservation = (
+  fieldId: string | null,
+  email: string,
+  resvDate: Date,
+  resvStartTime: string | null,
+  resvEndTime: string | null,
+  resvPrice: number | undefined,
+) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${process.env.REACT_APP_SERVER_IP}/field/insertReservation`, {
+        fieldId: fieldId,
+        email: email,
+        resvDate: resvDate,
+        resvStartTime: resvStartTime,
+        resvEndTime: resvEndTime,
+        resvPrice: resvPrice,
+      })
+      .then((e: any) => {
+        resolve(e);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
