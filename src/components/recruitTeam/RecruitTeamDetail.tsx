@@ -33,7 +33,7 @@ interface ICommentResponse {
   commentId: string;
   commentSeq: string;
 }
-interface ICommentData {
+export interface ICommentData {
   commentDate: string;
   commentText: string;
   commentId: string;
