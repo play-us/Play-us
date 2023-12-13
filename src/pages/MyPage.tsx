@@ -65,7 +65,6 @@ const MyPage = () => {
               {tab.tabName}
             </MypageMenuBarS.ListMenu>
           ))}
-          ;
         </MypageMenuBarS.ListMenuWrap>
         {activeTab.detail}
       </MypageMenuBarS.MyListWrap>

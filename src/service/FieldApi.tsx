@@ -103,13 +103,12 @@ export const getFieldLike = (fieldId: string) => {
 };
 
 // 구장 예약정보 조회
-export const getReservation = (email: string, resvId: string) => {
+export const getReservation = (email: string) => {
   return new Promise((resolve, reject) => {
     axios
       .get(`${process.env.REACT_APP_SERVER_IP}/field/getReservation`, {
         params: {
           email: email,
-          resvId: resvId,
         },
       })
       .then((e: any) => {

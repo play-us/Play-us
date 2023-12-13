@@ -15,9 +15,7 @@ export const TimeIcon = styled(BiSolidTimeFive)`
   color: #3ce4a8;
 `;
 
-
-export const ReserConWrap = styled.div`
-`
+export const ReserConWrap = styled.div``;
 
 export const ReserConBox = styled.div`
   background-color: #ffffff;
@@ -37,11 +35,11 @@ export const ReserTitle = styled.p`
   font-weight: bold;
   color: #464646;
 `;
-export const ReserCurrent = styled.p<{$resv_state:number}>`
-  color: ${(props)=>{
-    if(props.$resv_state === 0){
+export const ReserCurrent = styled.p<{ $resv_state: string }>`
+  color: ${(props) => {
+    if (props.$resv_state === '0') {
       return '#FF0000';
-    }else{
+    } else {
       return '#888888';
     }
   }};
@@ -72,12 +70,12 @@ export const ReserStateWrap = styled.div`
   display: flex;
   align-items: end;
 `;
-export const ReserStateBtn = styled.button<{$resv_state:number}>`
-  background-color: ${(props)=>{
-    if(props.$resv_state === 1){
-      return "#FF7171"
-    }else{
-      return"#555555"
+export const ReserStateBtn = styled.button<{ $resv_state: number }>`
+  background-color: ${(props) => {
+    if (props.$resv_state === 1) {
+      return '#FF7171';
+    } else {
+      return '#555555';
     }
   }};
   font-size: 1.125rem;
