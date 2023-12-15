@@ -1,15 +1,70 @@
-//예약 취소 , 관리자 상품등록 취소 모달 컴포넌트
+import moment from 'moment';
 import * as MypageModalS from '../../styles/common/Modal';
-import React, { SetStateAction, Dispatch } from 'react';
-import { useAppDispatch } from '../../stores/Store';
-import { reserStateChange } from '../../stores/features/GetReservationSlice';
+import { SetStateAction, Dispatch } from 'react';
+import { deleteReservation } from '../../service/FieldApi';
+import { IFieldResvData } from '../../utils/FieldType';
+import getDayofWeek from '../../hooks/getDayofWeek';
 interface cModalProp {
   setCModalState: Dispatch<SetStateAction<boolean>>;
-  dataIndex: number;
+  data: IFieldResvData;
 }
 const ReserCancle = (props: cModalProp) => {
-   // 예약내역 데이터 변경 dispatch
-   const mocDataDispatch = useAppDispatch();
+  // 예약내역 데이터 변경 dispatch
+  const deleteResv = async () => {
+    const d: any = await deleteReservation(props.data.resvId);
+    console.log('d', d);
+    /* 
+    result
+: 
+Array(1)
+0
+: 
+addr
+: 
+"서울특별시 마포구 성산동 산53-28"
+area
+: 
+"마포구"
+email
+: 
+"chu"
+fieldId
+: 
+"1"
+fieldNm
+: 
+"구장명입니다."
+insertDatetime
+: 
+"2023-12-12T11:23:36.000Z"
+remarkTxt
+: 
+null
+resvDate
+: 
+"2023-12-11T15:00:00.000Z"
+resvEndTime
+: 
+"21:00:00"
+resvId
+: 
+"1"
+resvPrice
+: 
+20000
+resvStartTime
+: 
+"20:00:00"
+resvState
+: 
+"1"
+resvStateNm
+: 
+"예약완료"
+updateDatetime
+: 
+"2023-12-12T11:23:36.000Z" */
+  };
   return (
     <MypageModalS.ModalWrap>
       <MypageModalS.ModalBox>
@@ -17,29 +72,35 @@ const ReserCancle = (props: cModalProp) => {
           <MypageModalS.Title>예약 취소</MypageModalS.Title>
           <MypageModalS.SubTitle>예약 내역</MypageModalS.SubTitle>
           <MypageModalS.InfoBox>
-            <MypageModalS.InfoTxt $color ={'#5a5a5a'}>서울 영등포 더에프 필드 B구장</MypageModalS.InfoTxt>
-            <MypageModalS.InfoTxt>10월 12일 목요일</MypageModalS.InfoTxt>
-            <MypageModalS.InfoTxt>14:00 ~ 16:00</MypageModalS.InfoTxt>
+            <MypageModalS.InfoTxt $color={'#5a5a5a'}>
+              {props.data.fieldNm}
+            </MypageModalS.InfoTxt>
+            <MypageModalS.InfoTxt>
+              {moment(props.data.resvDate).format('YYYY년 MM월 DD일')} &nbsp;
+              {getDayofWeek(moment(props.data.resvDate).day())}
+            </MypageModalS.InfoTxt>
+            <MypageModalS.InfoTxt>
+              &nbsp;
+              {props.data.resvStartTime.slice(0, 5)} ~&nbsp;
+              {props.data.resvEndTime.slice(0, 5)}
+            </MypageModalS.InfoTxt>
           </MypageModalS.InfoBox>
           <MypageModalS.ReserPriceWrap>
             <MypageModalS.SubTitle>이용금액</MypageModalS.SubTitle>
-            <MypageModalS.ReserPrice>10000원</MypageModalS.ReserPrice>
+            <MypageModalS.ReserPrice>
+              {props.data.resvPrice.toLocaleString('ko-KR')}원
+            </MypageModalS.ReserPrice>
           </MypageModalS.ReserPriceWrap>
-          <MypageModalS.WarnText $color ={'#5a5a5a'}>
-            예약{' '}
-            <MypageModalS.WarnAccText>
-              취소
-            </MypageModalS.WarnAccText>
-            시 예약 내역은 삭제되어 복구가 불가합니다.
+          <MypageModalS.WarnText $color={'#5a5a5a'}>
+            예약 <MypageModalS.WarnAccText>취소</MypageModalS.WarnAccText>시
+            예약 내역은 삭제되어 복구가 불가합니다.
           </MypageModalS.WarnText>
-          <MypageModalS.WarnText>
-            정말로 취소하시겠어요?
-          </MypageModalS.WarnText>
+          <MypageModalS.WarnText>정말로 취소하시겠어요?</MypageModalS.WarnText>
         </MypageModalS.ContentWrap>
         <MypageModalS.WarnBtnWrap>
           <MypageModalS.WarnBtn
             onClick={() => {
-              mocDataDispatch(reserStateChange({ reserState: 0, index: props.dataIndex }));
+              deleteResv();
               props.setCModalState(false);
             }}
           >

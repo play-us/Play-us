@@ -62,6 +62,34 @@ export const getFieldReview = (fieldId: string) => {
   });
 };
 
+// 구장 리뷰 등록
+export const insertFieldReview = (
+  fieldId: string,
+  resvId: string,
+  email: string,
+  starCnt: string,
+  reviewCon: string,
+) => {
+  return new Promise<IFieldCommentData[]>((resolve, reject) => {
+    axios
+      .post(`${process.env.REACT_APP_SERVER_IP}/field/insertFieldReview`, {
+        params: {
+          fieldId: fieldId,
+          resvId: resvId,
+          email: email,
+          starCnt: starCnt,
+          reviewCon: reviewCon,
+        },
+      })
+      .then((e: any) => {
+        resolve(e);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
 // 구장 좋아요
 export const postFieldLike = (
   fieldId: string,
@@ -188,6 +216,22 @@ export const insertReservation = (
         resvStartTime: resvStartTime,
         resvEndTime: resvEndTime,
         resvPrice: resvPrice,
+      })
+      .then((e: any) => {
+        resolve(e);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
+// 구장 예약 취소
+export const deleteReservation = (resvId: string) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .delete(`${process.env.REACT_APP_SERVER_IP}/field/deleteReservation`, {
+        params: { resvId: resvId },
       })
       .then((e: any) => {
         resolve(e);

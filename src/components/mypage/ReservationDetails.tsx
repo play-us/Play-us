@@ -50,8 +50,8 @@ const ReservationDetails = () => {
   const [cModalState, setCModalState] = useState<boolean>(false);
   const [wModalState, setWModalState] = useState<boolean>(false);
 
-  // 모달창에 전달할 해당 예약데이터 인덱스 번호 state
-  const [dataIndex, setDataIndex] = useState<number>(0);
+  // 모달창에 전달할 해당 예약데이터 예약 번호 state
+  const [data, setData] = useState<number>(0);
 
   // 모달 상태에 따라 변수에 담아줄 컴포넌트
   let showModal: null | JSX.Element = null;
@@ -59,12 +59,15 @@ const ReservationDetails = () => {
     showModal = (
       <CancleModal
         setCModalState={setCModalState}
-        dataIndex={dataIndex}
+        data={resvList[data]}
       ></CancleModal>
     );
   } else if (wModalState) {
     showModal = (
-      <ReviewWriteModal setWModalState={setWModalState}></ReviewWriteModal>
+      <ReviewWriteModal
+        setWModalState={setWModalState}
+        data={resvList[data]}
+      ></ReviewWriteModal>
     );
   }
   return (
@@ -79,35 +82,35 @@ const ReservationDetails = () => {
                 <MypageReserS.ReserTitle>
                   {data.fieldNm}
                 </MypageReserS.ReserTitle>
-                <MypageReserS.ReserCurrent $resv_state={data.resvState}>
+                <MypageReserS.ReserCurrent $resvState={data.resvState}>
                   {data.resvStateNm}
                 </MypageReserS.ReserCurrent>
               </MypageReserS.ReserTitleBox>
               <MypageReserS.ReserStateBox>
                 <ReserState data={data}></ReserState>
                 <MypageReserS.ReserStateWrap>
-                  {/*                   {data.resv_state === 1 && ( //함수로 분기처리
+                  {/* {data.resvState === '1' && ( //함수로 분기처리
                     <MypageReserS.ReserStateBtn
-                      $resv_state={data.resv_state}
+                      $resvState={data.resvState}
                       onClick={() => {
                         // 무명함수 사용 안 하기
                         setCModalState(true);
-                        setDataIndex(i);
+                        setData(i);
                       }}
                     >
                       예약취소
-                    </MypageReserS.ReserStateBtn>ß
-                  )}
-                  {data.resv_state === 2 && (
+                    </MypageReserS.ReserStateBtn>
+                  )} */}
+                  {data.resvState === '1' && (
                     <MypageReserS.ReserStateBtn
-                      $resv_state={data.resv_state}
+                      $resvState={data.resvState}
                       onClick={() => {
                         setWModalState(true);
                       }}
                     >
                       후기등록
                     </MypageReserS.ReserStateBtn>
-                  )} */}
+                  )}
                 </MypageReserS.ReserStateWrap>
               </MypageReserS.ReserStateBox>
             </MypageReserS.ReserConBox>

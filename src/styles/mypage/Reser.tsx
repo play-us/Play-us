@@ -35,9 +35,9 @@ export const ReserTitle = styled.p`
   font-weight: bold;
   color: #464646;
 `;
-export const ReserCurrent = styled.p<{ $resv_state: string }>`
+export const ReserCurrent = styled.p<{ $resvState: string }>`
   color: ${(props) => {
-    if (props.$resv_state === '0') {
+    if (props.$resvState === '0') {
       return '#FF0000';
     } else {
       return '#888888';
@@ -70,9 +70,9 @@ export const ReserStateWrap = styled.div`
   display: flex;
   align-items: end;
 `;
-export const ReserStateBtn = styled.button<{ $resv_state: number }>`
+export const ReserStateBtn = styled.button<{ $resvState: string }>`
   background-color: ${(props) => {
-    if (props.$resv_state === 1) {
+    if (props.$resvState === '1') {
       return '#FF7171';
     } else {
       return '#555555';
