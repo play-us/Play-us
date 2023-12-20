@@ -89,7 +89,7 @@ const ReservationDetails = () => {
               <MypageReserS.ReserStateBox>
                 <ReserState data={data}></ReserState>
                 <MypageReserS.ReserStateWrap>
-                  {/* {data.resvState === '1' && ( //함수로 분기처리
+                  {data.resvState === '1' && ( //함수로 분기처리
                     <MypageReserS.ReserStateBtn
                       $resvState={data.resvState}
                       onClick={() => {
@@ -100,8 +100,8 @@ const ReservationDetails = () => {
                     >
                       예약취소
                     </MypageReserS.ReserStateBtn>
-                  )} */}
-                  {data.resvState === '1' && (
+                  )}
+                  {data.resvState === '2' && (
                     <MypageReserS.ReserStateBtn
                       $resvState={data.resvState}
                       onClick={() => {

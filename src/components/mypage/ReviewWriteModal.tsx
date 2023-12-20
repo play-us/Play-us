@@ -1,14 +1,11 @@
 import moment from 'moment';
 import * as ReviewWrites from '../../styles/mypage/ReviewModal';
 import * as MypageModalS from '../../styles/common/Modal';
-import { FaStar, FaStarHalf } from 'react-icons/fa';
-import { useState, useRef, SetStateAction, Dispatch, useEffect } from 'react';
+import { useState, SetStateAction, Dispatch } from 'react';
 import { IFieldResvData } from '../../utils/FieldType';
 import getDayofWeek from '../../hooks/getDayofWeek';
 import { Rate, Input } from 'antd';
 import { insertFieldReview } from '../../service/FieldApi';
-// 별점 총 개수를 위한 배열 (상수는 대문자로 따로 뺴놓기)
-const STARCOUNT = [5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5];
 
 interface wModalProp {
   setWModalState: Dispatch<SetStateAction<boolean>>;
@@ -20,6 +17,7 @@ interface Ireview {
 }
 //컴포넌트 함수
 const ReviewWriteModal = (props: wModalProp) => {
+  const email = 'chu';
   const { TextArea } = Input;
   const [review, setReview] = useState<Ireview>({
     starCnt: 0,
@@ -54,7 +52,21 @@ const ReviewWriteModal = (props: wModalProp) => {
       return;
     }
 
-    //const d: any = await insertFieldReview(props.data.fieldId, props.data.resvId, );
+    const d: any = await insertFieldReview(
+      props.data.fieldId,
+      props.data.resvId,
+      email,
+      String(review.starCnt),
+      review.reviewCon,
+    );
+    console.log(d);
+
+    if (d.status === 200) {
+      props.setWModalState(false);
+    } else {
+      alert('리뷰 등록에 실패하였습니다.');
+      return;
+    }
   }
   return (
     <MypageModalS.ModalWrap>
