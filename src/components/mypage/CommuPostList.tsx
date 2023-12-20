@@ -3,8 +3,9 @@ import { PiHandPalmLight } from 'react-icons/pi';
 import { BiSolidCommentDots } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
 import { ICommunityRowData } from '../recruitTeam/RecruitTeamList';
-
+import { useNavigate } from 'react-router-dom';
 const CommuList = (props: { data: ICommunityRowData }) => {
+  const navigate = useNavigate();
   const {
     memberCount,
     stadium,
@@ -19,7 +20,10 @@ const CommuList = (props: { data: ICommunityRowData }) => {
   } = props.data;
 
   return (
-    <MypageCommuS.CommuListBox $padding={'30px'}>
+    <MypageCommuS.CommuListBox
+      onClick={() => navigate(`/recruitTeamDetail?commId=${commuId}`)}
+      style={{ padding: '30px' }}
+    >
       <MypageCommuS.CommuListDate>{deadLine}</MypageCommuS.CommuListDate>
       <MypageCommuS.CommuPostListTit>
         {commuTitle}

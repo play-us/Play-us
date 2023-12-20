@@ -23,17 +23,15 @@ export const MyInfoLeftInner = styled.div`
   margin-left: 20px;
 `;
 
-
-export const UserProImg = styled.div<{$size:string}>`
-  width: ${(props)=>props.$size};
-  height: ${(props)=>props.$size};
+export const UserProImg = styled.div<{ $size: string }>`
+  width: ${(props) => props.$size};
+  height: ${(props) => props.$size};
   border: 1px solid #e1e1e1;
   border-radius: 50%;
   background-image: url(${proImg});
   background-repeat: no-repeat;
   background-size: contain;
-
-`
+`;
 
 export const UserInfoName = styled.div`
   font-size: 3rem;
@@ -68,20 +66,16 @@ export const MyInfoRight = styled.button`
   cursor: pointer;
 `;
 
-
-
 // 마이페이지 오른쪽 내용 공통으로 감싸주는 부분
 export const MyListRight = styled.div`
   width: 100%;
   height: 700px;
   background-color: #f8f8f8;
   border-radius: 30px;
-  overflow: scroll;
+  /* overflow: scroll;
   &::-webkit-scrollbar{
     width: 0px;
-  }
+  } */
   padding: 30px 40px;
   box-sizing: border-box;
 `;
-
-

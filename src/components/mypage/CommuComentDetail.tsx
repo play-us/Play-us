@@ -4,12 +4,20 @@ import CommuCoList from './CommuCmList';
 import { useEffect, useState } from 'react';
 import Axios from 'axios';
 import { ICommentData } from '../recruitTeam/RecruitTeamDetail';
+import { Col, Pagination } from 'antd';
 const urlGetCommentList =
   'http://localhost:8080/community/getCommunityCommentList';
-const comDatas = [1, 2, 3, 4, 5, 6]; //임시 데이터 배열
 
 const CommuComentDetail = () => {
+  const ITEM_PER_PAGE = 3;
+  const [currentPage, setCurrentPage] = useState(1); //페이지네이션 현재페이지
+  const startIndex = (currentPage - 1) * ITEM_PER_PAGE;
+  const endIndex = startIndex + ITEM_PER_PAGE;
   const [commentDataList, setCommentDataList] = useState<any>([]);
+  // 페이지네이션 이벤트 함수
+  const handlePageChange = (page: any) => {
+    setCurrentPage(page);
+  };
   useEffect(() => {
     const commentListApiR = Axios.get<any>(
       urlGetCommentList,
@@ -59,6 +67,14 @@ const CommuComentDetail = () => {
             return <CommuCoList data={data}></CommuCoList>;
           })}
         </MypageCommuS.CommuListWrap>
+        <Col span={24}>
+          <Pagination
+            current={currentPage}
+            total={commentDataList.length}
+            pageSize={ITEM_PER_PAGE}
+            onChange={handlePageChange}
+          ></Pagination>
+        </Col>
       </MypageCommuS.CommuConBox>
     </MypageS.MyListRight>
   );

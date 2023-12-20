@@ -6,11 +6,23 @@ import axios from 'axios';
 import { ICommuDetailProps } from '../../pages';
 import ConvertDate from '../common/date/dateFormat';
 import { ICommunityRowData } from '../recruitTeam/RecruitTeamList';
+import { Col, Pagination } from 'antd';
 const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
-const comDatas = [1, 2, 3, 4, 5, 6]; //임시 데이터 배열
-
+const ITEM_PER_PAGE = 3;
 const CommunityDetails = () => {
+  const [currentPage, setCurrentPage] = useState(1); //페이지네이션 현재페이지
   const [recruitData, setRecruitData] = useState<ICommunityRowData[]>([]);
+  const startIndex = (currentPage - 1) * ITEM_PER_PAGE;
+  const endIndex = startIndex + ITEM_PER_PAGE;
+  // 페이지네이션 이벤트 함수
+  const handlePageChange = (page: any) => {
+    setCurrentPage(page);
+  };
+  // 팀원 모집 리스트 컴포넌트
+  const communityList = recruitData
+    .slice(startIndex, endIndex)
+    .map((data: ICommunityRowData) => <CommuPostList data={data} />);
+
   useEffect(() => {
     //상세 정보
 
@@ -57,12 +69,16 @@ const CommunityDetails = () => {
   return (
     <MypageS.MyListRight>
       <MypageCommuS.CommuConBox>
-        <MypageCommuS.CommuListWrap>
-          {recruitData.map((data) => {
-            return <CommuPostList data={data}></CommuPostList>;
-          })}
-        </MypageCommuS.CommuListWrap>
+        <MypageCommuS.CommuListWrap>{communityList}</MypageCommuS.CommuListWrap>
       </MypageCommuS.CommuConBox>
+      <Col span={24}>
+        <Pagination
+          current={currentPage}
+          total={recruitData.length}
+          pageSize={ITEM_PER_PAGE}
+          onChange={handlePageChange}
+        ></Pagination>
+      </Col>
     </MypageS.MyListRight>
   );
 };
