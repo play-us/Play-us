@@ -11,7 +11,7 @@ const LikedField = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [Likeddata, setLikedData] = useState<IRowData[]>([]);
   const [currentPage, setCurrentPage] = useState(1); //페이지네이션 현재페이지
-  const ITEM_PER_PAGE = 10;
+  const ITEM_PER_PAGE = 5;
   const startIndex = (currentPage - 1) * ITEM_PER_PAGE;
   const endIndex = startIndex + ITEM_PER_PAGE;
 

@@ -7,64 +7,19 @@ import getDayofWeek from '../../hooks/getDayofWeek';
 interface cModalProp {
   setCModalState: Dispatch<SetStateAction<boolean>>;
   data: IFieldResvData;
+  getReservationList: Function;
 }
 const ReserCancle = (props: cModalProp) => {
-  // 예약내역 데이터 변경 dispatch
+  /* 예약 취소 */
   const deleteResv = async () => {
     const d: any = await deleteReservation(props.data.resvId);
-    console.log('d', d);
-    /* 
-    result
-: 
-Array(1)
-0
-: 
-addr
-: 
-"서울특별시 마포구 성산동 산53-28"
-area
-: 
-"마포구"
-email
-: 
-"chu"
-fieldId
-: 
-"1"
-fieldNm
-: 
-"구장명입니다."
-insertDatetime
-: 
-"2023-12-12T11:23:36.000Z"
-remarkTxt
-: 
-null
-resvDate
-: 
-"2023-12-11T15:00:00.000Z"
-resvEndTime
-: 
-"21:00:00"
-resvId
-: 
-"1"
-resvPrice
-: 
-20000
-resvStartTime
-: 
-"20:00:00"
-resvState
-: 
-"1"
-resvStateNm
-: 
-"예약완료"
-updateDatetime
-: 
-"2023-12-12T11:23:36.000Z" */
+
+    if (d.status === 200) {
+      alert('예약이 취소되었습니다.');
+      props.getReservationList();
+    }
   };
+
   return (
     <MypageModalS.ModalWrap>
       <MypageModalS.ModalBox>

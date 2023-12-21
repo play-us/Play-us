@@ -14,7 +14,7 @@ const ReservationDetails = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [resvList, setResvList] = useState<IFieldResvData[]>([]);
   const [currentPage, setCurrentPage] = useState(1); //페이지네이션 현재페이지
-  const ITEM_PER_PAGE = 10;
+  const ITEM_PER_PAGE = 5;
   const startIndex = (currentPage - 1) * ITEM_PER_PAGE;
   const endIndex = startIndex + ITEM_PER_PAGE;
   useEffect(() => {
@@ -25,7 +25,7 @@ const ReservationDetails = () => {
   /* 구장 예약정보 조회 */
   async function getReservationList() {
     const email = 'chu';
-    const res: any = await getReservation(email, 0, 20);
+    const res: any = await getReservation(email);
 
     setResvList(res.data.result);
     setIsLoading(false);
@@ -45,6 +45,7 @@ const ReservationDetails = () => {
       <CancleModal
         setCModalState={setCModalState}
         data={resvList[data]}
+        getReservationList={getReservationList}
       ></CancleModal>
     );
   } else if (wModalState) {
@@ -69,7 +70,6 @@ const ReservationDetails = () => {
         index={index}
         setData={setData}
         setCModalState={setCModalState}
-        setWModalState={setWModalState}
       />
     ));
 

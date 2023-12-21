@@ -14,7 +14,7 @@ interface reserData {
 }
 
 const ReserState = ({ data }: any) => {
-  console.log('data.resvStartTime', moment(data.resvStartTime).format('HH:mm'));
+  console.log('data', data);
 
   return (
     <MypageReserS.ReserDetailsWrap>
@@ -32,7 +32,8 @@ const ReserState = ({ data }: any) => {
       <MypageReserS.ReserListWrap>
         <MypageReserS.TimeIcon size={20} />
         <MypageReserS.ReserListText>
-          {data.resvState}시간 이용
+          {data.resvEndTime.slice(0, 2) - data.resvStartTime.slice(0, 2)}시간
+          이용
         </MypageReserS.ReserListText>
       </MypageReserS.ReserListWrap>
     </MypageReserS.ReserDetailsWrap>

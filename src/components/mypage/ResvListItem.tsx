@@ -8,11 +8,10 @@ interface IResvItemProp {
   index: number;
   setData: Dispatch<SetStateAction<number>>;
   setCModalState: Dispatch<SetStateAction<boolean>>;
-  setWModalState: Dispatch<SetStateAction<boolean>>;
 }
 
 const ResvListItem = (props: IResvItemProp) => {
-  const { data, index, setData, setCModalState, setWModalState } = props;
+  const { data, index, setData, setCModalState } = props;
   return (
     <MypageReserS.ReserConBox key={index}>
       <MypageReserS.ReserTitleBox>
@@ -28,22 +27,11 @@ const ResvListItem = (props: IResvItemProp) => {
             <MypageReserS.ReserStateBtn
               $resvState={data.resvState}
               onClick={() => {
-                // 무명함수 사용 안 하기
                 setCModalState(true);
                 setData(index);
               }}
             >
               예약취소
-            </MypageReserS.ReserStateBtn>
-          )}
-          {data.resvState === '2' && (
-            <MypageReserS.ReserStateBtn
-              $resvState={data.resvState}
-              onClick={() => {
-                setWModalState(true);
-              }}
-            >
-              후기등록
             </MypageReserS.ReserStateBtn>
           )}
         </MypageReserS.ReserStateWrap>

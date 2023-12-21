@@ -133,8 +133,8 @@ export const getFieldLike = (fieldId: string) => {
 // 구장 예약정보 조회
 export const getReservation = (
   email: string,
-  pageStart: number,
-  pageEnd: number,
+  pageStart?: number,
+  pageEnd?: number,
 ) => {
   return new Promise((resolve, reject) => {
     axios
