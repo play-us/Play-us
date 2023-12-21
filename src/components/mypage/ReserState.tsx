@@ -14,8 +14,6 @@ interface reserData {
 }
 
 const ReserState = ({ data }: any) => {
-  console.log('data', data);
-
   return (
     <MypageReserS.ReserDetailsWrap>
       <MypageReserS.ReserListWrap>

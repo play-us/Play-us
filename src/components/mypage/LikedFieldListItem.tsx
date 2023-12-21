@@ -5,6 +5,7 @@ import { IRowData } from '../../utils/FieldType';
 import NoImg from '../../assets/images/NoImg.png';
 import { RedColor } from '../../styles/CommonStyle';
 import { postFieldLike } from '../../service/FieldApi';
+import { useNavigate } from 'react-router-dom';
 
 const LikedFieldListItem = (props: {
   data: IRowData;
@@ -12,6 +13,7 @@ const LikedFieldListItem = (props: {
 }) => {
   const data = props.data;
   const email = 'chu';
+  const navigate = useNavigate();
 
   /* 좋아요 취소 */
   const putLiked = async () => {
@@ -21,21 +23,24 @@ const LikedFieldListItem = (props: {
     props.getDataAll();
   };
 
+  const NavigateFieldDetail = () => {
+    navigate(`/fieldDetail?id=${data.fieldId}`);
+  };
+
   return (
     <Wrap key={data.fieldId}>
       <ThumbImg>
         <img src={data.imgUrl ? data.imgUrl : NoImg} alt="썸네일 이미지" />
       </ThumbImg>
-      <InfoWrap>
-        <ActionWrap>
+      {/* <InfoWrap onClick={() => navigate(`/recruitTeamDetail`)}> */}
+      <InfoWrap onClick={() => console.log('hello')}>
+        <ActionWrap onClick={() => putLiked()}>
           <WishBtn>
-            <Heart color={RedColor} onClick={() => putLiked()} />
+            <Heart color={RedColor} />
           </WishBtn>
         </ActionWrap>
         <Addr>{data.addr}</Addr>
-        <Link to={`/fieldDetail?id=${data.fieldId}`}>
-          <FieldName>{data.fieldNm}</FieldName>
-        </Link>
+        <FieldName>{data.fieldNm}</FieldName>
         <Contour />
         <UseInfo>
           <Price>{data.price}원</Price>
