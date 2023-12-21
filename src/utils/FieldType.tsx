@@ -44,6 +44,23 @@ export interface IFieldTypeData {
   searchTxt: string | null;
 }
 
+export interface IFieldResvData {
+  email: string;
+  fieldId: string;
+  fieldNm: string;
+  addr: string;
+  insertDatetime: string;
+  remarkTxt: null;
+  resvDate: string;
+  resvEndTime: string;
+  resvId: string;
+  resvPrice: number;
+  resvStartTime: string;
+  resvState: string;
+  resvStateNm: string;
+  updateDatetime: string;
+}
+
 export interface IFieldCommentData {
   length: boolean;
   map(

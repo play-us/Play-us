@@ -21,7 +21,7 @@ const Flex = styled.div`
   display: flex;
   align-items: center;
 `;
-const MenuWrap = styled.div`
+const MenuWrap = styled.ul`
   margin-left: 200px;
   display: flex;
   align-items: center;

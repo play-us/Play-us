@@ -1,35 +1,37 @@
 import * as MypageS from '../styles/mypage/Mypage';
 import * as MypageMenuBarS from '../styles/mypage/MenuBar';
-import { useEffect, useState } from 'react';
-import { useAppSelector } from '../stores/Store';
-import MypageMenu from '../components/mypage/MypageMenu';
+import { ReactNode, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ReservationDetails from '../components/mypage/ReservationDetails';
 import CommunityDetails from '../components/mypage/CommuPostDetails';
-import ReviewDetails from '../components/mypage/ReviewDetails';
 import CommuComentDetail from './../components/mypage/CommuComentDetail';
-import { useNavigate } from 'react-router-dom';
+
+import ReviewDetails from '../components/mypage/ReviewDetails';
+import LikedField from '../components/mypage/LikedFiled';
 import CommuWishDetails from './../components/mypage/CommuWishDetails';
-import axios from 'axios';
-import ConvertDate from '../components/common/date/dateFormat';
-import { ICommunityRowData } from '../components/recruitTeam/RecruitTeamList';
-import { ICommuDetailProps } from '.';
 
+export interface ITabMenu {
+  id: number;
+  tabName: string;
+  detail: ReactNode;
+}
 const MyPage = () => {
-  const getMenuState = useAppSelector((state) => state.menu.MState);
-  let showDetails: JSX.Element | null = null; // 탭 메뉴별로 보여줄 ReservationDetails 컴포넌트
-  if (getMenuState === '예약') {
-    showDetails = <ReservationDetails></ReservationDetails>;
-  } else if (getMenuState === '작성 글') {
-    showDetails = <CommunityDetails></CommunityDetails>;
-  } else if (getMenuState === '작성 댓글') {
-    showDetails = <CommuComentDetail></CommuComentDetail>;
-  } else if (getMenuState === '리뷰') {
-    showDetails = <ReviewDetails></ReviewDetails>;
-  } else if (getMenuState === '찜 목록') {
-    showDetails = <CommuWishDetails></CommuWishDetails>;
-  }
-  let navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<ITabMenu>({
+    id: 1,
+    tabName: '예약',
+    detail: <ReservationDetails />,
+  });
 
+  const tabMenuList = [
+    { id: 1, tabName: '예약', detail: <ReservationDetails /> },
+    { id: 2, tabName: '작성글', detail: <CommunityDetails /> },
+    { id: 3, tabName: '작성댓글', detail: <CommuComentDetail /> },
+    { id: 4, tabName: '리뷰', detail: <ReviewDetails /> },
+    { id: 5, tabName: '구장 좋아요', detail: <LikedField /> },
+    { id: 6, tabName: '관심글', detail: <CommuWishDetails /> },
+  ];
+
+  let navigate = useNavigate();
   return (
     <MypageS.MypageWrap>
       <MypageS.MypageInfo>
@@ -52,8 +54,20 @@ const MyPage = () => {
         </MypageS.MyInfoRight>
       </MypageS.MypageInfo>
       <MypageMenuBarS.MyListWrap>
-        <MypageMenu></MypageMenu>
-        {showDetails}
+        <MypageMenuBarS.ListMenuWrap>
+          {tabMenuList.map((tab) => (
+            <MypageMenuBarS.ListMenu
+              key={tab.id}
+              $menuState={activeTab.tabName}
+              onClick={() => {
+                setActiveTab(tab);
+              }}
+            >
+              {tab.tabName}
+            </MypageMenuBarS.ListMenu>
+          ))}
+        </MypageMenuBarS.ListMenuWrap>
+        {activeTab.detail}
       </MypageMenuBarS.MyListWrap>
     </MypageS.MypageWrap>
   );

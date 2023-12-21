@@ -23,49 +23,46 @@ export const ModalBox = styled.div`
   box-sizing: border-box;
 `;
 
-
-
 export const ContentWrap = styled.div`
   text-align: left;
 `;
 
 export const Title = styled.p`
-   font-size:  1.25rem;
-   font-weight: bold;
-   margin-bottom: 20px;
-`
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+`;
 export const SubTitle = styled.p`
-   color: #d2d2d2;
-   font-weight: bold;
-   font-size: 0.75rem;
-`
+  color: #d2d2d2;
+  font-weight: bold;
+  font-size: 0.75rem;
+`;
 export const InfoBox = styled.div`
   padding: 30px 35px;
   border-radius: 20px;
   box-sizing: border-box;
   background-color: #f4f4f4;
   margin: 20px 0;
-`
+`;
 
-export const InfoTxt = styled.p<{$color?:string}>`
-   color: ${(props) => props.$color};
-   font-weight: bold;
-   font-size:  1.125rem;
-   line-height: 30px;
-   margin-right: 70px;
-`
+export const InfoTxt = styled.p<{ $color?: string }>`
+  color: ${(props) => props.$color};
+  font-weight: bold;
+  font-size: 1.125rem;
+  line-height: 30px;
+  margin-right: 70px;
+`;
 
 export const ReserPriceWrap = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
-  
-`
+`;
 export const ReserPrice = styled.p`
   font-weight: bold;
-`
+`;
 
-export const WarnText = styled.p<{$color?:string}>`
+export const WarnText = styled.p<{ $color?: string }>`
   font-size: 0.875em;
   margin-bottom: 20px;
   font-weight: bold;
@@ -78,6 +75,7 @@ export const WarnBtnWrap = styled.ul`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  margin-top: 20px;
 `;
 export const WarnBtn = styled.li`
   width: 40%;
@@ -87,11 +85,11 @@ export const WarnBtn = styled.li`
   box-sizing: border-box;
   font-weight: bold;
   cursor: pointer;
-  &:nth-child(1){
+  &:nth-child(1) {
     background-color: #3ce48a;
     color: #ffffff;
   }
-  &:nth-child(2){
+  &:nth-child(2) {
     background-color: #d9d9d9;
   }
 `;
