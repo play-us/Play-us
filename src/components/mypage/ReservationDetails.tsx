@@ -1,8 +1,9 @@
 import * as MypageReserS from '../../styles/mypage/Reser';
 import * as MypageS from '../../styles/mypage/Mypage';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CancleModal from './CancleModal';
 import ReviewWriteModal from './ReviewWriteModal';
+import { Col, Pagination } from 'antd';
 
 import { getReservation } from '../../service/FieldApi';
 import { IFieldResvData } from '../../utils/FieldType';
@@ -21,10 +22,11 @@ const ReservationDetails = () => {
     getReservationList();
   }, []);
 
-  /* 예약 불가능 일자 조회 */
+  /* 구장 예약정보 조회 */
   async function getReservationList() {
     const email = 'chu';
     const res: any = await getReservation(email, 0, 20);
+
     setResvList(res.data.result);
     setIsLoading(false);
   }
@@ -54,6 +56,11 @@ const ReservationDetails = () => {
     );
   }
 
+  // 페이지네이션 이벤트 함수
+  const handlePageChange = (page: any) => {
+    setCurrentPage(page);
+  };
+
   const resvListComponent = resvList
     .slice(startIndex, endIndex)
     .map((data: IFieldResvData, index: number) => (
@@ -72,6 +79,14 @@ const ReservationDetails = () => {
       {showModal}
       <MypageReserS.ReserConWrap>
         {!isLoading ? resvListComponent : <LoadingComponent />}
+        <Col span={24}>
+          <Pagination
+            current={currentPage}
+            total={resvList.length}
+            pageSize={ITEM_PER_PAGE}
+            onChange={handlePageChange}
+          ></Pagination>
+        </Col>
       </MypageReserS.ReserConWrap>
     </MypageS.MyListRight>
   );
