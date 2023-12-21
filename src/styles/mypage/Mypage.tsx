@@ -69,13 +69,13 @@ export const MyInfoRight = styled.button`
 // 마이페이지 오른쪽 내용 공통으로 감싸주는 부분
 export const MyListRight = styled.div`
   width: 100%;
-  height: 700px;
+  height: 100%;
   background-color: #f8f8f8;
   border-radius: 30px;
-  /* overflow: scroll;
-  &::-webkit-scrollbar{
+  overflow: scroll;
+  &::-webkit-scrollbar {
     width: 0px;
-  } */
+  }
   padding: 30px 40px;
   box-sizing: border-box;
 `;

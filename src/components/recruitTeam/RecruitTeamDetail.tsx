@@ -40,6 +40,7 @@ export interface ICommentData {
   commentSeq: string;
   name: string;
   pImg: null;
+  commuId?: string;
 }
 interface IDetailRowData {
   area: string;

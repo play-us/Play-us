@@ -3,20 +3,20 @@ import * as MypageCommuS from '../../styles/mypage/Community';
 import ConvertDate from '../common/date/dateFormat';
 import { ICommentData } from '../recruitTeam/RecruitTeamDetail';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 const CommuCoList = (props: { data: ICommentData }) => {
   const { data } = props;
   console.log(data, ' prop');
-  // const url = 'http://localhost:8080/mypage/getMyPageData';
+  const url = 'http://localhost:8080/mypage/getMyPageData';
+  const navigate = useNavigate();
 
   // useEffect(() => {
-  //   const commentListApiR = Axios.get<any>(
-  //     url,
-  //     //      {
-  //     //     params: {
-  //     //       commuId: param1Value,
-  //     //     },
-  //     //   }
-  //   ).then((response) => {
+  //   const commentListApiR = Axios.get<any>(url, {
+  //     params: {
+  //       email: 'chu',
+  //     },
+  //   }).then((response) => {
   //     console.log(response, 'eeeee');
 
   //     const { result } = response.data;
@@ -50,7 +50,9 @@ const CommuCoList = (props: { data: ICommentData }) => {
 
   return (
     <MypageCommuS.CommuListBox style={{ padding: '50px' }}>
-      <MypageCommuS.CommuListInfoWrap>
+      <MypageCommuS.CommuListInfoWrap
+        onClick={() => navigate(`/recruitTeamDetail?commId=${data.commuId}`)}
+      >
         <MypageCommuS.CommentImg></MypageCommuS.CommentImg>
         <MypageCommuS.CommentTxtWrap>
           <MypageCommuS.CommentPostTitle>

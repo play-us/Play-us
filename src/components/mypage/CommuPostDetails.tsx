@@ -8,7 +8,7 @@ import ConvertDate from '../common/date/dateFormat';
 import { ICommunityRowData } from '../recruitTeam/RecruitTeamList';
 import { Col, Pagination } from 'antd';
 const urlGetMainDataList = 'http://localhost:8080/main/getMainData';
-const ITEM_PER_PAGE = 3;
+const ITEM_PER_PAGE = 5;
 const CommunityDetails = () => {
   const [currentPage, setCurrentPage] = useState(1); //페이지네이션 현재페이지
   const [recruitData, setRecruitData] = useState<ICommunityRowData[]>([]);
