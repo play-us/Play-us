@@ -23,17 +23,12 @@ const LikedFieldListItem = (props: {
     props.getDataAll();
   };
 
-  const NavigateFieldDetail = () => {
-    navigate(`/fieldDetail?id=${data.fieldId}`);
-  };
-
   return (
-    <Wrap key={data.fieldId}>
+    <Wrap onClick={() => navigate(`/fieldDetail?id=${data.fieldId}`)}>
       <ThumbImg>
         <img src={data.imgUrl ? data.imgUrl : NoImg} alt="썸네일 이미지" />
       </ThumbImg>
-      {/* <InfoWrap onClick={() => navigate(`/recruitTeamDetail`)}> */}
-      <InfoWrap onClick={() => console.log('hello')}>
+      <InfoWrap>
         <ActionWrap onClick={() => putLiked()}>
           <WishBtn>
             <Heart color={RedColor} />
@@ -56,7 +51,7 @@ export default LikedFieldListItem;
 const Wrap = styled.div`
   width: 100%;
   overflow: hidden;
-  pointer-events: none;
+  /* pointer-events: none; */
   outline: 1px solid rgba(23, 23, 23, 0.08);
   border-radius: 12px;
   outline-offset: -1px;
