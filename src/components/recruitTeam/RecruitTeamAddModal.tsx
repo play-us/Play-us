@@ -44,7 +44,7 @@ const RecruitTeamAddMoadl = (props: {
     }
   };
   const NavigateCommunityList = () => {
-    navigate('/community');
+    navigate('/communityList');
   };
   const handleAddOnClick = () => {
     // 등록 api
@@ -67,7 +67,7 @@ const RecruitTeamAddMoadl = (props: {
 
         onClose();
         // NavigateCommunityList();
-        navigate(`/recruitTeamDetail?commId=${commuid}`);
+        navigate(`/community`);
       } else {
         //실패 앐럿
         //창 유지

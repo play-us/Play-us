@@ -192,6 +192,7 @@ const CommentData = (props: { data: ICommentData }) => {
 };
 //팀원모집상세 컴포넌트
 const RecruitInfoData = (props: { data: ICommunityRowData }) => {
+  const navigate = useNavigate();
   const { data } = props;
   const location = useLocation();
 
@@ -229,6 +230,7 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
         // 성공적인 응답을 처리합니다.
         console.log(response.data);
         // NavigateCommunityList();
+        navigate('/communityList');
       });
   };
   const { commuTitle, stadium, name, memberCount, deadLine, area, content } =
