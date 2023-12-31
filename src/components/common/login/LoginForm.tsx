@@ -4,19 +4,23 @@ import { Button, Checkbox, Col, ConfigProvider, Form, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import SocialKakao from '../../kakaoLogin/SocialKakao';
+import { getMember } from '../../../service/UserApi';
+import { useAppDispatch } from '../../../stores/Store';
+import { authenticateUser } from '../../../stores/features/AuthenticationSlice';
 
 export function LoginForm() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const handleIdPwdChangeOnClick = () => {
     return;
   };
 
   const [formState, setFormState] = useState<{
-    id: string;
+    email: string;
     password: string;
     remember: boolean;
   }>({
-    id: '',
+    email: '',
     password: '',
     remember: false,
   });
@@ -24,9 +28,10 @@ export function LoginForm() {
   const [form] = Form.useForm();
 
   const handleChange = (values: any) => {
-    console.log(values);
     setFormState({
-      id: Object.keys(values).includes('id') ? values.id : formState.id,
+      email: Object.keys(values).includes('email')
+        ? values.id
+        : formState.email,
       password: Object.keys(values).includes('password')
         ? values.password
         : formState.password,
@@ -34,7 +39,6 @@ export function LoginForm() {
         ? values.remember
         : formState.remember,
     });
-    console.log(formState);
     // setFormState((prev) => ({...formState, values}));
     // console.log(values);
     // console.log(formState);
@@ -50,12 +54,9 @@ export function LoginForm() {
   //   // todo: get user id and pw from local storage
   // });
 
-  const onFinish = async (formResult: {
-    id: string;
-    password: string;
-    remember: boolean;
-  }) => {
-    console.log(formResult);
+  const onFinish = async (formResult: { email: string; password: string }) => {
+    dispatch(authenticateUser(formResult.email, formResult.password));
+    console.log(formResult.email, formResult.password);
 
     // formResult.password = passwordEncrypt(formResult.password);
 
@@ -110,7 +111,7 @@ export function LoginForm() {
           onValuesChange={handleChange}
           style={{ margin: '10%' }}
         >
-          <Form.Item name="id" required={true}>
+          <Form.Item name="email" required={true}>
             <Input
               prefix={<UserOutlined />}
               placeholder="아이디 또는 이메일"
