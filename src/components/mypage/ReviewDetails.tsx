@@ -1,47 +1,67 @@
 import * as MypageS from '../../styles/mypage/Mypage';
 import * as MypageReviewS from '../../styles/mypage/Review';
-const ReviewDetails = () => {
-    const RevDatas = [1,2,3,4,5,6]; //임시 데이터 배열
-    // 별점 총 개수를 위한 배열
-    const starsCount = [5,4.5,4,3.5,3,2.5,2,1.5,1,0.5];
-    return(
-        <MypageS.MyListRight>
-            {RevDatas.map(function(){
-                return(
-                    <MypageReviewS.ReviewConBox>
-                        <MypageReviewS.ReviewTopWrap>
-                            <MypageReviewS.NameStarsWrap>
-                                <MypageS.UserProImg $size={'60px'}></MypageS.UserProImg>
-                                <MypageReviewS.ReviewUserName>홍범진</MypageReviewS.ReviewUserName>
-                                <MypageReviewS.StarsWrap>
-                                    {starsCount.map(function(star,i){
-                                        let isHalf: null | boolean = null;
-                                        if(Number.isInteger(star) === true){
-                                        isHalf = false;
-                                        }else{
-                                        isHalf = true;
-                                        }
-                                        return(
-                                            <>
-                                                {isHalf ? <MypageReviewS.HalfStar/>: <MypageReviewS.Star/>}
-                                            </>
-                                        );
-                                    })}
-                                </MypageReviewS.StarsWrap>
-                            </MypageReviewS.NameStarsWrap>
-                            <MypageReviewS.ReviewReserDate>2023.08.07</MypageReviewS.ReviewReserDate>
-                        </MypageReviewS.ReviewTopWrap>
-                        <MypageReviewS.ReviewInfoBox>남양주 준타스 풋살 아레나</MypageReviewS.ReviewInfoBox>
-                        <MypageReviewS.ReviewInfoBox>사용일시: 2023.08.08 20:00~22:00</MypageReviewS.ReviewInfoBox>
-                        <MypageReviewS.ReviewContent>
-                            너무 좋았어요! 소규모로 모임 있을 때 조용하게 보내는게 돈도 아끼고 이득일듯요
-                            친구랑도 재밌게 놀았습니다! 시설도 깔끔하고 너무 좋아요
-                        </MypageReviewS.ReviewContent>
-            </MypageReviewS.ReviewConBox>
-                )
-            })}
-        </MypageS.MyListRight>
-    )
+import { Rate } from 'antd';
+import { useEffect, useState } from 'react';
+import { Col, Pagination } from 'antd';
+import { getFieldReview } from '../../service/FieldApi';
+import LoadingComponent from '../../components/common/Loading';
+import FieldComment from '../../components/field/FieldComment';
+import { IFieldCommentData } from '../../utils/FieldType';
+
+export interface IFieldReviewData {
+  resvId: string;
+  userNm: string;
+  fieldNm: string;
+  resvDate: string;
+  resvStartTime: string;
+  resvEndTime: string;
+  resvState: string;
 }
+
+const ReviewDetails = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [reviewList, setReviewList] = useState<IFieldCommentData[]>([]);
+  const [currentPage, setCurrentPage] = useState(1); //페이지네이션 현재페이지
+  const ITEM_PER_PAGE = 10;
+  const startIndex = (currentPage - 1) * ITEM_PER_PAGE;
+  const endIndex = startIndex + ITEM_PER_PAGE;
+
+  useEffect(() => {
+    setIsLoading(true);
+    getReservationList();
+  }, []);
+
+  /* 구장 리뷰 조회 */
+  async function getReservationList() {
+    const email = 'chu';
+    const res: any = await getFieldReview('', email, 0, 20);
+
+    setReviewList(res.data.result);
+    setIsLoading(false);
+  }
+
+  // 페이지네이션 이벤트 함수
+  const handlePageChange = (page: any) => {
+    setCurrentPage(page);
+  };
+
+  const reviewItemList = reviewList
+    .slice(startIndex, endIndex)
+    .map((data: IFieldCommentData) => <FieldComment data={data} />);
+
+  return (
+    <MypageS.MyListRight>
+      {!isLoading ? reviewItemList : <LoadingComponent />}
+      <Col span={24}>
+        <Pagination
+          current={currentPage}
+          total={reviewList.length}
+          pageSize={ITEM_PER_PAGE}
+          onChange={handlePageChange}
+        ></Pagination>
+      </Col>
+    </MypageS.MyListRight>
+  );
+};
 
 export default ReviewDetails;

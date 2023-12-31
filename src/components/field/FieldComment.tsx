@@ -1,7 +1,7 @@
 import { User } from 'lucide-react';
-import { Rate } from 'antd';
+import moment from 'moment';
 import styled, { css } from 'styled-components';
-import { Col, Row } from 'antd';
+import { Col, Row, Rate } from 'antd';
 import { IFieldCommentData } from '../../utils/FieldType';
 import ConvertDate from '../common/date/dateFormat';
 
@@ -28,11 +28,20 @@ const FieldComment = (props: { data: IFieldCommentData }) => {
             </CommentInfoDate>
           </Col>
         </Row>
-        <Col span={24} style={{ margin: '20px 0' }}>
+        <Col
+          span={24}
+          style={{
+            margin: '20px 0 40px 0',
+            color: '#646464',
+            fontSize: '1.25rem',
+            fontWeight: 'bold',
+          }}
+        >
           {data.reviewCon}
         </Col>
         <Col span={24} style={{ fontWeight: '500', color: 'gray' }}>
-          사용일시 : 2023.08.08 20:00~22:00
+          사용일시 : {moment(data.resvDate).format('YYYY-MM-DD')}{' '}
+          {data.resvStartTime.slice(0, 5)}~{data.resvEndTime.slice(0, 5)}
         </Col>
       </Col>
     </CommentList>
@@ -42,14 +51,17 @@ const FieldComment = (props: { data: IFieldCommentData }) => {
 export default FieldComment;
 
 const CommentList = styled.div`
-  margin-bottom: 15px;
-  border-bottom: 1px solid #dfdfdf;
+  background-color: #ffffff;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  text-align: start;
+  padding: 30px;
 `;
 const CommentInfoDate = styled.div`
-  font-size: 14px;
-  line-height: 126.5%;
-  letter-spacing: -0.005em;
-  color: #9f9f9f;
+  font-size: 1rem;
+  margin-left: 5px;
+  color: #9d9d9d;
 `;
 const CommentInfoName = styled.div`
   font-size: 16px;

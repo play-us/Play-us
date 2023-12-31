@@ -53,6 +53,7 @@ const ReservationDetails = () => {
       <ReviewWriteModal
         setWModalState={setWModalState}
         data={resvList[data]}
+        getReservationList={getReservationList}
       ></ReviewWriteModal>
     );
   }
@@ -70,6 +71,7 @@ const ReservationDetails = () => {
         index={index}
         setData={setData}
         setCModalState={setCModalState}
+        setWModalState={setWModalState}
       />
     ));
 

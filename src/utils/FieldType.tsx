@@ -59,14 +59,10 @@ export interface IFieldResvData {
   resvState: string;
   resvStateNm: string;
   updateDatetime: string;
+  reviewYn: string;
 }
 
 export interface IFieldCommentData {
-  length: boolean;
-  map(
-    arg0: (data: IFieldCommentData) => import('react/jsx-runtime').JSX.Element,
-  ): any;
-
   reviewId: string;
   fieldId: string;
   email: string;
@@ -77,4 +73,7 @@ export interface IFieldCommentData {
   remarkTxt: string;
   insertDatetime: string;
   updateDatetime: string;
+  resvDate: string;
+  resvStartTime: string;
+  resvEndTime: string;
 }

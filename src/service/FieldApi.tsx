@@ -45,12 +45,20 @@ export const getFieldDetail = (fieldId: string, email?: string) => {
 };
 
 // 구장 리뷰 조회(상세페이지)
-export const getFieldReview = (fieldId: string) => {
+export const getFieldReview = (
+  fieldId?: string,
+  email?: string,
+  pageStart?: number,
+  pageEnd?: number,
+) => {
   return new Promise<IFieldCommentData[]>((resolve, reject) => {
     axios
       .get(`${process.env.REACT_APP_SERVER_IP}/field/getFieldReview`, {
         params: {
           fieldId: fieldId,
+          email: email,
+          pageStart: pageStart,
+          pageEnd: pageEnd,
         },
       })
       .then((e: any) => {
@@ -73,13 +81,11 @@ export const insertFieldReview = (
   return new Promise<IFieldCommentData[]>((resolve, reject) => {
     axios
       .post(`${process.env.REACT_APP_SERVER_IP}/field/insertFieldReview`, {
-        params: {
-          fieldId: fieldId,
-          resvId: resvId,
-          email: email,
-          starCnt: starCnt,
-          reviewCon: reviewCon,
-        },
+        fieldId: fieldId,
+        resvId: resvId,
+        email: email,
+        starCnt: starCnt,
+        reviewCon: reviewCon,
       })
       .then((e: any) => {
         resolve(e);

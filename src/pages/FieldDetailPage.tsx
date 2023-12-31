@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Button, Typography, message } from 'antd';
+import { Button, Typography, message, Col, Pagination } from 'antd';
 import { RedColor } from '../styles/CommonStyle';
 import KakaoMap from '../components/common/KakaoMap';
 import FieldComment from '../components/field/FieldComment';
@@ -38,9 +38,11 @@ const FieldDetailPage = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<IFieldItem | null | undefined>();
-  const [commentDataList, setCommentDataList] = useState<
-    IFieldCommentData | undefined
-  >();
+  const [commentDataList, setCommentDataList] = useState<IFieldCommentData[]>();
+  const [currentPage, setCurrentPage] = useState(1); //페이지네이션 현재페이지
+  const ITEM_PER_PAGE = 10;
+  const startIndex = (currentPage - 1) * ITEM_PER_PAGE;
+  const endIndex = startIndex + ITEM_PER_PAGE;
   const [liked, setLiked] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -119,12 +121,17 @@ const FieldDetailPage = () => {
     message.info(`주소를 복사하였습니다!`);
   };
 
+  // 페이지네이션 이벤트 함수
+  const handlePageChange = (page: any) => {
+    setCurrentPage(page);
+  };
+
   /* 댓글 목록 */
   let commentList;
   if (commentDataList !== undefined && commentDataList !== null) {
-    commentList = commentDataList.map((data: IFieldCommentData) => (
-      <FieldComment data={data} />
-    ));
+    commentList = commentDataList
+      .slice(startIndex, endIndex)
+      .map((data: IFieldCommentData) => <FieldComment data={data} />);
   } else {
     commentList = <div>등록된 리뷰가 없습니다.</div>;
   }
@@ -240,6 +247,16 @@ const FieldDetailPage = () => {
               </CommentLength>
             </CommentHeaderWrap>
             {commentList}
+            <Col span={24}>
+              {commentDataList !== undefined && (
+                <Pagination
+                  current={currentPage}
+                  total={commentDataList.length}
+                  pageSize={ITEM_PER_PAGE}
+                  onChange={handlePageChange}
+                ></Pagination>
+              )}
+            </Col>
           </SectionWrap>
           <FieldResvModal
             fieldName="구장이름"
@@ -268,6 +285,10 @@ export default FieldDetailPage;
 const Wrap = styled.div`
   text-align: left;
   background-color: #f2f5f7;
+
+  & .ant-pagination {
+    text-align: center;
+  }
 `;
 
 const BackgroundImg = styled.div`
@@ -327,11 +348,6 @@ const FlexWrap = styled(Text)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
-
-const AddressCopy = styled(Text)`
-  text-align: right;
-  cursor: pointer;
 `;
 
 const Contour = styled.div`

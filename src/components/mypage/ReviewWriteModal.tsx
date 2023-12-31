@@ -10,6 +10,7 @@ import { insertFieldReview } from '../../service/FieldApi';
 interface wModalProp {
   setWModalState: Dispatch<SetStateAction<boolean>>;
   data: IFieldResvData;
+  getReservationList: Function;
 }
 interface Ireview {
   starCnt: number;
@@ -63,6 +64,7 @@ const ReviewWriteModal = (props: wModalProp) => {
 
     if (d.status === 200) {
       props.setWModalState(false);
+      props.getReservationList();
     } else {
       alert('리뷰 등록에 실패하였습니다.');
       return;
