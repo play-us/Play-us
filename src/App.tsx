@@ -16,6 +16,7 @@ import AdminPage from './pages/AdminPage';
 import FieldRegis from './pages/FieldRegis';
 import CompletePaymentPage from './pages/CompletePaymentPage';
 import RecruitTeamList from './components/recruitTeam/RecruitTeamList';
+import SignUp from './pages/SignUp';
 
 const Wrap = styled.div`
   background-color: #ffffff;
@@ -36,7 +37,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />}></Route>
             <Route path="/signIn" element={<SignIn />}></Route>
-            <Route path="/signUp"></Route>
+            <Route path="/signUp" element={<SignUp />}></Route>
             <Route path="/mypage" element={<MyPage></MyPage>}></Route>
             <Route path="/admin" element={<AdminPage></AdminPage>}></Route>
             <Route
