@@ -67,7 +67,8 @@ const RecruitTeamAddMoadl = (props: {
 
         onClose();
         // NavigateCommunityList();
-        navigate(`/community`);
+        // navigate(`/community`);
+        navigate(`/recruitTeamDetail?commId=${commuid}`);
       } else {
         //실패 앐럿
         //창 유지

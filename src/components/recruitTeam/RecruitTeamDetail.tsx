@@ -195,6 +195,7 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
   const navigate = useNavigate();
   const { data } = props;
   const location = useLocation();
+  const [detailTitle, setDetailTilte] = useState<string>('');
 
   const queryParams = new URLSearchParams(location.search);
   const param1Value = queryParams.get('commId');
@@ -237,11 +238,15 @@ const RecruitInfoData = (props: { data: ICommunityRowData }) => {
     data;
 
   console.log(data);
+  useEffect(() => {
+    setDetailTilte(commuTitle);
+  }, []);
 
   return (
     <>
       <Col span={24} className="recruit_detail_title">
-        <Title>{commuTitle}</Title>
+        {/* <Title>{commuTitle}</Title> */}
+        <Title>{detailTitle}</Title>
       </Col>
       <Col
         span={24}
