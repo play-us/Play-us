@@ -1,22 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import { Button, Checkbox, Col, ConfigProvider, Form, Input } from 'antd';
+import { Button, Checkbox, ConfigProvider, Form, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import SocialKakao from '../../kakaoLogin/SocialKakao';
+import { getMember } from '../../../service/UserApi';
+import { loginUser } from '../../../stores/features/AuthenticationSlice';
+import { useAppDispatch } from '../../../stores/Store';
 
 export function LoginForm() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const handleIdPwdChangeOnClick = () => {
     return;
   };
 
   const [formState, setFormState] = useState<{
-    id: string;
+    email: string;
     password: string;
     remember: boolean;
   }>({
-    id: '',
+    email: '',
     password: '',
     remember: false,
   });
@@ -24,9 +28,10 @@ export function LoginForm() {
   const [form] = Form.useForm();
 
   const handleChange = (values: any) => {
-    console.log(values);
     setFormState({
-      id: Object.keys(values).includes('id') ? values.id : formState.id,
+      email: Object.keys(values).includes('email')
+        ? values.id
+        : formState.email,
       password: Object.keys(values).includes('password')
         ? values.password
         : formState.password,
@@ -34,57 +39,20 @@ export function LoginForm() {
         ? values.remember
         : formState.remember,
     });
-    console.log(formState);
-    // setFormState((prev) => ({...formState, values}));
-    // console.log(values);
-    // console.log(formState);
-    //    setFormState((prev) => ({...prev, [name]: value}));
   };
 
-  // const useEffectOnMount = (effect : React.EffectCallback) => {
-  //   // eslint-disable-next-line
-  //   useEffect(effect, []);
-  // }
-
-  // useEffectOnMount(() => {
-  //   // todo: get user id and pw from local storage
-  // });
-
-  const onFinish = async (formResult: {
-    id: string;
-    password: string;
-    remember: boolean;
-  }) => {
-    console.log(formResult);
-
-    // formResult.password = passwordEncrypt(formResult.password);
-
-    // try {
-    //   const loginResponse = await login({
-    //     id: formResult.id,
-    //     password: formResult.password,
-    //   } as LoginRequest).unwrap();
-    //   if (
-    //     loginResponse.Result === LoginResponseErrorType.EXPIRED_PASSWORD ||
-    //     loginResponse.Result ===
-    //       LoginResponseErrorType.MULTIPLE_PASSWORD_FAILURE ||
-    //     loginResponse.Result === LoginResponseErrorType.NO_USER_OR_NOT_VAILD_PW
-    //   ) {
-    //     // 서버 오류의 경우
-    //     console.log('메세지 출력, 서버에서 온 에러');
-    //   } else {
-    //     // 로그인 성공 시, 내 정보 가져오기 수행
-    //     console.log(loginResponse);
-
-    //     const result = await getMyInfo(formResult.id).unwrap();
-
-    //     if (result.length > 0) {
-    //       navigate('/main');
-    //     }
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
+  const onFinish = async (formResult: { email: string; password: string }) => {
+    try {
+      const authData: any = await getMember(
+        formResult.email,
+        formResult.password,
+      );
+      // setTokens(authData.data);
+      dispatch(loginUser(authData.data.result[0]));
+      navigate('/');
+    } catch (err: any) {
+      console.log('err');
+    }
   };
 
   return (
@@ -110,7 +78,7 @@ export function LoginForm() {
           onValuesChange={handleChange}
           style={{ margin: '10%' }}
         >
-          <Form.Item name="id" required={true}>
+          <Form.Item name="email" required={true}>
             <Input
               prefix={<UserOutlined />}
               placeholder="아이디 또는 이메일"
