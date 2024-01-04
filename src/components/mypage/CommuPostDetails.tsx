@@ -42,8 +42,6 @@ const CommunityDetails = () => {
         // if (data.length > 0) {
         const rows: any[] = [];
         data.forEach((element: ICommuDetailProps) => {
-          console.log(element, 'dd');
-
           const row = {
             deadline: ConvertDate(element.insertDatetime),
             commuTitle: element.commuTitle,
@@ -62,7 +60,6 @@ const CommunityDetails = () => {
         });
 
         setRecruitData(rows);
-        console.log(recruitData, 'initdata');
         // }
       });
   }, []);

@@ -1,8 +1,9 @@
-import { User } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { primaryColor } from '../../styles/CommonStyle';
+import { useAppDispatch, useAppSelector } from '../../stores/Store';
+import { clearUser } from '../../stores/features/AuthenticationSlice';
 const Background = styled.div`
   box-shadow: 0 4px 10px -8px transparent;
   border-bottom: 1px solid #ddd;
@@ -138,7 +139,8 @@ const MyMenu = styled.div<{ isMenuOpend: boolean }>`
   }
 `;
 const Header = () => {
-  const [logined, setLogined] = useState<boolean>(true);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user);
   const [isMenuOpend, setIsMenuOpend] = useState<boolean>(false);
 
   return (
@@ -158,7 +160,7 @@ const Header = () => {
             </li>
           </MenuWrap>
         </Flex>
-        {!logined ? (
+        {!user.isLogin ? (
           <NavWrap>
             <Link to="/signIn">
               <Nav>로그인</Nav>
@@ -177,7 +179,7 @@ const Header = () => {
                 src="https://lh3.googleusercontent.com/-LNDcyoUZV3U/AAAAAAAAAAI/AAAAAAAAAAA/AML38-szSEwtVxDGrb8lU9truJxdb9pwWQ/photo.jpg?sz=46"
                 alt="프로필이미지"
               />
-              <span>김선희</span>님
+              <span>{user.name}</span>님
               <MyMenu isMenuOpend={isMenuOpend}>
                 <Link to="/profileRetouch">
                   <Nav>프로필보기</Nav>
@@ -188,7 +190,7 @@ const Header = () => {
               </MyMenu>
             </Nav>
             <Link to="/">
-              <Nav onClick={() => setLogined(false)}>로그아웃</Nav>
+              <Nav onClick={() => dispatch(clearUser())}>로그아웃</Nav>
             </Link>
           </NavWrap>
         )}

@@ -1,14 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { useNavigate } from 'react-router-dom';
-import { getMember } from '../../service/UserApi';
+import { createSlice } from '@reduxjs/toolkit';
 
 export interface IAuthentication {
-  //isProcessingRequest: boolean;
   accessToken?: string;
   name: '';
   email: '';
   phone: '';
-  isLoading: false; // optional
   isLogin: boolean;
 }
 const initialState: IAuthentication = {
@@ -16,10 +12,9 @@ const initialState: IAuthentication = {
   name: '',
   email: '',
   phone: '',
-  isLoading: false,
 };
 export const authenticationSlice = createSlice({
-  name: 'authentication',
+  name: 'user',
   initialState,
   reducers: {
     loginUser: (state, action) => {
@@ -35,45 +30,9 @@ export const authenticationSlice = createSlice({
       state.phone = '';
       state.isLogin = false;
     },
-    // start: (state) => {
-    //   return {
-    //     ...state,
-    //     isProcessingRequest: true,
-    //   };
-    // },
-    // success: (state, action: PayloadAction<any>) => {
-    //   return {
-    //     ...state,
-    //     isProcessingRequest: false,
-    //   };
-    // },
-    // error: (state, action: PayloadAction<string>) => {
-    //   return {
-    //     ...state,
-    //     isProcessingRequest: false,
-    //   };
-    // },
   },
 });
-export const authenticateUser =
-  (email: string, password: string) => async (dispatch: any) => {
-    const navigate = useNavigate();
-    console.log('email&pw', email, password);
 
-    /*     try {
-      const authData = await getMember(email, password);
-      console.log('authData', authData);
-
-      // setTokens(authData.data);
-      // dispatch(success(authData.data));
-      navigate('/');
-    } catch (err: any) {
-      console.log('err');
-
-      //dispatch(error(err));
-    } */
-  };
 export const { loginUser, clearUser } = authenticationSlice.actions;
-//export const { start, success, error } = authenticationSlice.actions;
-//export const selectAuthentication = (state: RootState) => state.authentication;
+export const userInfo = (state: { user: IAuthentication }) => state.user;
 export const authenticationReducer = authenticationSlice.reducer;

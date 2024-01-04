@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
-import { Button, Checkbox, Col, ConfigProvider, Form, Input } from 'antd';
+import { Button, Checkbox, ConfigProvider, Form, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import SocialKakao from '../../kakaoLogin/SocialKakao';
 import { getMember } from '../../../service/UserApi';
+import { loginUser } from '../../../stores/features/AuthenticationSlice';
 import { useAppDispatch } from '../../../stores/Store';
-import { authenticateUser } from '../../../stores/features/AuthenticationSlice';
 
 export function LoginForm() {
   const navigate = useNavigate();
@@ -39,53 +39,20 @@ export function LoginForm() {
         ? values.remember
         : formState.remember,
     });
-    // setFormState((prev) => ({...formState, values}));
-    // console.log(values);
-    // console.log(formState);
-    //    setFormState((prev) => ({...prev, [name]: value}));
   };
 
-  // const useEffectOnMount = (effect : React.EffectCallback) => {
-  //   // eslint-disable-next-line
-  //   useEffect(effect, []);
-  // }
-
-  // useEffectOnMount(() => {
-  //   // todo: get user id and pw from local storage
-  // });
-
   const onFinish = async (formResult: { email: string; password: string }) => {
-    dispatch(authenticateUser(formResult.email, formResult.password));
-    console.log(formResult.email, formResult.password);
-
-    // formResult.password = passwordEncrypt(formResult.password);
-
-    // try {
-    //   const loginResponse = await login({
-    //     id: formResult.id,
-    //     password: formResult.password,
-    //   } as LoginRequest).unwrap();
-    //   if (
-    //     loginResponse.Result === LoginResponseErrorType.EXPIRED_PASSWORD ||
-    //     loginResponse.Result ===
-    //       LoginResponseErrorType.MULTIPLE_PASSWORD_FAILURE ||
-    //     loginResponse.Result === LoginResponseErrorType.NO_USER_OR_NOT_VAILD_PW
-    //   ) {
-    //     // 서버 오류의 경우
-    //     console.log('메세지 출력, 서버에서 온 에러');
-    //   } else {
-    //     // 로그인 성공 시, 내 정보 가져오기 수행
-    //     console.log(loginResponse);
-
-    //     const result = await getMyInfo(formResult.id).unwrap();
-
-    //     if (result.length > 0) {
-    //       navigate('/main');
-    //     }
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      const authData: any = await getMember(
+        formResult.email,
+        formResult.password,
+      );
+      // setTokens(authData.data);
+      dispatch(loginUser(authData.data.result[0]));
+      navigate('/');
+    } catch (err: any) {
+      console.log('err');
+    }
   };
 
   return (
