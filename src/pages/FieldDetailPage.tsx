@@ -9,6 +9,7 @@ import KakaoMap from '../components/common/KakaoMap';
 import FieldComment from '../components/field/FieldComment';
 import FieldResvModal from '../components/field/FieldResvModal';
 import { IFieldItem, IFieldCommentData } from '../utils/FieldType';
+import { useAppSelector } from '../stores/Store';
 import {
   getFieldDetail,
   getFieldReview,
@@ -44,7 +45,8 @@ const FieldDetailPage = () => {
   const [liked, setLiked] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const email = 'chu';
+  const user = useAppSelector((state) => state.user);
+  const email = user.email;
 
   const [date, setDate] = useState<any>(
     moment(new Date()).format('YYYY-MM-DD'),

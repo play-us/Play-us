@@ -6,20 +6,19 @@ import NoImg from '../../assets/images/NoImg.png';
 import { RedColor } from '../../styles/CommonStyle';
 import { postFieldLike } from '../../service/FieldApi';
 import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../stores/Store';
 
 const LikedFieldListItem = (props: {
   data: IRowData;
   getDataAll: Function;
 }) => {
   const data = props.data;
-  const email = 'chu';
   const navigate = useNavigate();
+  const user = useAppSelector((state) => state.user);
 
   /* 좋아요 취소 */
   const putLiked = async () => {
-    console.log('좋아요 취소');
-
-    await postFieldLike(data.fieldId, email, false);
+    await postFieldLike(data.fieldId, user.email, false);
     props.getDataAll();
   };
 

@@ -6,6 +6,7 @@ import { IFieldResvData } from '../../utils/FieldType';
 import getDayofWeek from '../../hooks/getDayofWeek';
 import { Rate, Input } from 'antd';
 import { insertFieldReview } from '../../service/FieldApi';
+import { useAppSelector } from '../../stores/Store';
 
 interface wModalProp {
   setWModalState: Dispatch<SetStateAction<boolean>>;
@@ -17,7 +18,7 @@ interface Ireview {
 }
 //컴포넌트 함수
 const ReviewWriteModal = (props: wModalProp) => {
-  const email = 'chu';
+  const user = useAppSelector((state) => state.user);
   const { TextArea } = Input;
   const [review, setReview] = useState<Ireview>({
     starCnt: 0,
@@ -55,7 +56,7 @@ const ReviewWriteModal = (props: wModalProp) => {
     const d: any = await insertFieldReview(
       props.data.fieldId,
       props.data.resvId,
-      email,
+      user.email,
       String(review.starCnt),
       review.reviewCon,
     );

@@ -9,8 +9,10 @@ import { getReservation } from '../../service/FieldApi';
 import { IFieldResvData } from '../../utils/FieldType';
 import LoadingComponent from '../../components/common/Loading';
 import ResvListItem from './ResvListItem';
+import { useAppSelector } from '../../stores/Store';
 
 const ReservationDetails = () => {
+  const user = useAppSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [resvList, setResvList] = useState<IFieldResvData[]>([]);
   const [currentPage, setCurrentPage] = useState(1); //페이지네이션 현재페이지
@@ -24,8 +26,7 @@ const ReservationDetails = () => {
 
   /* 구장 예약정보 조회 */
   async function getReservationList() {
-    const email = 'chu';
-    const res: any = await getReservation(email);
+    const res: any = await getReservation(user.email);
 
     setResvList(res.data.result);
     setIsLoading(false);
