@@ -2,22 +2,34 @@ import { Button, Col, Form, Input, Row, Select } from 'antd';
 import { LoginForm } from '../components/common/login/LoginForm';
 import { LoginLogo } from '../components/common/login/LoginLogo';
 import { useState } from 'react';
+import axios from 'axios';
 
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const phoneRegex = /^\d{11}$/;
 const { Option } = Select;
-
+const urlGetCommuDetail = 'http://localhost:8080/login/insertMember';
 const SignUp = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [areaType, setAreaType] = useState<string>('전체');
 
   const handleSelectAreaChange = (type: any) => {
-    console.log(type);
     setAreaType(type);
   };
 
   const onFinish = (values: any) => {
-    console.log('Received values of form: ', values);
+    const data = {
+      email: values.email,
+      name: values.name,
+      password: values.password,
+      phone: values.phoneNumber,
+      area: values.selectArea,
+    };
+    //회원가입
+    axios.post(urlGetCommuDetail, data).then((response) => {
+      if (response.status === 200) {
+        alert('회원가입 축하드려욧!🥳');
+      }
+    });
   };
 
   return (
