@@ -44,3 +44,19 @@ export const getMember = (email: string, password: string) => {
       });
   });
 };
+
+// 카카오 로그인 유저정보 조회
+export const getKakaoMemberInfo = (access_token: string) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${process.env.REACT_APP_SERVER_IP}/login/kakao`, {
+        access_token: access_token,
+      })
+      .then((e: any) => {
+        resolve(e);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};

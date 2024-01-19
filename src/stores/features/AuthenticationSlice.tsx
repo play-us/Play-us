@@ -4,14 +4,14 @@ export interface IAuthentication {
   accessToken?: string;
   name: '';
   email: '';
-  phone: '';
+  //phone: '';
   isLogin: boolean;
 }
 const initialState: IAuthentication = {
   isLogin: false,
   name: '',
   email: '',
-  phone: '',
+  //phone: '',
 };
 export const authenticationSlice = createSlice({
   name: 'user',
@@ -20,14 +20,14 @@ export const authenticationSlice = createSlice({
     loginUser: (state, action) => {
       state.name = action.payload.name;
       state.email = action.payload.email;
-      state.phone = action.payload.phone;
+      //state.phone = action.payload.phone;
       state.isLogin = true;
     },
 
     clearUser: (state) => {
       state.name = '';
       state.email = '';
-      state.phone = '';
+      //state.phone = '';
       state.isLogin = false;
     },
   },
